@@ -1,0 +1,173 @@
+{
+	"succeeded": true,
+	"message": "Lấy dữ liệu thành công",
+	"errors": null,
+	"data": [
+		{
+			"REGDATE": "2025-05-07T00:00:00",
+			"LISREG": [
+				{
+					"REGID": "A018BA250507015",
+					"REGDATE": "2025-05-07T00:00:00",
+					"PTNID": "A018PT25050000155",
+					"PTNNAME": "PHÙNG THỊ NGÂN",
+					"PTNSEX": "Nữ",
+					"PTNAGE": "59",
+					"PTNPHONE": "0375535525",
+					"SYMPTOM": "",
+					"REQUEST": "",
+					"NOTES": "",
+					"GRPSERVICES": [
+						{
+							"SER_GRPID": "A018SE013",
+							"SER_GRPNAME": "Siêu âm",
+							"SERVICES": [
+								{
+									"ISLINK": true,
+									"LOGICDEL": false,
+									"REGID": "A018BA250507015",
+									"SERID": "A018SE0130001",
+									"REGSERID": "A018RS250000026239",
+									"SERNAMEVN": "Bụng tổng quát",
+									"SERSIG": "trinh.phambs",
+									"BSTHUCHIEN": "Bác sĩ PHẠM THỊ KIM TRINH"
+								},
+								{
+									"ISLINK": true,
+									"LOGICDEL": false,
+									"REGID": "A018BA250507015",
+									"SERID": "A018SE0130016",
+									"REGSERID": "A018RS250000026240",
+									"SERNAMEVN": "Tuyến vú màu",
+									"SERSIG": "trinh.phambs",
+									"BSTHUCHIEN": "Bác sĩ PHẠM THỊ KIM TRINH"
+								}
+							]
+						},
+						{
+							"SER_GRPID": "A018SE015",
+							"SER_GRPNAME": "Thăm dò chức năng",
+							"SERVICES": [
+								{
+									"ISLINK": true,
+									"LOGICDEL": false,
+									"REGID": "A018BA250507015",
+									"SERID": "A018SE0150001",
+									"REGSERID": "A018RS250000026241",
+									"SERNAMEVN": "Đo điện tâm đồ",
+									"SERSIG": "son.huabs",
+									"BSTHUCHIEN": "Bác sĩ HỨA THỊ TÚ SƠN"
+								}
+							]
+						},
+						{
+							"SER_GRPID": "GRPXN_",
+							"SER_GRPNAME": "Xét nghiệm",
+							"SERVICES": [
+								{
+									"ISLINK": true,
+									"LOGICDEL": false,
+									"REGSERID": "A018BA250507015_svxn",
+									"REGID": "A018BA250507015",
+									"SERID": "SERIDXN",
+									"SERNAMEVN": "Glucose,HbA1c,Ure,Creatinin,Cholesterol toàn phần,Triglyceride,HDL - C,LDL - C,AST ( GOT ),ALT ( GPT ),Điện giải đồ ( Ion đồ ),Tổng phân tích nước tiểu (11 thông số),Tổng phân tích tế bào máu ngoại vi (bằng máy đếm laser),Ferritin",
+									"SERSIG": "ha.nguyen"
+								}
+							]
+						}
+					]
+				},
+				{
+					"REGID": "A01825050700003",
+					"REGDATE": "2025-05-07T00:00:00",
+					"PTNID": {},
+					"PTNNAME": "o",
+					"PTNSEX": {},
+					"PTNAGE": {},
+					"PTNPHONE": {},
+					"SYMPTOM": "",
+					"REQUEST": "",
+					"NOTES": "",
+					"GRPSERVICES": [
+						{
+							"SER_GRPID": "A018SE013",
+							"SER_GRPNAME": "Siêu âm",
+							"SERVICES": [
+								{
+									"ISLINK": false,
+									"LOGICDEL": false,
+									"REGID": "A01825050700003",
+									"SERID": "A018SE0130004",
+									"REGSERID": "",
+									"SERNAMEVN": "Doppler mạch máu chi dưới 2 bên",
+									"SERSIG": "",
+									"BSTHUCHIEN": ""
+								},
+								{
+									"ISLINK": false,
+									"LOGICDEL": false,
+									"REGID": "A01825050700003",
+									"SERID": "A018SE0130020",
+									"REGSERID": "",
+									"SERNAMEVN": "Sản phụ khoa",
+									"SERSIG": "",
+									"BSTHUCHIEN": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"REGID": "A01825050700002",
+					"REGDATE": "2025-05-07T00:00:00",
+					"PTNID": {},
+					"PTNNAME": "Test 2",
+					"PTNSEX": {},
+					"PTNAGE": {},
+					"PTNPHONE": {},
+					"SYMPTOM": "",
+					"REQUEST": "",
+					"NOTES": "",
+					"GRPSERVICES": [
+						{
+							"SER_GRPID": "A018SE002",
+							"SER_GRPNAME": "X Quang",
+							"SERVICES": [
+								{
+									"ISLINK": false,
+									"LOGICDEL": false,
+									"REGID": "A01825050700002",
+									"SERID": "A018SE0020010",
+									"REGSERID": "",
+									"SERNAMEVN": "Cổ chân trái thẳng & nghiêng",
+									"SERSIG": "",
+									"BSTHUCHIEN": ""
+								},
+								{
+									"ISLINK": false,
+									"LOGICDEL": false,
+									"REGID": "A01825050700002",
+									"SERID": "A018SE0020135",
+									"REGSERID": "",
+									"SERNAMEVN": "Cột sống cổ thẳng & nghiêng",
+									"SERSIG": "",
+									"BSTHUCHIEN": ""
+								},
+								{
+									"ISLINK": false,
+									"LOGICDEL": false,
+									"REGID": "A01825050700002",
+									"SERID": "A018SE0020139",
+									"REGSERID": "",
+									"SERNAMEVN": "Cột sống thắt lưng - thẳng & nghiêng",
+									"SERSIG": "",
+									"BSTHUCHIEN": ""
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,63 @@
+{
+	"serviceGroups": [
+		{
+			"group": "X-Quang",
+			"services": [
+				{ "service": "Chụp X-quang ngực" },
+				{ "service": "Chụp X-quang cột sống" },
+				{ "service": "Chụp X-quang tay chân" }
+			]
+		},
+		{
+			"group": "Siêu Âm",
+			"services": [
+				{ "service": "Siêu âm bụng tổng quát" },
+				{ "service": "Siêu âm tim" },
+				{ "service": "Siêu âm tuyến giáp" }
+			]
+		},
+		{
+			"group": "Thăm Dò Chức Năng",
+			"services": [
+				{ "service": "Điện tim" },
+				{ "service": "Đo chức năng hô hấp" },
+				{ "service": "Đo điện não đồ" }
+			]
+		},
+		{
+			"group": "Điện Cơ",
+			"services": [
+				{ "service": "Điện cơ chi trên" },
+				{ "service": "Điện cơ chi dưới" },
+				{ "service": "Điện cơ mặt" }
+			]
+		},
+		{
+			"group": "Chụp CT",
+			"services": [
+				{ "service": "Chụp CT sọ não" },
+				{ "service": "Chụp CT ngực" },
+				{ "service": "Chụp CT bụng" }
+			]
+		},
+		{
+			"group": "Đo Mật Độ Xương",
+			"services": [
+				{ "service": "Đo mật độ xương cột sống" },
+				{ "service": "Đo mật độ xương đùi" },
+				{ "service": "Đo toàn thân" }
+			]
+		},
+		{
+			"group": "Xét Nghiệm",
+			"services": [
+				{ "service": "Xét nghiệm nhóm máu" },
+				{ "service": "Xét nghiệm tình trạng máu" },
+				{ "service": "Xét nghiệm sinh hóa máu" },
+				{ "service": "Xét nghiệm nước tiểu" },
+				{ "service": "Xét nghiệm viêm gan B/C" },
+				{ "service": "Xét nghiệm đường huyết" }
+			]
+		}
+	]
+}

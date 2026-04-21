@@ -1,0 +1,8 @@
+class ApiConstants {
+  ApiConstants._();
+  static const String baseUrl = 'https://api.ltc365.com';
+  static const String login = '/api/UserApp/authenticate';
+  static const String register = '/api/UserApp/register';
+  static const String registerLTC = '/api/UserApp/register-gtltc';
+  static const String profile = '/api/PERMISSION/search-user-has-permission';
+}
