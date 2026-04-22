@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,9 +30,11 @@ class AuthRepositoryImpl implements AuthRepository {
         return Right(response.data!);
       }
       return Left(Failure(response.message));
-    } on DioException catch (e) {
+    } on DioException catch (e, stackTrace) {
+      log('AuthRepositoryImpl: ${e.message} = $stackTrace');
       return Left(Failure(e.message ?? 'ERROR DIO'));
     } catch (e, stackTrace) {
+      log('AuthRepositoryImpl: Unexpected error: ${e.toString()} $stackTrace');
       return Left(
         Failure('ERROR UNEXPECTED: login ${e.toString()} $stackTrace'),
       );
@@ -43,6 +47,7 @@ class AuthRepositoryImpl implements AuthRepository {
       await _datasource.logout();
       return const Right(null);
     } catch (e, stackTrace) {
+      log('AuthRepositoryImpl: $e = $stackTrace');
       return Left(
         Failure('ERROR UNEXPECTED: logout ${e.toString()} $stackTrace'),
       );
@@ -54,10 +59,12 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final user = await _datasource.getMe();
       return Right(user);
-    } on DioException catch (e) {
+    } on DioException catch (e, stackTrace) {
+      log('AuthRepositoryImpl: $e = $stackTrace');
       final msg = e.response?.data?['message'] ?? 'Lỗi xác thực';
       return Left(Failure(msg));
     } catch (e, stackTrace) {
+      log('AuthRepositoryImpl: $e = $stackTrace');
       return Left(
         Failure('ERROR UNEXPECTED: getMe ${e.toString()} $stackTrace'),
       );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../core/constants/image_path_constants.dart';
+import '../../../core/constants/image_path_constants.dart';
 
-class ImageAssetWidget extends StatelessWidget {
+class AssetImageWidget extends StatelessWidget {
   final String assetPath;
   final double? width;
   final double? height;
@@ -9,7 +9,7 @@ class ImageAssetWidget extends StatelessWidget {
   final BoxFit fit;
   final Widget? errorWidget;
 
-  const ImageAssetWidget({
+  const AssetImageWidget({
     super.key,
     required this.assetPath,
     this.width,

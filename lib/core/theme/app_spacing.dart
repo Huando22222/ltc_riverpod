@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class AppSpacing {
   AppSpacing._();
 
@@ -13,4 +15,9 @@ class AppSpacing {
   static const double radiusLg = 16;
   static const double radiusXl = 24;
   static const double radiusFull = 999;
+
+  static const EdgeInsets paddingScreen = EdgeInsets.symmetric(
+    horizontal: md,
+    vertical: lg,
+  );
 }

@@ -38,8 +38,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       if (authState is AuthUnauthenticated || authState is AuthError) {
-        return onLogin ? null : Routes.dashboard;
-        // return onLogin ? null : Routes.login;
+        // return onLogin ? null : Routes.dashboard;
+        return onLogin ? null : Routes.login;
       }
 
       if (authState is AuthAuthenticated) {

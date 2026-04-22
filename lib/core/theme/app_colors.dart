@@ -3,34 +3,56 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // Brand – xanh y tế tin cậy
-  static const primary = Color(0xFF1A73E8); // Blue 600
-  static const primaryLight = Color(0xFF4A9EF4);
-  static const primaryDark = Color(0xFF0D47A1);
+  // ─── Primary ────────────────────────────────────
+  static const primary = Color(0xFF2F80ED);
+  static const primaryLight = Color(0xFFEBF3FF);
+  static const primaryDark = Color(0xFF1C5BB2);
+  static const primaryGradientEnd = Color(0xFF4F9EF7);
 
-  // Secondary – teal nhẹ
-  static const secondary = Color(0xFF00897B);
-  static const secondaryLight = Color(0xFF4DB6AC);
+  // ─── Semantic ───────────────────────────────────
+  static const success = Color(0xFF27AE60);
+  static const successLight = Color(0xFFE9F7EF);
+  static const warning = Color(0xFFF2994A);
+  static const warningLight = Color(0xFFFEF3E7);
 
-  // Semantic
-  static const success = Color(0xFF2E7D32);
-  static const warning = Color(0xFFF57C00);
-  static const error = Color(0xFFC62828);
-  static const info = Color(0xFF0277BD);
+  // Error — Light
+  static const error = Color(0xFFEB5757);
+  static const errorLight = Color(0xFFFDECEC);
+  // Error — Dark
+  static const errorDark = Color(0xFFFF6B6B);
+  static const errorContainerDark = Color(0xFF4A1A1A);
+  static const onErrorContainerDark = Color(0xFFFFB4B4);
 
-  // Neutral
-  static const grey50 = Color(0xFFF8F9FA);
-  static const grey100 = Color(0xFFF1F3F4);
-  static const grey200 = Color(0xFFE8EAED);
-  static const grey400 = Color(0xFFBDC1C6);
-  static const grey600 = Color(0xFF80868B);
-  static const grey800 = Color(0xFF3C4043);
-  static const grey900 = Color(0xFF202124);
-
-  // Surface
+  // ─── Neutrals (Light) ───────────────────────────
   static const white = Color(0xFFFFFFFF);
   static const black = Color(0xFF000000);
-  static const surfaceLight = Color(0xFFF8F9FA);
-  static const surfaceDark = Color(0xFF1E1E2E);
+  static const backgroundLight = Color(0xFFF8FAFE);
+  static const border = Color(0xFFE0E0E0);
+  static const borderVariant = Color(0xFFEEEEEE);
+  static const textPrimary = Color(0xFF1A1C1C);
+  static const textSecondary = Color(0xFF666666);
+  static const textDisabled = Color(0xFF9E9E9E);
+
+  // ─── Dark Mode ──────────────────────────────────
   static const backgroundDark = Color(0xFF121212);
+  static const surfaceDark = Color(0xFF1E1E2E);
+  static const surfaceContainerDark = Color(0xFF252538);
+  static const surfaceContainerHighDark = Color(0xFF2A2A3E);
+  static const borderDark = Color(0xFF2A2A3E);
+  static const borderVariantDark = Color(0xFF3A3A5C);
+  static const onSurfaceDark = Color(0xFFE8EAED);
+  static const onSurfaceVariantDark = Color(0xFFBDBDBD);
+
+  // ─── Container Dark ─────────────────────────────
+  static const primaryContainerDark = Color(0xFF1A3A6E);
+  static const secondaryContainerDark = Color(0xFF0D3A4A);
+  static const tertiaryContainerDark = Color(0xFF0D2A3A);
+  static const inverseSurfaceDark = Color(0xFFE8EAED);
+  static const onInverseSurfaceDark = Color(0xFF1E1E2E);
+  static const inversePrimaryDark = Color(0xFF1C5BB2);
+
+  // ─── Shadow ─────────────────────────────────────
+  static const List<BoxShadow> softShadow = [
+    BoxShadow(color: Color(0x0A000000), blurRadius: 24, offset: Offset(0, 4)),
+  ];
 }

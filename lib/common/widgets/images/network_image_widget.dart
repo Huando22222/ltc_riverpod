@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../core/constants/image_path_constants.dart';
+import '../../../core/constants/image_path_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class ImageNetworkWidget extends StatelessWidget {
+class NetworkImageWidget extends StatelessWidget {
   final String? url;
   final double? width;
   final double? height;
@@ -11,7 +11,7 @@ class ImageNetworkWidget extends StatelessWidget {
   final Widget? loadingWidget;
   final Widget? errorWidget;
 
-  const ImageNetworkWidget({
+  const NetworkImageWidget({
     super.key,
     required this.url,
     this.width,

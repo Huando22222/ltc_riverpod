@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
-class ImageBase64Widget extends StatefulWidget {
+class Base64ImageWidget extends StatefulWidget {
   final String base64String;
 
   /// Kích thước hiển thị (null = full width)
@@ -21,7 +21,7 @@ class ImageBase64Widget extends StatefulWidget {
   /// Widget hiển thị khi lỗi (null = dùng default)
   final Widget? errorWidget;
 
-  const ImageBase64Widget({
+  const Base64ImageWidget({
     super.key,
     required this.base64String,
     this.width,
@@ -33,10 +33,10 @@ class ImageBase64Widget extends StatefulWidget {
   });
 
   @override
-  State<ImageBase64Widget> createState() => _ImageBase64WidgetState();
+  State<Base64ImageWidget> createState() => _Base64ImageWidgetState();
 }
 
-class _ImageBase64WidgetState extends State<ImageBase64Widget> {
+class _Base64ImageWidgetState extends State<Base64ImageWidget> {
   Uint8List? _imageBytes;
   String? _errorMessage;
   bool _isLoading = true;
@@ -48,7 +48,7 @@ class _ImageBase64WidgetState extends State<ImageBase64Widget> {
   }
 
   @override
-  void didUpdateWidget(covariant ImageBase64Widget oldWidget) {
+  void didUpdateWidget(covariant Base64ImageWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.base64String != widget.base64String) {
       _decodeBase64();
