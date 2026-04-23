@@ -29,7 +29,7 @@ class AuthRepositoryImpl implements AuthRepository {
       if (response.data != null) {
         return Right(response.data!);
       }
-      return Left(Failure(response.message));
+      return Left(Failure(response.message ?? 'Lỗi đăng nhập'));
     } on DioException catch (e, stackTrace) {
       log('AuthRepositoryImpl: ${e.message} = $stackTrace');
       return Left(Failure(e.message ?? 'ERROR DIO'));

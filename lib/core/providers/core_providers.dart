@@ -1,9 +1,12 @@
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ltc/core/storage/local_storage_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// import '../network/ip_service_impl.dart';
+final sharedPrefsProvider = Provider<SharedPreferences>((ref) {
+  throw UnimplementedError();
+});
 
-// final ipServiceProvider = Provider((ref) => IpServiceImpl());
-
-// final localIpProvider = FutureProvider((ref) {
-//   return ref.read(ipServiceProvider).getLocalIp();
-// });
+final localStorageProvider = Provider<LocalStorageService>((ref) {
+  final prefs = ref.watch(sharedPrefsProvider);
+  return LocalStorageService(prefs);
+});

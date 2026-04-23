@@ -1,4 +1,4 @@
-# Hệ thống Thiết kế — LTC
+# Hệ thống Thiết kế — LTC = 0785588272
 
 > Bộ màu và quy chuẩn giao diện cho ứng dụng y tế LTC.  
 > Được thiết kế để tạo cảm giác **chuyên nghiệp · tin cậy · hiện đại**.

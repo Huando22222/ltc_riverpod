@@ -1,5 +1,6 @@
 class UserEntity {
   final String userId;
+  String? userSessionId;
   final String username;
   final String fullname;
   final String email;
@@ -12,10 +13,11 @@ class UserEntity {
   final String sex;
   String? token;
   String? refreshToken;
-  final String userIdGTLTC;
+  final String? userIdGTLTC;
 
   UserEntity({
     required this.userId,
+    required this.userSessionId,
     required this.username,
     required this.fullname,
     required this.email,
@@ -31,3 +33,9 @@ class UserEntity {
     required this.userIdGTLTC,
   });
 }
+
+// extension UserMapper on UserEntity {
+//   Map<String, dynamic> toJson() {
+//     return {'UserId': userId, 'UserName': username};
+//   }
+// }

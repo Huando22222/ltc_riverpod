@@ -19,7 +19,7 @@ class AuthRemoteDatasource {
     required String username,
     required String password,
   }) async {
-    final response = await _dio.post(
+    final responseAuth = await _dio.post(
       ApiConstants.login,
       data: {
         'username': username,
@@ -28,10 +28,31 @@ class AuthRemoteDatasource {
         'application_id': AppConstants.appId,
       },
     );
-    return BaseResponse.fromJson(
-      response.data,
-      (data) => UserModel.fromJson(data as Map<String, dynamic>),
-    ); // UserModel.fromJson(response.data['data']);
+    final res = BaseResponse<dynamic>.fromJson(
+      responseAuth.data,
+      (data) => data,
+    );
+    final token = res.data['jwt_token'];
+    final refreshToken = res.data['user_session']['refreshToken'];
+    final userSessionId = res.data['user_session']['id'];
+
+    
+    final responseInfo = await _dio.get(
+      ApiConstants.profile,
+      queryParameters: {
+        'PhoneNumber': res.data['phone_number'],
+        'application_id': AppConstants.appId,
+      },
+    );
+    final list = responseInfo.data['data'] as List;
+
+    final user = UserModel.fromJson(json: list.first as Map<String, dynamic>);
+
+    user.token = token;
+    user.refreshToken = refreshToken;
+    user.userSessionId = userSessionId;
+
+    return BaseResponse<UserModel>(success: true, message: null, data: user);
   }
 
   Future<void> logout() async {
@@ -40,6 +61,6 @@ class AuthRemoteDatasource {
 
   Future<UserModel> getMe() async {
     final response = await _dio.get(ApiConstants.profile);
-    return UserModel.fromJson(response.data['data']);
+    return UserModel.fromJson(json: response.data['data']);
   }
 }
