@@ -1,5 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ltc/common/widgets/images/asset_image_widget.dart';
+import 'package:ltc/common/widgets/splash_tap_widget.dart';
+import 'package:ltc/core/constants/image_path_constants.dart';
+import 'package:ltc/core/extensions/context_ext.dart';
+import 'package:ltc/core/localization/locale_provider.dart';
+import 'package:ltc/core/theme/app_spacing.dart';
+import 'package:ltc/features/dashboard/presentation/providers/dashboard_provider.dart';
+import 'package:ltc/features/dashboard/presentation/widgets/banner_widget.dart';
+import 'package:ltc/features/dashboard/presentation/widgets/content_card_widget.dart';
+import 'package:ltc/features/dashboard/presentation/widgets/promo_service_card_widget.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -10,7 +21,232 @@ class DashboardScreen extends ConsumerStatefulWidget {
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   @override
+  void initState() {
+    super.initState();
+    ref.read(dashboardProvider.notifier).getDashboardData();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Column(children: [Text("Dashboard")]));
+    final tr = ref.watch(stringsProvider);
+    final db = ref.watch(dashboardProvider);
+    final size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      backgroundColor: context.colorScheme.surfaceContainerLow,
+      body: CustomScrollView(
+        slivers: [
+          // ── AppBar ──────────────────────────────────
+          SliverAppBar(
+            floating: true,
+            snap: true,
+            pinned: false,
+            backgroundColor: context.colorScheme.surfaceContainerLow,
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            expandedHeight: 56,
+            flexibleSpace: FlexibleSpaceBar(
+              background: _DashboardHeader(),
+              collapseMode: CollapseMode.pin,
+            ),
+          ),
+
+          // ── Body ────────────────────────────────────
+          SliverList(
+            delegate: SliverChildListDelegate([
+              const SizedBox(height: AppSpacing.sm),
+
+              // Banner
+              BannerWidget(
+                items: db.slider
+                    .map((e) => BannerItem(title: e.title, imageUrl: e.image))
+                    .toList(),
+              ),
+
+              const SizedBox(height: AppSpacing.lg),
+
+              _SectionHeader(title: tr.packages, trailing: tr.viewAll),
+              const SizedBox(height: AppSpacing.sm),
+              _HorizontalList(height: size.height * 0.2, items: db.package),
+
+              const SizedBox(height: AppSpacing.lg),
+
+              _SectionHeader(title: tr.testServices, trailing: tr.viewAll),
+              const SizedBox(height: AppSpacing.sm),
+              _HorizontalList(height: size.height * 0.2, items: db.test),
+
+              const SizedBox(height: AppSpacing.lg),
+
+              _SectionHeader(title: tr.medicalTopics),
+              const SizedBox(height: AppSpacing.sm),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.horizontalPaddingScreen,
+                ),
+                child: Column(
+                  children: db.medicalTopic
+                      .map(
+                        (e) => Padding(
+                          padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                          child: ContentCardWidget(item: e),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+
+              const SizedBox(height: AppSpacing.xxl),
+            ]),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Header ────────────────────────────────────────────────
+class _DashboardHeader extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tr = ref.watch(stringsProvider);
+    return Container(
+      color: context.colorScheme.surfaceContainerLow,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
+      alignment: Alignment.bottomLeft,
+      child: Row(
+        children: [
+          AssetImageWidget(
+            assetPath: ImagePathConstants.logo,
+            width: 36,
+            height: 36,
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Text(
+              tr.appName,
+              style: context.textTheme.titleLarge?.copyWith(
+                color: context.colorScheme.primary,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          SplashTapWidget(
+            borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+            child: Padding(
+              padding: const EdgeInsets.all(AppSpacing.xs),
+              child: Icon(
+                FontAwesomeIcons.magnifyingGlass,
+                size: 18,
+                color: context.colorScheme.onSurface,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Section Header ────────────────────────────────────────
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({
+    required this.title,
+    this.trailing,
+    this.onTrailingTap,
+  });
+
+  final String title;
+  final String? trailing;
+  final VoidCallback? onTrailingTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.horizontalPaddingScreen,
+      ),
+      child: Row(
+        children: [
+          // Accent bar
+          Container(
+            width: 3,
+            height: 18,
+            margin: const EdgeInsets.only(right: AppSpacing.sm),
+            decoration: BoxDecoration(
+              color: context.colorScheme.primary,
+              borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              title,
+              style: context.textTheme.titleMedium?.copyWith(
+                color: context.colorScheme.onSurface,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          if (trailing != null)
+            SplashTapWidget(
+              onTap: onTrailingTap,
+              borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.xs,
+                  vertical: 2,
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      trailing!,
+                      style: context.textTheme.labelSmall?.copyWith(
+                        color: context.colorScheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 2),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 10,
+                      color: context.colorScheme.primary,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Horizontal List ───────────────────────────────────────
+class _HorizontalList extends StatelessWidget {
+  const _HorizontalList({required this.height, required this.items});
+
+  final double height;
+  final List items;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: height,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.horizontalPaddingScreen,
+          vertical: AppSpacing.xs,
+        ),
+        itemCount: items.length,
+        separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.md),
+        itemBuilder: (context, index) => AspectRatio(
+          aspectRatio: 4 / 3,
+          child: PromoServiceCardWidget(service: items[index], onTap: () {}),
+        ),
+      ),
+    );
   }
 }

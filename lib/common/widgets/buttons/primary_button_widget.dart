@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ltc/common/widgets/splash_tap_widget.dart';
 import 'package:ltc/core/extensions/color_schema_ext.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
-import 'package:ltc/core/theme/app_colors.dart';
 import 'package:ltc/core/theme/app_spacing.dart';
 
 class PrimaryButtonWidget extends StatefulWidget {
@@ -40,7 +39,7 @@ class _PrimaryButtonWidgetState extends State<PrimaryButtonWidget> {
             const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         width: widget.width ?? double.infinity,
         decoration: BoxDecoration(
-          boxShadow: AppColors.softShadow,
+          boxShadow: context.colorScheme.softShadow,
           borderRadius: BorderRadius.circular(
             widget.radius ?? AppSpacing.radiusMd,
           ),

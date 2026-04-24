@@ -36,7 +36,6 @@ class AuthRemoteDatasource {
     final refreshToken = res.data['user_session']['refreshToken'];
     final userSessionId = res.data['user_session']['id'];
 
-    
     final responseInfo = await _dio.get(
       ApiConstants.profile,
       queryParameters: {

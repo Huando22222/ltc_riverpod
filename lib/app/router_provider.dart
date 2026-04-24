@@ -27,7 +27,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       if (authState is AuthUnauthenticated || authState is AuthError) {
-        return onLogin ? null : Routes.login;
+        return onLogin ? null : Routes.main;
+        // return onLogin ? null : Routes.login;
       }
 
       if (authState is AuthAuthenticated) {
@@ -39,7 +40,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(path: Routes.splash, builder: (_, __) => const SplashScreen()),
       GoRoute(path: Routes.login, builder: (_, __) => const LoginScreen()),
-      GoRoute(path: Routes.main, builder: (_, __) => const MainShell()),
+      GoRoute(path: Routes.main, builder: (_, __) => MainShell()),
       GoRoute(
         path: Routes.dashboard,
         builder: (_, __) => const DashboardScreen(),

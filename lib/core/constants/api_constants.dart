@@ -7,4 +7,6 @@ class ApiConstants {
   static const String register = '/api/UserApp/register';
   static const String registerLTC = '/api/UserApp/register-gtltc';
   static const String profile = '/api/PERMISSION/search-user-has-permission';
+  // MARK: Dashboard
+  static const String dashboard = '/api/LTC/Dashboard';
 }

@@ -9,37 +9,67 @@ class EnStrings extends AppStrings {
   String get appTagline => 'Healthcare Management Solution';
 
   @override
-  String get authLogin => 'Login';
+  String get login => 'Login';
   @override
-  String get authLogout => 'Logout';
+  String get logout => 'Logout';
   @override
-  String get authUsername => 'Username';
+  String get username => 'Username';
   @override
-  String get authPassword => 'Password';
+  String get password => 'Password';
   @override
-  String get authLoginFailed => 'Login failed';
+  String get loginFailed => 'Login failed';
   @override
-  String get authForgotPassword => 'Forgot Password?';
+  String get forgotPassword => 'Forgot Password?';
   @override
-  String get authLoginInstruction => 'Please enter your credentials to log in.';
+  String get loginInstruction => 'Please enter your credentials to log in.';
   @override
-  String get authNoAccountMessage => 'Don\'t have an account?';
+  String get noAccountMessage => 'Don\'t have an account?';
   @override
-  String get authRegister => 'Register';
+  String get register => 'Register';
 
   @override
-  String get commonSave => 'Save';
+  String get save => 'Save';
   @override
-  String get commonCancel => 'Cancel';
+  String get cancel => 'Cancel';
   @override
-  String get commonLoading => 'Loading...';
+  String get loading => 'Loading...';
   @override
-  String get commonError => 'An error occurred';
+  String get error => 'An error occurred';
   @override
-  String get commonChangeLanguage => 'Change language';
+  String get changeLanguage => 'Change language';
+
+  @override
+  String get home => 'Home';
+  @override
+  String get document => 'Documents';
+  @override
+  String get health => 'Health';
+  @override
+  String get profile => 'Profile';
 
   @override
   String welcome(String name) => 'Hello, $name';
   @override
   String required(String field) => '$field is required';
+
+  @override
+  String get doctors => 'Doctors';
+
+  @override
+  String get features => 'Features';
+
+  @override
+  String get medicalTopics => 'Medical Topics';
+
+  @override
+  String get packages => 'Packages';
+
+  @override
+  String get testServices => 'Test Services';
+
+  @override
+  String get viewAll => 'View All';
+
+  @override
+  String get explore => 'Explore';
 }

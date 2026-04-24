@@ -6,40 +6,67 @@ class ViStrings extends AppStrings {
   String get appName => 'LTC';
   @override
   String get appTagline => 'Giải pháp quản lý y tế';
+  @override
+  String get login => 'Đăng nhập';
+  @override
+  String get logout => 'Đăng xuất';
+  @override
+  String get username => 'Tài khoản';
+  @override
+  String get forgotPassword => 'Quên mật khẩu?';
+  @override
+  String get loginFailed => 'Đăng nhập thất bại';
+  @override
+  String get loginInstruction => 'Vui lòng nhập thông tin đăng nhập của bạn.';
+  @override
+  String get noAccountMessage => 'Chưa có tài khoản?';
+  @override
+  String get password => 'Mật khẩu';
+  @override
+  String get register => 'Đăng ký';
+  @override
+  String get cancel => 'Hủy';
+  @override
+  String get changeLanguage => 'Đổi ngôn ngữ';
+  @override
+  String get error => 'Đã xảy ra lỗi';
+  @override
+  String get loading => 'Đang tải...';
+  @override
+  String get save => 'Lưu';
 
   @override
-  String get authLogin => 'Đăng nhập';
+  String get home => 'Trang chủ';
   @override
-  String get authLogout => 'Đăng xuất';
+  String get document => 'Hồ sơ';
   @override
-  String get authUsername => 'Tài khoản';
-
+  String get health => 'Sức khỏe';
   @override
-  String get authForgotPassword => 'Quên mật khẩu?';
-  @override
-  String get authLoginFailed => 'Đăng nhập thất bại';
-  @override
-  String get authLoginInstruction =>
-      'Vui lòng nhập thông tin đăng nhập của bạn.';
-  @override
-  String get authNoAccountMessage => 'Chưa có tài khoản?';
-  @override
-  String get authPassword => 'Mật khẩu';
-  @override
-  String get authRegister => 'Đăng ký';
-  @override
-  String get commonCancel => 'Hủy';
-  @override
-  String get commonChangeLanguage => 'Đổi ngôn ngữ';
-  @override
-  String get commonError => 'Đã xảy ra lỗi';
-  @override
-  String get commonLoading => 'Đang tải...';
-  @override
-  String get commonSave => 'Lưu';
+  String get profile => 'Tài khoản';
 
   @override
   String welcome(String name) => 'Xin chào, $name';
   @override
   String required(String field) => '$field không được để trống';
+
+  @override
+  String get doctors => 'Bác sĩ';
+
+  @override
+  String get features => 'Tính năng';
+
+  @override
+  String get medicalTopics => 'Y học gia đình';
+
+  @override
+  String get packages => 'Gói dịch vụ';
+
+  @override
+  String get testServices => 'Dịch vụ xét nghiệm';
+
+  @override
+  String get viewAll => 'Xem Tất Cả';
+
+  @override
+  String get explore => 'Tìm hiểu';
 }

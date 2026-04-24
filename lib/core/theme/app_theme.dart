@@ -39,15 +39,21 @@ class AppTheme {
       errorContainer: AppColors.errorLight, // #FDECEC
       onErrorContainer: Color(0xFF8B1A1A),
 
-      // ── Surface ──────────────────────────────
-      surface: AppColors.white, // card, input fill, dialog
-      onSurface: AppColors.textPrimary, // #1A1C1C — text chính
-      onSurfaceVariant: AppColors.textSecondary, // #666666 — text phụ, label
-      surfaceContainerLowest: AppColors.white,
-      surfaceContainerLow: AppColors.backgroundLight, // #F8FAFE
-      surfaceContainer: AppColors.backgroundLight,
-      surfaceContainerHigh: Color(0xFFF0F4FF),
-      surfaceContainerHighest: AppColors.backgroundLight, // disabled input fill
+      // ── Surface ──────────────────────────────────────────────
+      surface: AppColors.white, // #FFFFFF — Card, Input, Dialog, BottomSheet
+      onSurface: AppColors.textPrimary, // # — Text chính, Icon chính
+      onSurfaceVariant:
+          AppColors.textSecondary, // #666666 — Text phụ, Label, Subtitle
+      surfaceContainerLowest: AppColors.white, // #FFFFFF — Ít dùng, trắng tinh
+      surfaceContainerLow:
+          AppColors.backgroundLight, // #F8FAFE — Scaffold background
+      surfaceContainer:
+          AppColors.backgroundLight, // #F8FAFE — Section bg, Chip bg
+      surfaceContainerHigh: Color(
+        0xFFF0F4FF,
+      ), // #F0F4FF — Selected item, Hover, Active bg
+      surfaceContainerHighest:
+          AppColors.backgroundLight, // #F8FAFE — Input disabled fill input fill
       // ── Background ───────────────────────────
       // ignore: deprecated_member_use_from_same_package (vẫn cần cho một số widget cũ)
       // background:           AppColors.backgroundLight,

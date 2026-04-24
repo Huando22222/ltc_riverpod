@@ -9,7 +9,6 @@ import 'package:ltc/core/constants/image_path_constants.dart';
 import 'package:ltc/core/extensions/color_schema_ext.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
 import 'package:ltc/core/localization/locale_provider.dart';
-import 'package:ltc/core/theme/app_colors.dart';
 import 'package:ltc/core/theme/app_spacing.dart';
 import 'package:ltc/features/auth/presentation/providers/auth_provider.dart';
 
@@ -161,7 +160,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 children: [
                                   // Header
                                   Text(
-                                    tr.authLogin,
+                                    tr.login,
                                     style: context.textTheme.titleLarge
                                         ?.copyWith(
                                           color: context.colorScheme.onSurface,
@@ -170,7 +169,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   ),
                                   const SizedBox(height: AppSpacing.xs),
                                   Text(
-                                    tr.authLoginInstruction,
+                                    tr.loginInstruction,
                                     style: context.textTheme.bodySmall
                                         ?.copyWith(
                                           color: context
@@ -183,7 +182,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   // Username
                                   InputFieldWidget(
                                     controller: _usernameCtrl,
-                                    label: tr.authUsername,
+                                    label: tr.username,
                                     icon: Icons.person_outline_rounded,
                                   ),
                                   const SizedBox(height: AppSpacing.md),
@@ -191,7 +190,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   // Password
                                   InputFieldWidget(
                                     controller: _passwordCtrl,
-                                    label: tr.authPassword,
+                                    label: tr.password,
                                     icon: Icons.lock_outline_rounded,
                                     isPassword: true,
                                   ),
@@ -208,7 +207,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         ),
                                       ),
                                       child: Text(
-                                        tr.authForgotPassword,
+                                        tr.forgotPassword,
                                         style: context.textTheme.bodySmall
                                             ?.copyWith(
                                               color:
@@ -227,7 +226,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       Expanded(
                                         child: PrimaryButtonWidget(
                                           isEnabled: true,
-                                          title: tr.authLogin,
+                                          title: tr.login,
                                           onPressed: () async {
                                             await ref
                                                 .read(authProvider.notifier)
@@ -258,7 +257,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            tr.authNoAccountMessage,
+                            tr.noAccountMessage,
                             style: context.textTheme.bodyMedium?.copyWith(
                               color: context.colorScheme.onSurface,
                             ),
@@ -266,7 +265,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           TextButton(
                             onPressed: () {},
                             child: Text(
-                              tr.authRegister,
+                              tr.register,
                               style: context.textTheme.bodyMedium?.copyWith(
                                 color: context.colorScheme.primary,
                                 fontWeight: FontWeight.w700,
