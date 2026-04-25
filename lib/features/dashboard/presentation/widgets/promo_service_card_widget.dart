@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ltc/common/widgets/images/network_image_widget.dart';
+import 'package:ltc/core/extensions/color_schema_ext.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
 import 'package:ltc/core/extensions/double_extention.dart';
 import 'package:ltc/core/theme/app_spacing.dart';
@@ -23,13 +24,7 @@ class PromoServiceCardWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: context.colorScheme.surface,
           borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.06),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          boxShadow: context.colorScheme.softShadow,
         ),
         clipBehavior: Clip.antiAlias,
         child: Column(
@@ -44,15 +39,7 @@ class PromoServiceCardWidget extends StatelessWidget {
                   Positioned.fill(
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black.withOpacity(0.2),
-                          ],
-                          stops: const [0.5, 1.0],
-                        ),
+                        gradient: context.colorScheme.imageOverlayGradient,
                       ),
                     ),
                   ),
@@ -74,7 +61,7 @@ class PromoServiceCardWidget extends StatelessWidget {
                       child: Text(
                         service.price.formatCurrency,
                         style: context.textTheme.labelSmall?.copyWith(
-                          color: Colors.white,
+                          color: context.colorScheme.onPrimary,
                           fontWeight: FontWeight.w700,
                         ),
                       ),

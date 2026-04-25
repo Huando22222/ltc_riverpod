@@ -14,6 +14,12 @@ extension AppGradients on ColorScheme {
     end: Alignment.centerRight,
     colors: [primaryContainer, secondaryContainer],
   );
+  LinearGradient get imageOverlayGradient => LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Colors.transparent, Colors.black.withOpacity(0.2)],
+    stops: const [0.5, 1.0],
+  );
 
   List<BoxShadow> get softShadow => AppColors.softShadow;
 }

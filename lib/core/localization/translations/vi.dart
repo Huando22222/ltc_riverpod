@@ -51,22 +51,36 @@ class ViStrings extends AppStrings {
 
   @override
   String get doctors => 'Bác sĩ';
-
   @override
   String get features => 'Tính năng';
-
   @override
   String get medicalTopics => 'Y học gia đình';
-
   @override
   String get packages => 'Gói dịch vụ';
-
   @override
   String get testServices => 'Dịch vụ xét nghiệm';
-
   @override
   String get viewAll => 'Xem Tất Cả';
-
   @override
   String get explore => 'Tìm hiểu';
+  @override
+  String get account => 'Tài khoản';
+  @override
+  String get booking => 'Đặt hẹn';
+  @override
+  String get changePassword => 'Đổi mật khẩu';
+  @override
+  String get darkMode => 'Nền tối';
+  @override
+  String get language => 'Ngôn ngữ';
+  @override
+  String get languageName => 'Tiếng việt';
+  @override
+  String get notification => 'Thông báo';
+  @override
+  String get preferences => 'Tùy chọn';
+  @override
+  String get security => 'Bảo mật';
+  @override
+  String get setting => 'Cài đặt';
 }

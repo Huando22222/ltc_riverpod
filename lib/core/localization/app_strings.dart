@@ -12,7 +12,7 @@ abstract class AppStrings {
   String get noAccountMessage;
   String get loginInstruction;
   String get loginFailed;
-
+  String get changePassword;
   // MARK: Common
   String get save;
   String get cancel;
@@ -20,7 +20,15 @@ abstract class AppStrings {
   String get error;
   String get changeLanguage;
   String get viewAll;
-
+  String get setting;
+  String get booking;
+  String get account;
+  String get notification;
+  String get security;
+  String get preferences;
+  String get darkMode;
+  String get language;
+  String get languageName;
   // MARK: Shell
   String get home;
   String get document;

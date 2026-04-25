@@ -54,22 +54,36 @@ class EnStrings extends AppStrings {
 
   @override
   String get doctors => 'Doctors';
-
   @override
   String get features => 'Features';
-
   @override
   String get medicalTopics => 'Medical Topics';
-
   @override
   String get packages => 'Packages';
-
   @override
   String get testServices => 'Test Services';
-
   @override
   String get viewAll => 'View All';
-
   @override
   String get explore => 'Explore';
+  @override
+  String get account => 'Account';
+  @override
+  String get booking => 'Booking';
+  @override
+  String get changePassword => 'ChangePassword';
+  @override
+  String get darkMode => 'DarkMode';
+  @override
+  String get language => 'Language';
+  @override
+  String get languageName => 'LanguageName';
+  @override
+  String get notification => 'Notification';
+  @override
+  String get preferences => 'Preferences';
+  @override
+  String get security => 'Security';
+  @override
+  String get setting => 'Setting';
 }

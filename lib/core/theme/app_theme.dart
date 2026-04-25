@@ -14,10 +14,10 @@ class AppTheme {
     brightness: Brightness.light,
     iconTheme: const IconThemeData(
       color: AppColors.textPrimary,
-      size: AppSpacing.lg,
+      size: AppSpacing.iconLg,
     ),
     colorScheme: const ColorScheme.light(
-      // ── Primary ──────────────────────────────
+      // ── Primary ──
       primary: AppColors.primary, // #2F80ED — button, active icon, link
       onPrimary: AppColors.white, // text/icon trên primary
       primaryContainer: AppColors.primaryLight, // #EBF3FF — chip bg, badge bg
