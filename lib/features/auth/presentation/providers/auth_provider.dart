@@ -14,7 +14,6 @@ class AuthNotifier extends Notifier<AuthState> {
   @override
   AuthState build() => const AuthInitial();
 
-  // ✅ Usecase lấy qua ref — không cần truyền constructor
   LoginUsecase get _login => ref.read(loginUsecaseProvider);
   LogoutUsecase get _logout => ref.read(logoutUsecaseProvider);
 
@@ -57,7 +56,7 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
-  Future<void> login({
+  Future<bool> login({
     required String username,
     required String password,
   }) async {
@@ -67,11 +66,18 @@ class AuthNotifier extends Notifier<AuthState> {
       LoginParams(username: username, password: password),
     );
 
-    result.fold((failure) => state = AuthError(failure.message), (user) async {
-      final model = user as UserModel;
-      await _saveSession(model);
-      state = AuthAuthenticated(model);
-    });
+    return result.fold(
+      (failure) {
+        // state = AuthError(failure.message);
+        return false;
+      },
+      (user) async {
+        final model = user as UserModel;
+        await _saveSession(model);
+        state = AuthAuthenticated(model);
+        return true;
+      },
+    );
   }
 
   Future<void> logout() async {

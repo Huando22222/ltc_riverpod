@@ -86,4 +86,19 @@ class EnStrings extends AppStrings {
   String get security => 'Security';
   @override
   String get setting => 'Setting';
+
+  @override
+  String get contactSupport => 'Contact support';
+  @override
+  String get editProfile => 'Edit profile';
+  @override
+  String get privacyPolicy => 'Privacy policy';
+  @override
+  String get support => 'Support';
+  @override
+  String get termOfUse => 'Term Of Use';
+  @override
+  String get guestSubtitle => 'View profile, medical history and more';
+  @override
+  String get loginToContinue => 'Sign in to continue';
 }

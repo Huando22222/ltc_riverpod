@@ -31,7 +31,7 @@ class HeaderWidget extends ConsumerWidget {
                   ),
                 ),
               ),
-              AvatarWidget(borderRadius: 500, showBorder: true),
+              // AvatarWidget(borderRadius: 500, showBorder: true),
             ],
           ),
         ),

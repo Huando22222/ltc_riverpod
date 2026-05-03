@@ -13,6 +13,10 @@ abstract class AppStrings {
   String get loginInstruction;
   String get loginFailed;
   String get changePassword;
+  String get editProfile;
+  String get loginToContinue;
+  String get guestSubtitle;
+
   // MARK: Common
   String get save;
   String get cancel;
@@ -29,6 +33,10 @@ abstract class AppStrings {
   String get darkMode;
   String get language;
   String get languageName;
+  String get support;
+  String get contactSupport;
+  String get privacyPolicy;
+  String get termOfUse;
   // MARK: Shell
   String get home;
   String get document;
