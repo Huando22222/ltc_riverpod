@@ -25,7 +25,7 @@ class SettingScreen extends ConsumerWidget {
           SingleChildScrollView(
             child: Column(
               children: [
-                _buildSection(title: title, icon: icon, color: color, child: ,);
+                // _buildSection(title: title, icon: icon, color: color, child: ,);
                 PrimaryButtonWidget(
                   isEnabled: true,
                   title: tr.logout,
