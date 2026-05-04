@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ltc/common/widgets/images/asset_image_widget.dart';
 import 'package:ltc/common/widgets/splash_tap_widget.dart';
+import 'package:ltc/core/config/routes.dart';
 import 'package:ltc/core/constants/image_path_constants.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
 import 'package:ltc/core/localization/locale_provider.dart';
@@ -62,7 +64,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     .map((e) => BannerItem(title: e.title, imageUrl: e.image))
                     .toList(),
               ),
-
+              const SizedBox(height: AppSpacing.md),
+              _QuickActionsGrid(),
               const SizedBox(height: AppSpacing.lg),
 
               _SectionHeader(title: tr.packages, trailing: tr.viewAll),
@@ -245,6 +248,170 @@ class _HorizontalList extends StatelessWidget {
         itemBuilder: (context, index) => AspectRatio(
           aspectRatio: 4 / 3,
           child: PromoServiceCardWidget(service: items[index], onTap: () {}),
+        ),
+      ),
+    );
+  }
+}
+
+class _QuickActionsGrid extends ConsumerWidget {
+  const _QuickActionsGrid();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tr = ref.watch(stringsProvider);
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.horizontalPaddingScreen,
+      ),
+      decoration: BoxDecoration(
+        color: context.colorScheme.surface,
+        borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+        boxShadow: [
+          BoxShadow(
+            color: context.colorScheme.primary.withOpacity(0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: AppSpacing.md,
+          horizontal: AppSpacing.xs,
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: _QuickActionButton(
+                    icon: FontAwesomeIcons.calendarCheck,
+                    label: tr.booking,
+                    onTap: () {
+                      context.pushNamed(RouteName.serviceBooking);
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: _QuickActionButton(
+                    icon: FontAwesomeIcons.hospital,
+                    label: tr.specialty,
+                  ),
+                ),
+
+                Expanded(
+                  child: _QuickActionButton(
+                    icon: FontAwesomeIcons.flask,
+                    label: tr.labTest,
+                  ),
+                ),
+                Expanded(
+                  child: _QuickActionButton(
+                    icon: FontAwesomeIcons.layerGroup,
+                    label: tr.package,
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: AppSpacing.xs),
+
+            Row(
+              children: [
+                Expanded(
+                  child: _QuickActionButton(
+                    icon: FontAwesomeIcons.pills,
+                    label: tr.medication,
+                  ),
+                ),
+                Expanded(
+                  child: _QuickActionButton(
+                    icon: FontAwesomeIcons.truckMedical,
+                    label: tr.emergency,
+                  ),
+                ),
+                Expanded(
+                  child: _QuickActionButton(
+                    icon: FontAwesomeIcons.fileWaveform,
+                    label: tr.lookup,
+                  ),
+                ),
+                Expanded(
+                  child: _QuickActionButton(
+                    icon: FontAwesomeIcons.commentMedical,
+                    label: tr.consultation,
+                  ),
+                ),
+                // Expanded(
+                //   child: _QuickActionButton(
+                //     icon: FontAwesomeIcons.ellipsis,
+                //     label: tr.all,
+                //   ),
+                // ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── Button ────────────────────────────────────────────────
+class _QuickActionButton extends StatelessWidget {
+  const _QuickActionButton({
+    required this.icon,
+    required this.label,
+    this.bgColor,
+    this.iconColor,
+    this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color? bgColor;
+  final Color? iconColor;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color iconColor = this.iconColor ?? context.colorScheme.primary;
+    final Color bgColor = this.bgColor ?? context.colorScheme.primaryContainer;
+
+    return SplashTapWidget(
+      borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+      onTap: onTap ?? () {},
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: AppSpacing.sm,
+          horizontal: AppSpacing.xs,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              alignment: Alignment.center,
+              child: FaIcon(icon, size: 20, color: iconColor),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              style: context.textTheme.labelSmall?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: context.colorScheme.onSurface,
+                height: 1.2,
+              ),
+            ),
+          ],
         ),
       ),
     );

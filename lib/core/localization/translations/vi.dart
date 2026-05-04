@@ -83,4 +83,42 @@ class ViStrings extends AppStrings {
   String get security => 'Bảo mật';
   @override
   String get setting => 'Cài đặt';
+  @override
+  String get contactSupport => 'Liên hệ trợ';
+  @override
+  String get editProfile => 'Sửa thông tin';
+  @override
+  String get privacyPolicy => 'Chính sách';
+  @override
+  String get support => 'Hỗ trợ';
+  @override
+  String get termOfUse => 'Điều khoản sử dụng';
+  @override
+  String get guestSubtitle => 'Xem hồ sơ, lịch sử khám và nhiều hơn nữa';
+  @override
+  String get loginToContinue => 'Đăng nhập để tiếp tục';
+  @override
+  String get serviceBooking => 'Đặt hẹn dịch vụ';
+  @override
+  String get specialtyBooking => 'Đặt hẹn chuyên khoa';
+  @override
+  String get consultation => 'Tư vấn';
+  @override
+  String get emergency => 'Khẩn cấp';
+  @override
+  String get labTest => 'Xét nghiệm';
+  @override
+  String get lookup => 'Tra cứu';
+  @override
+  String get medication => 'Thuốc';
+  @override
+  String get specialty => 'Chuyên khoa';
+  @override
+  String get all => 'Tất cả';
+  @override
+  String get service => 'Dịch vụ';
+  @override
+  String get package => 'Gói';
+  @override
+  String get packageBooking => 'Đặt hẹn gói';
 }

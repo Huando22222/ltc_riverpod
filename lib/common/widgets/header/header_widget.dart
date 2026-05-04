@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:ltc/common/widgets/avatar/avatar_widget.dart';
 import 'package:ltc/common/widgets/dividers/app_bar_divider_widget.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
 import 'package:ltc/core/theme/app_spacing.dart';
@@ -31,7 +30,7 @@ class HeaderWidget extends ConsumerWidget {
                   ),
                 ),
               ),
-              AvatarWidget(borderRadius: 500, showBorder: true),
+              // AvatarWidget(borderRadius: 500, showBorder: true),
             ],
           ),
         ),

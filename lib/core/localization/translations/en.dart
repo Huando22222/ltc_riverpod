@@ -86,4 +86,43 @@ class EnStrings extends AppStrings {
   String get security => 'Security';
   @override
   String get setting => 'Setting';
+
+  @override
+  String get contactSupport => 'Contact support';
+  @override
+  String get editProfile => 'Edit profile';
+  @override
+  String get privacyPolicy => 'Privacy policy';
+  @override
+  String get support => 'Support';
+  @override
+  String get termOfUse => 'Term Of Use';
+  @override
+  String get guestSubtitle => 'View profile, medical history and more';
+  @override
+  String get loginToContinue => 'Sign in to continue';
+  @override
+  String get serviceBooking => 'Service booking';
+  @override
+  String get specialtyBooking => 'Specialty booking';
+  @override
+  String get consultation => 'Consultation';
+  @override
+  String get emergency => 'Emergency';
+  @override
+  String get labTest => 'Test';
+  @override
+  String get lookup => 'Lookup';
+  @override
+  String get medication => 'Med';
+  @override
+  String get specialty => 'Specialty';
+  @override
+  String get all => 'All';
+  @override
+  String get service => 'Service';
+  @override
+  String get package => 'Package';
+  @override
+  String get packageBooking => 'Package booking';
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,9 +7,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ltc/common/widgets/buttons/primary_button_widget.dart';
 import 'package:ltc/common/widgets/images/asset_image_widget.dart';
 import 'package:ltc/common/widgets/text_fields/input_field_widget.dart';
+import 'package:ltc/core/config/routes.dart';
 import 'package:ltc/core/constants/image_path_constants.dart';
 import 'package:ltc/core/extensions/color_schema_ext.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
+import 'package:ltc/core/helpers/in_app_notification_helper.dart';
 import 'package:ltc/core/localization/locale_provider.dart';
 import 'package:ltc/core/theme/app_spacing.dart';
 import 'package:ltc/features/auth/presentation/providers/auth_provider.dart';
@@ -48,33 +52,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           children: [
             // ── Background ──────────────────────────────
             const _Background(),
-            SafeArea(
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  margin: EdgeInsets.only(top: 10, left: 20),
-                  child: Material(
-                    color: context.colorScheme.surface.withAlpha(100),
-                    shape: CircleBorder(),
-                    child: InkWell(
-                      customBorder: CircleBorder(),
-                      onTap: () {
-                        if (context.canPop()) {
-                          context.pop();
-                        }
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Icon(
-                          FontAwesomeIcons.angleLeft,
-                          color: context.colorScheme.surface,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+
             // ── Content ─────────────────────────────────
             SingleChildScrollView(
               physics: const ClampingScrollPhysics(),
@@ -228,12 +206,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                           isEnabled: true,
                                           title: tr.login,
                                           onPressed: () async {
-                                            await ref
+                                            final result = await ref
                                                 .read(authProvider.notifier)
                                                 .login(
                                                   username: _usernameCtrl.text,
                                                   password: _passwordCtrl.text,
                                                 );
+
+                                            if (!result) {
+                                              InAppNotificationHelper.showError(
+                                                context,
+                                                message: 'k thành công',
+                                              );
+                                            } else {
+                                              context.goNamed(RouteName.main);
+                                            }
                                           },
                                         ),
                                       ),
@@ -277,6 +264,34 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ],
                       ),
                     ],
+                  ),
+                ),
+              ),
+            ),
+
+            SafeArea(
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  margin: EdgeInsets.only(top: 10, left: 20),
+                  child: Material(
+                    color: context.colorScheme.surface.withAlpha(100),
+                    shape: CircleBorder(),
+                    child: InkWell(
+                      customBorder: CircleBorder(),
+                      onTap: () {
+                        if (context.canPop()) {
+                          context.pop();
+                        }
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Icon(
+                          FontAwesomeIcons.angleLeft,
+                          color: context.colorScheme.surface,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),

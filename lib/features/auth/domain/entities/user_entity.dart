@@ -1,3 +1,5 @@
+import 'package:ltc/features/auth/domain/entities/permission_entity.dart';
+
 class UserEntity {
   final String userId;
   String? userSessionId;
@@ -14,7 +16,7 @@ class UserEntity {
   String? token;
   String? refreshToken;
   final String? userIdGTLTC;
-
+  final List<PermissionEntity> role;
   UserEntity({
     required this.userId,
     required this.userSessionId,
@@ -31,11 +33,6 @@ class UserEntity {
     this.token,
     this.refreshToken,
     required this.userIdGTLTC,
+    required this.role,
   });
 }
-
-// extension UserMapper on UserEntity {
-//   Map<String, dynamic> toJson() {
-//     return {'UserId': userId, 'UserName': username};
-//   }
-// }

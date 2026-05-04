@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:ltc/features/auth/data/models/permission_model.dart';
+
 import '../../domain/entities/user_entity.dart';
 
 class UserModel extends UserEntity {
@@ -19,6 +21,7 @@ class UserModel extends UserEntity {
     super.token,
     super.refreshToken,
     super.userIdGTLTC,
+    required super.role,
   });
 
   factory UserModel.fromJson({required Map<String, dynamic> json}) {
@@ -38,6 +41,9 @@ class UserModel extends UserEntity {
       token: json['jwt_token'],
       refreshToken: json['refreshToken'],
       userIdGTLTC: json['IduserGtltc'],
+      role: (json['list_Permission'] as List)
+          .map((e) => PermissionModel.fromJson(json: e))
+          .toList(),
     );
   }
   factory UserModel.fromRawJson(String str) {
@@ -61,6 +67,9 @@ class UserModel extends UserEntity {
       'jwt_token': token,
       'refreshToken': refreshToken,
       'IduserGtltc': userIdGTLTC,
+      'list_Permission': role
+          .map((e) => PermissionModel.fromEntity(e).toJson())
+          .toList(),
     };
   }
 }

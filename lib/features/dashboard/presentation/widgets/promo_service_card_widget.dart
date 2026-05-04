@@ -71,48 +71,45 @@ class PromoServiceCardWidget extends StatelessWidget {
               ),
             ),
 
-            Expanded(
-              flex: 3,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.sm,
-                  vertical: AppSpacing.xs,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      service.title,
-                      style: context.textTheme.labelMedium?.copyWith(
-                        color: context.colorScheme.onSurface,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.xs,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    service.title,
+                    style: context.textTheme.labelMedium?.copyWith(
+                      color: context.colorScheme.onSurface,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
 
-                    Row(
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.locationDot,
-                          size: 10,
-                          color: context.colorScheme.secondary,
-                        ),
-                        const SizedBox(width: 3),
-                        Expanded(
-                          child: Text(
-                            service.clinicName,
-                            style: context.textTheme.bodySmall?.copyWith(
-                              color: context.colorScheme.secondary,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: [
+                      Icon(
+                        FontAwesomeIcons.locationDot,
+                        size: 10,
+                        color: context.colorScheme.secondary,
+                      ),
+                      const SizedBox(width: 3),
+                      Expanded(
+                        child: Text(
+                          service.clinicName,
+                          style: context.textTheme.bodySmall?.copyWith(
+                            color: context.colorScheme.secondary,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],

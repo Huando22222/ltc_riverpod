@@ -1,8 +1,8 @@
 abstract class AppStrings {
-  // MARK: App
+  // MARK: APP
   String get appName;
   String get appTagline;
-  // MARK: Auth
+  // MARK: AUTH
   String get login;
   String get logout;
   String get register;
@@ -13,15 +13,19 @@ abstract class AppStrings {
   String get loginInstruction;
   String get loginFailed;
   String get changePassword;
-  // MARK: Common
+  String get editProfile;
+  String get loginToContinue;
+  String get guestSubtitle;
+
+  // MARK: COMMON
   String get save;
   String get cancel;
   String get loading;
   String get error;
   String get changeLanguage;
+  String get all;
   String get viewAll;
   String get setting;
-  String get booking;
   String get account;
   String get notification;
   String get security;
@@ -29,13 +33,17 @@ abstract class AppStrings {
   String get darkMode;
   String get language;
   String get languageName;
-  // MARK: Shell
+  String get support;
+  String get contactSupport;
+  String get privacyPolicy;
+  String get termOfUse;
+  // MARK: SHELL
   String get home;
   String get document;
   String get health;
   String get profile;
 
-  // MARK: Dashboard
+  // MARK: DASHBOARD
   String get features;
   String get doctors;
   String get packages;
@@ -43,7 +51,22 @@ abstract class AppStrings {
   String get medicalTopics;
   String get explore;
 
-  // MARK: Dynamic
+  String get specialty;
+  String get consultation;
+  String get labTest;
+  String get medication;
+  String get emergency;
+  String get lookup;
+
+  // MARK: BOOKING
+  String get booking;
+  String get package;
+  String get service;
+  String get serviceBooking;
+  String get packageBooking;
+  String get specialtyBooking;
+
+  // MARK: DYNAMIC
   String welcome(String name);
   String required(String field);
 }
