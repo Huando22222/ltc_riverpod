@@ -17,6 +17,14 @@ abstract class AppStrings {
   String get loginToContinue;
   String get guestSubtitle;
 
+  String get loginRequiredTitle;
+  String loginRequiredSubtitle(String? featureName);
+  String get loginNow;
+  String get createAccount;
+  String get skipContinue;
+  String get benefitBooking;
+  String get benefitHealthRecord;
+  String get benefitMore;
   // MARK: COMMON
   String get save;
   String get cancel;

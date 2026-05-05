@@ -201,10 +201,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   Row(
                                     children: [
                                       // Login button
+                                      // Expanded(
+                                      //   child: PrimaryButtonWidget(
+                                      //     isEnabled: true,
+                                      //     title: tr.login,
+                                      //     onPressed: () async {
+                                      //       final result = await ref
+                                      //           .read(authProvider.notifier)
+                                      //           .login(
+                                      //             username: _usernameCtrl.text,
+                                      //             password: _passwordCtrl.text,
+                                      //           );
+
+                                      //       if (!result) {
+                                      //         InAppNotificationHelper.showError(
+                                      //           context,
+                                      //           message: 'k thành công',
+                                      //         );
+                                      //       } else {
+                                      //         context.goNamed(RouteName.main);
+                                      //       }
+                                      //     },
+                                      //   ),
+                                      // ),
                                       Expanded(
-                                        child: PrimaryButtonWidget(
-                                          isEnabled: true,
-                                          title: tr.login,
+                                        child: ElevatedButton(
                                           onPressed: () async {
                                             final result = await ref
                                                 .read(authProvider.notifier)
@@ -222,6 +243,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                               context.goNamed(RouteName.main);
                                             }
                                           },
+                                          child: Text(tr.login),
                                         ),
                                       ),
                                       const SizedBox(width: AppSpacing.sm),

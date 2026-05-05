@@ -22,6 +22,7 @@ class _NavItemData {
 
 class BottomNavShell extends ConsumerWidget {
   const BottomNavShell({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(bottomNavProvider);
@@ -51,73 +52,125 @@ class BottomNavShell extends ConsumerWidget {
       ),
     ];
 
-    return Container(
-      padding: EdgeInsets.fromLTRB(16, 8, 16, md.padding.bottom),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(AppSpacing.radiusXl),
-          topRight: Radius.circular(AppSpacing.radiusXl),
-        ),
-        color: Colors.white,
-        boxShadow: context.colorScheme.softShadow,
-      ),
-      child: Row(
-        spacing: 5,
-        children: List.generate(items.length, (index) {
-          final item = items[index];
+    final borderRadius = BorderRadius.only(
+      topLeft: Radius.circular(AppSpacing.radiusXl),
+      topRight: Radius.circular(AppSpacing.radiusXl),
+    );
 
-          return _buildNavItem(
-            icon: item.icon,
-            activeIcon: item.activeIcon,
-            label: item.label,
-            isSelected: currentIndex == index,
-            onTap: () => _onTap(ref, index),
-            context: context,
-          );
-        }),
+    return PhysicalShape(
+      color: context.colorScheme.surface,
+      clipper: ShapeBorderClipper(
+        shape: RoundedRectangleBorder(borderRadius: borderRadius),
+      ),
+      elevation: 12,
+      shadowColor: context.colorScheme.shadow,
+      child: Container(
+        padding: EdgeInsets.fromLTRB(16, 10, 16, md.padding.bottom + 4),
+        child: Row(
+          spacing: 5,
+          children: List.generate(items.length, (index) {
+            final item = items[index];
+            return _NavItem(
+              icon: item.icon,
+              activeIcon: item.activeIcon,
+              label: item.label,
+              isSelected: currentIndex == index,
+              onTap: () =>
+                  ref.read(bottomNavProvider.notifier).changeTab(index),
+            );
+          }),
+        ),
       ),
     );
   }
+}
 
-  void _onTap(WidgetRef ref, int index) {
-    ref.read(bottomNavProvider.notifier).changeTab(index);
-  }
+// ─────────────────────────────────────────────
+// NAV ITEM
+// ─────────────────────────────────────────────
 
-  Widget _buildNavItem({
-    required IconData icon,
-    required IconData activeIcon,
-    required String label,
-    required bool isSelected,
-    required VoidCallback onTap,
-    required BuildContext context,
-  }) {
-    final color = isSelected
-        ? context.colorScheme.primary
-        : context.colorScheme.onSurface.withOpacity(0.6);
+class _NavItem extends StatelessWidget {
+  final IconData icon;
+  final IconData activeIcon;
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _NavItem({
+    required this.icon,
+    required this.activeIcon,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  static const _duration = Duration(milliseconds: 100);
+  static const _curve = Curves.easeInOut;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = context.colorScheme;
+    final tt = context.textTheme;
+
+    final activeColor = cs.primary;
+    final inactiveColor = cs.onSurfaceVariant;
+    final activeBg = cs.surfaceContainerHigh;
 
     return Expanded(
-      child: SplashTapWidget(
+      child: GestureDetector(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 6),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? context.colorScheme.primary.withOpacity(0.1)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
+        behavior: HitTestBehavior.opaque,
+        child: TweenAnimationBuilder<Color?>(
+          tween: ColorTween(
+            begin: isSelected ? inactiveColor : activeColor,
+            end: isSelected ? activeColor : inactiveColor,
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(isSelected ? activeIcon : icon, color: color, size: 20),
-              const SizedBox(height: 4),
-              Text(
-                label,
-                style: context.textTheme.labelSmall!.copyWith(color: color),
+          duration: _duration,
+          curve: _curve,
+          builder: (context, fgColor, _) {
+            final resolvedFg = fgColor ?? inactiveColor;
+
+            // TweenAnimationBuilder cho màu nền
+            return Container(
+              padding: const EdgeInsets.symmetric(vertical: 7),
+              decoration: BoxDecoration(
+                color: isSelected ? activeBg : Colors.transparent,
+                borderRadius: BorderRadius.circular(12),
               ),
-            ],
-          ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Icon: scale transition khi đổi icon active/inactive
+                  AnimatedSwitcher(
+                    duration: _duration,
+                    switchInCurve: _curve,
+                    switchOutCurve: _curve,
+                    transitionBuilder: (child, animation) =>
+                        ScaleTransition(scale: animation, child: child),
+                    child: Icon(
+                      isSelected ? activeIcon : icon,
+                      key: ValueKey(isSelected),
+                      color: resolvedFg,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  // Text: animate color + fontWeight
+                  AnimatedDefaultTextStyle(
+                    duration: _duration,
+                    curve: _curve,
+                    style: tt.labelSmall!.copyWith(
+                      color: resolvedFg,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w400,
+                    ),
+                    child: Text(label),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

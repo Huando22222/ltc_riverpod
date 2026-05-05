@@ -330,7 +330,7 @@ class AppTheme {
       surfaceContainerLow: AppColors.surfaceDark, // #1E1E2E
       surfaceContainer: AppColors.surfaceContainerDark, // #252538
       surfaceContainerHigh: AppColors.surfaceContainerHighDark, // #2A2A3E
-      surfaceContainerHighest:
+      surfaceContainerHighest:  
           AppColors.surfaceContainerHighDark, // disabled input fill
       // ── Outline ──────────────────────────────
       outline: AppColors.borderDark, // #2A2A3E — border mặc định

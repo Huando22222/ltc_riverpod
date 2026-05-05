@@ -121,4 +121,27 @@ class ViStrings extends AppStrings {
   String get package => 'Gói';
   @override
   String get packageBooking => 'Đặt hẹn gói';
+  @override
+  String get loginRequiredTitle => 'Đăng nhập để tiếp tục';
+
+  @override
+  String loginRequiredSubtitle(String? featureName) {
+    if (featureName != null) {
+      return 'Bạn cần đăng nhập để sử dụng tính năng "$featureName".';
+    }
+    return 'Đăng nhập để trải nghiệm đầy đủ các tính năng chăm sóc sức khoẻ của bạn.';
+  }
+
+  @override
+  String get loginNow => 'Đăng nhập ngay';
+  @override
+  String get createAccount => 'Tạo tài khoản mới';
+  @override
+  String get skipContinue => 'Bỏ qua, tiếp tục xem';
+  @override
+  String get benefitBooking => 'Đặt lịch khám & theo dõi kết quả';
+  @override
+  String get benefitHealthRecord => 'Lưu trữ hồ sơ sức khoẻ cá nhân';
+  @override
+  String get benefitMore => 'Và nhiều tính năng khác nữa';
 }

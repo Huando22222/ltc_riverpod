@@ -125,4 +125,26 @@ class EnStrings extends AppStrings {
   String get package => 'Package';
   @override
   String get packageBooking => 'Package booking';
+  @override
+  String get loginRequiredTitle => 'Login required';
+  @override
+  String loginRequiredSubtitle(String? featureName) {
+    if (featureName != null) {
+      return 'You need to log in to use "$featureName".';
+    }
+    return 'Log in to fully experience your healthcare features.';
+  }
+
+  @override
+  String get loginNow => 'Login now';
+  @override
+  String get createAccount => 'Create account';
+  @override
+  String get skipContinue => 'Skip and continue';
+  @override
+  String get benefitBooking => 'Book appointments & track results';
+  @override
+  String get benefitHealthRecord => 'Store personal health records';
+  @override
+  String get benefitMore => 'And many feature more';
 }

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ltc/core/constants/api_constants.dart';
 import 'package:ltc/core/models/base_response.dart';
 import 'package:ltc/core/network/dio_provider.dart';
-import 'package:ltc/features/booking/data/models/service_model.dart';
+import 'package:ltc/features/service/data/models/service_model.dart';
 
 final serviceRemoteDatasourceProvider = Provider<ServiceRemoteDatasource>(
   (ref) => ServiceRemoteDatasource(ref.read(dioProvider)),

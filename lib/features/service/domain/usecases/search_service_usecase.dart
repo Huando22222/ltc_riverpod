@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ltc/core/error/failure.dart';
-import 'package:ltc/features/booking/data/repositories/service_repository_impl.dart';
-import 'package:ltc/features/booking/domain/entities/service_entity.dart';
-import 'package:ltc/features/booking/domain/repositories/service_repository.dart';
+import 'package:ltc/features/service/data/repositories/service_repository_impl.dart';
+import 'package:ltc/features/service/domain/entities/service_entity.dart';
+import 'package:ltc/features/service/domain/repositories/service_repository.dart';
 
 class SearchParams {
   final String search;
@@ -17,10 +17,10 @@ class SearchServiceUsecase {
   SearchServiceUsecase(this._repository);
 
   Future<Either<Failure, ServiceEntity>> call(SearchParams params) {
-    return _repository.search(search: params.search);
+    return _repository.searchService(search: params.search);
   }
 }
 
-final loginUsecaseProvider = Provider<SearchServiceUsecase>(
+final searchServiceUsecaseProvider = Provider<SearchServiceUsecase>(
   (ref) => SearchServiceUsecase(ref.read(serviceRepositoryProvider)),
 );

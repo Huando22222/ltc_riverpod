@@ -19,6 +19,7 @@ class MainShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(bottomNavProvider);
     return Scaffold(
+      extendBody: true,
       body: IndexedStack(index: currentIndex, children: _screens),
       bottomNavigationBar: BottomNavShell(),
     );

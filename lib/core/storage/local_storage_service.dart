@@ -20,6 +20,10 @@ class LocalStorageService {
     return _prefs.getString(PrefConstants.appLocale) ?? 'vi';
   }
 
+  Future<String> getTheme() async {
+    return _prefs.getString(PrefConstants.themeMode) ?? 'system';
+  }
+
   String? getString(String key) => _prefs.getString(key);
 
   Future<void> setString(String key, String value) {

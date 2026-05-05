@@ -1,4 +1,4 @@
-import 'package:ltc/features/booking/domain/entities/service_entity.dart';
+import 'package:ltc/features/service/domain/entities/service_entity.dart';
 
 class ServiceModel extends ServiceEntity {
   ServiceModel({

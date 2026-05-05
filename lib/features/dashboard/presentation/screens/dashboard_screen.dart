@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ltc/common/helper/modal_helper.dart';
 import 'package:ltc/common/widgets/images/asset_image_widget.dart';
 import 'package:ltc/common/widgets/splash_tap_widget.dart';
 import 'package:ltc/core/config/routes.dart';
@@ -9,6 +10,7 @@ import 'package:ltc/core/constants/image_path_constants.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
 import 'package:ltc/core/localization/locale_provider.dart';
 import 'package:ltc/core/theme/app_spacing.dart';
+import 'package:ltc/features/auth/presentation/providers/auth_provider.dart';
 import 'package:ltc/features/dashboard/presentation/providers/dashboard_provider.dart';
 import 'package:ltc/features/dashboard/presentation/widgets/banner_widget.dart';
 import 'package:ltc/features/dashboard/presentation/widgets/content_card_widget.dart';
@@ -260,6 +262,7 @@ class _QuickActionsGrid extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tr = ref.watch(stringsProvider);
+    final user = ref.watch(currentUserProvider);
     return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: AppSpacing.horizontalPaddingScreen,
@@ -289,6 +292,10 @@ class _QuickActionsGrid extends ConsumerWidget {
                     icon: FontAwesomeIcons.calendarCheck,
                     label: tr.booking,
                     onTap: () {
+                      if (user == null) {
+                        ModalHelper.showLoginRequired(context);
+                        return;
+                      }
                       context.pushNamed(RouteName.serviceBooking);
                     },
                   ),
@@ -360,6 +367,12 @@ class _QuickActionsGrid extends ConsumerWidget {
 
 // ── Button ────────────────────────────────────────────────
 class _QuickActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color? bgColor;
+  final Color? iconColor;
+  final VoidCallback? onTap;
+
   const _QuickActionButton({
     required this.icon,
     required this.label,
@@ -367,12 +380,6 @@ class _QuickActionButton extends StatelessWidget {
     this.iconColor,
     this.onTap,
   });
-
-  final IconData icon;
-  final String label;
-  final Color? bgColor;
-  final Color? iconColor;
-  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

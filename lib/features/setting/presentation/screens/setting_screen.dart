@@ -12,6 +12,7 @@ import 'package:ltc/core/extensions/context_ext.dart';
 import 'package:ltc/core/localization/locale_provider.dart';
 import 'package:ltc/core/theme/app_colors.dart';
 import 'package:ltc/core/theme/app_spacing.dart';
+import 'package:ltc/core/theme/theme_provider.dart';
 import 'package:ltc/features/auth/presentation/providers/auth_provider.dart';
 import 'package:ltc/features/auth/domain/entities/user_entity.dart';
 
@@ -92,13 +93,19 @@ class SettingScreen extends ConsumerWidget {
                         icon: FontAwesomeIcons.headset,
                         color: context.colorScheme.tertiary,
                         label: tr.contactSupport,
-                        onTap: () {},
+                        onTap: () {
+                          final theme = ref.read(themeProvider.notifier);
+                          theme.setTheme(ThemeMode.dark);
+                        },
                       ),
                       _SettingItem(
                         icon: FontAwesomeIcons.shieldHalved,
                         color: context.colorScheme.primary,
                         label: tr.privacyPolicy,
-                        onTap: () {},
+                        onTap: () {
+                          final theme = ref.read(themeProvider.notifier);
+                          theme.setTheme(ThemeMode.light);
+                        },
                       ),
                       _SettingItem(
                         icon: FontAwesomeIcons.fileLines,
