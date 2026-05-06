@@ -5,19 +5,16 @@ import 'package:ltc/features/doctor/data/repositories/doctor_repository_impl.dar
 import 'package:ltc/features/doctor/domain/entities/doctor_entity.dart';
 import 'package:ltc/features/doctor/domain/repositories/doctor_repository.dart';
 
-class SearchParams {
-  final String search;
-
-  SearchParams({required this.search});
-}
-
 class SearchDoctorUsecase {
   final DoctorRepository _repository;
 
   SearchDoctorUsecase(this._repository);
 
-  Future<Either<Failure, DoctorEntity>> call(SearchParams params) {
-    return _repository.search(search: params.search);
+  Future<Either<Failure, List<DoctorEntity>>> call({
+    String? dcomId,
+    String? specId,
+  }) {
+    return _repository.search(dcomId: dcomId, specId: specId);
   }
 }
 

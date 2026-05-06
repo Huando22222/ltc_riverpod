@@ -5,19 +5,13 @@ import 'package:ltc/features/service/data/repositories/service_repository_impl.d
 import 'package:ltc/features/service/domain/entities/service_entity.dart';
 import 'package:ltc/features/service/domain/repositories/service_repository.dart';
 
-class SearchParams {
-  final String search;
-
-  SearchParams({required this.search});
-}
-
 class SearchServiceUsecase {
   final ServiceRepository _repository;
 
   SearchServiceUsecase(this._repository);
 
-  Future<Either<Failure, ServiceEntity>> call(SearchParams params) {
-    return _repository.searchService(search: params.search);
+  Future<Either<Failure, List<ServiceEntity>>> call(String? search) {
+    return _repository.searchService(search: search);
   }
 }
 

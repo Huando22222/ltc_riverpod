@@ -214,7 +214,7 @@ class _StepperItemCanvas extends CustomPainter {
 // HEADER STEPPER CONTAINER
 // ─────────────────────────────────────────────
 
-class HeaderStepperContainer extends StatelessWidget {
+class HeaderStepperContainerWidget extends StatelessWidget {
   final bool isActive;
   final bool isCheck;
 
@@ -229,7 +229,7 @@ class HeaderStepperContainer extends StatelessWidget {
 
   final VoidCallback? onTap;
 
-  const HeaderStepperContainer({
+  const HeaderStepperContainerWidget({
     super.key,
     required this.isActive,
     required this.isCheck,

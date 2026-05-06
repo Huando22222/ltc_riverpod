@@ -1,0 +1,83 @@
+// booking_notifier.dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ltc/features/booking/presentation/providers/booking_state.dart';
+import 'package:ltc/features/doctor/domain/usecases/search_doctor_usecase.dart';
+import 'package:ltc/features/service/domain/entities/package_entity.dart';
+import 'package:ltc/features/service/domain/usecases/get_package_detail_usecase.dart';
+import 'package:ltc/features/service/domain/usecases/get_package_usecase.dart';
+import 'package:ltc/features/service/domain/usecases/search_service_usecase.dart';
+import 'package:ltc/features/specialty/domain/usecases/get_clinic_specialty_usecase.dart';
+
+class BookingNotifier extends Notifier<BookingState> {
+  @override
+  BookingState build() {
+    Future.microtask(() => loadClinic());
+    return const BookingState(dcomId: 'A018');
+  }
+
+  // ── Helpers ──────────────────────────────────────────
+  SearchServiceUsecase get _searchService =>
+      ref.read(searchServiceUsecaseProvider);
+  GetPackagesUsecase get _getPackages => ref.read(getPackagesUsecaseProvider);
+  GetPackageDetailUsecase get _getPackageDetail =>
+      ref.read(getPackageDetailUsecaseProvider);
+  GetClinicSpecialtyUsecase get _getSpecialty =>
+      ref.read(getClinicSpecialtyUsecaseProvider);
+  SearchDoctorUsecase get _searchDoctor =>
+      ref.read(searchDoctorUsecaseProvider);
+
+  Future<void> loadClinic() async {}
+
+  Future<void> loadServices(String? search) async {
+    state = state.copyWith(isLoadingServices: true);
+    final result = await _searchService.call(search);
+
+    result.fold(
+      (failure) => state = state.copyWith(errorMessage: failure.message),
+      (services) => state = state.copyWith(services: services),
+    );
+    state = state.copyWith(isLoadingServices: false);
+  }
+
+  Future<void> loadPackages() async {
+    state = state.copyWith(isLoadingPackages: true);
+    final result = await _getPackages.call();
+
+    result.fold(
+      (failure) => state = state.copyWith(errorMessage: failure.message),
+      (packages) => state = state.copyWith(packages: packages),
+    );
+    state = state.copyWith(isLoadingPackages: false);
+  }
+
+  Future<void> loadSpecialty() async {
+    state = state.copyWith(isLoadingSpecialty: true);
+    final result = await _getSpecialty.call(state.dcomId);
+    result.fold(
+      (failure) => state = state.copyWith(errorMessage: failure.message),
+      (specialty) => state = state.copyWith(specialties: specialty),
+    );
+    state = state.copyWith(isLoadingSpecialty: false);
+  }
+
+  Future<void> loadDoctor() async {
+    state = state.copyWith(isLoadingDoctors: true);
+    final result = await _searchDoctor.call(
+      dcomId: state.dcomId,
+      specId: state.selectedSpecialty!.id,
+    );
+    result.fold(
+      (failure) => state = state.copyWith(errorMessage: failure.message),
+      (doctor) => state = state.copyWith(doctors: doctor),
+    );
+    state = state.copyWith(isLoadingDoctors: false);
+  }
+
+  void selectDate(DateTime date) => state = state.copyWith(selectedDate: date);
+  void selectTimeSlot(String slot) =>
+      state = state.copyWith(selectedTimeSlot: slot);
+}
+
+final bookingProvider = NotifierProvider<BookingNotifier, BookingState>(
+  BookingNotifier.new,
+);

@@ -13,15 +13,19 @@ class DoctorRemoteDatasource {
   final Dio _dio;
   const DoctorRemoteDatasource(this._dio);
 
-  Future<BaseResponse<DoctorModel>> search({String? search}) async {
+  Future<BaseResponse<List<DoctorModel>>> search({
+    String? dcomId,
+    String? specId,
+  }) async {
     final response = await _dio.get(
       ApiConstants.getListDoctor,
-      queryParameters: {'search': search},
+      queryParameters: {'dcom_id': dcomId, 'spec_id': specId},
     );
 
-    final res = BaseResponse<DoctorModel>.fromJson(
+    final res = BaseResponse<List<DoctorModel>>.fromJson(
       response.data,
-      (json) => json,
+      (json) =>
+          (json as List).map((e) => DoctorModel.fromJson(json: e)).toList(),
     );
     return res;
   }

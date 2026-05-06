@@ -7,7 +7,6 @@ import 'package:ltc/features/service/data/datasources/service_remote_datasource.
 import 'package:ltc/features/service/domain/entities/package_entity.dart';
 import 'package:ltc/features/service/domain/entities/package_item_entity.dart';
 import 'package:ltc/features/service/domain/entities/service_entity.dart';
-import 'package:ltc/features/service/domain/entities/specialty_entity.dart';
 import 'package:ltc/features/service/domain/repositories/service_repository.dart';
 
 final serviceRepositoryProvider = Provider<ServiceRepository>(
@@ -18,7 +17,9 @@ class ServiceRepositoryImpl implements ServiceRepository {
   final ServiceRemoteDatasource _datasource;
   const ServiceRepositoryImpl(this._datasource);
   @override
-  Future<Either<Failure, ServiceEntity>> searchService({String? search}) async {
+  Future<Either<Failure, List<ServiceEntity>>> searchService({
+    String? search,
+  }) async {
     try {
       final response = await _datasource.search(search: search);
       if (response.data != null) {
@@ -32,13 +33,32 @@ class ServiceRepositoryImpl implements ServiceRepository {
   }
 
   @override
-  Future<Either<Failure, PackageItemEntity>> getPackageDetail({
-    String packageId,
-  }) {}
+  Future<Either<Failure, List<PackageEntity>>> getPackages() async {
+    try {
+      final response = await _datasource.getPackages();
+      if (response.data != null) {
+        return Right(response.data!);
+      }
+      return Left(Failure(response.message ?? 'Lỗi get service'));
+    } catch (e, stackTrace) {
+      log("ServiceRepositoryImpl ERROR: $e = $stackTrace");
+      return Left(Failure('ERROR UNEXPECTED: ${e.toString()} $stackTrace'));
+    }
+  }
 
   @override
-  Future<Either<Failure, PackageEntity>> getPackages() {}
-
-  @override
-  Future<Either<Failure, SpecialtyEntity>> getSpecialty({String? dcomId}) {}
+  Future<Either<Failure, List<PackageItemEntity>>> getPackageDetail({
+    String? packageId,
+  }) async {
+    try {
+      final response = await _datasource.getPackageDetail();
+      if (response.data != null) {
+        return Right(response.data!);
+      }
+      return Left(Failure(response.message ?? 'Lỗi get service'));
+    } catch (e, stackTrace) {
+      log("ServiceRepositoryImpl ERROR: $e = $stackTrace");
+      return Left(Failure('ERROR UNEXPECTED: ${e.toString()} $stackTrace'));
+    }
+  }
 }

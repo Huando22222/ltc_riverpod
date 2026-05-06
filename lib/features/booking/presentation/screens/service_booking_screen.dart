@@ -4,10 +4,10 @@ import 'package:ltc/common/widgets/scaffold/app_scaffold_widget.dart';
 import 'package:ltc/common/widgets/stepper/vertical_stepper_widget.dart';
 import 'package:ltc/core/localization/locale_provider.dart';
 import 'package:ltc/core/theme/app_spacing.dart';
-
-// ─────────────────────────────────────────────
-// SERVICE BOOKING SCREEN
-// ─────────────────────────────────────────────
+import 'package:ltc/features/booking/presentation/widgets/confirm_step_header_widget.dart';
+import 'package:ltc/features/booking/presentation/widgets/patient_info_step_header_widget.dart';
+import 'package:ltc/features/booking/presentation/widgets/service_step_header_widget.dart';
+import 'package:ltc/features/booking/presentation/widgets/time_step_header_widget.dart';
 
 class ServiceBookingScreen extends ConsumerStatefulWidget {
   const ServiceBookingScreen({super.key});
@@ -18,9 +18,12 @@ class ServiceBookingScreen extends ConsumerStatefulWidget {
 }
 
 class _ServiceBookingScreenState extends ConsumerState<ServiceBookingScreen> {
+  int _currentStep = 3;
+
   @override
   Widget build(BuildContext context) {
     final tr = ref.watch(stringsProvider);
+
     return AppScaffoldWidget(
       title: tr.service,
       child: SingleChildScrollView(
@@ -30,132 +33,66 @@ class _ServiceBookingScreenState extends ConsumerState<ServiceBookingScreen> {
         ),
         child: VerticalStepperWidget(
           stepper: [
+            // ── Step 1: Chọn dịch vụ ─────────────
             VerticalStepperItemWidget(
-              isActive: true,
-              isCheck: true,
               isFirst: true,
-              isLast: false,
-              header: HeaderStepperContainer(
-                isActive: true,
-                isCheck: true,
-                icon: Icons.calendar_today,
-                onTap: () {},
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Chọn thời gian'),
-                    Text('Thứ Ba, 06/05/2025'),
-                  ],
-                ),
+              isActive: _currentStep == 0,
+              isCheck: _currentStep > 0,
+              header: ServiceStepHeader(
+                isActive: _currentStep == 0,
+                isCheck: _currentStep > 0,
+                serviceName: _currentStep > 0 ? 'Khám tổng quát' : null,
+                onTap: _currentStep > 0
+                    ? () => setState(() => _currentStep = 0)
+                    : null,
               ),
-              body: StepBodyContainer(child: _TimePickerBody()),
             ),
+
+            // ── Step 2: Chọn thời gian ────────────
             VerticalStepperItemWidget(
-              isActive: false,
-              isCheck: false,
-              isFirst: false,
-              isLast: true,
-              header: // Cách dùng
-              HeaderStepperContainer(
-                isActive: true,
-                isCheck: false,
-                icon: Icons.calendar_today,
-                onTap: () {},
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Chọn thời gian'),
-                    Text('Thứ Ba, 06/05/2025'),
-                  ],
-                ),
+              isActive: _currentStep == 1,
+              isCheck: _currentStep > 1,
+              header: TimeStepHeaderWidget(
+                isActive: _currentStep == 1,
+                isCheck: _currentStep > 1,
+                dateTime: _currentStep > 1
+                    ? 'Thứ Ba, 06/05/2025 · 09:00'
+                    : null,
+                onTap: _currentStep > 1
+                    ? () => setState(() => _currentStep = 1)
+                    : null,
               ),
-              body: StepBodyContainer(child: _TimePickerBody()),
+            ),
+
+            // ── Step 3: Thông tin bệnh nhân ───────
+            VerticalStepperItemWidget(
+              isActive: _currentStep == 2,
+              isCheck: _currentStep > 2,
+              header: PatientInfoStepHeaderWidget(
+                isActive: _currentStep == 2,
+                isCheck: _currentStep > 2,
+                patientName: _currentStep > 2
+                    ? 'Nguyễn Văn A · 01/01/1990'
+                    : null,
+                onTap: _currentStep > 2
+                    ? () => setState(() => _currentStep = 2)
+                    : null,
+              ),
+            ),
+
+            // ── Step 4: Xác nhận ──────────────────
+            VerticalStepperItemWidget(
+              isLast: true,
+              isActive: _currentStep == 3,
+              isCheck: _currentStep > 3,
+              header: ConfirmStepHeaderWidget(
+                isActive: _currentStep == 3,
+                isCheck: _currentStep > 3,
+              ),
             ),
           ],
         ),
       ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────
-// SAMPLE BODY: TIME PICKER
-// ─────────────────────────────────────────────
-
-class _TimePickerBody extends StatefulWidget {
-  @override
-  State<_TimePickerBody> createState() => _TimePickerBodyState();
-}
-
-class _TimePickerBodyState extends State<_TimePickerBody> {
-  int? selectedSlot;
-  final List<String> slots = [
-    '08:00',
-    '08:30',
-    '09:00',
-    '09:30',
-    '10:00',
-    '10:30',
-    '14:00',
-    '14:30',
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    final tt = Theme.of(context).textTheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Thứ Ba, 06 tháng 5, 2025',
-          style: tt.bodySmall?.copyWith(
-            color: cs.onSurfaceVariant,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: List.generate(slots.length, (i) {
-            final isSelected = selectedSlot == i;
-            return GestureDetector(
-              onTap: () => setState(() => selectedSlot = i),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: isSelected ? cs.primary : cs.surface,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: isSelected ? cs.primary : cs.outlineVariant,
-                  ),
-                ),
-                child: Text(
-                  slots[i],
-                  style: tt.bodySmall?.copyWith(
-                    color: isSelected ? cs.onPrimary : cs.onSurface,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  ),
-                ),
-              ),
-            );
-          }),
-        ),
-        const SizedBox(height: 16),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: selectedSlot != null ? () {} : null,
-            child: const Text('Xác nhận giờ hẹn'),
-          ),
-        ),
-      ],
     );
   }
 }

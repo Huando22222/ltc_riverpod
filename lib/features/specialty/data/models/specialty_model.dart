@@ -1,4 +1,4 @@
-import 'package:ltc/features/service/domain/entities/specialty_entity.dart';
+import 'package:ltc/features/specialty/domain/entities/specialty_entity.dart';
 
 class SpecialtyModel extends SpecialtyEntity {
   SpecialtyModel({
