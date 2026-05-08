@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:ltc/core/extensions/context_ext.dart';
 
-class ContainerBottomModelSheet extends StatelessWidget {
+class ContainerBottomModalSheet extends StatelessWidget {
   final EdgeInsets padding;
 
   ///[height] general height is 380
   final double? height;
 
   final Widget child;
-  const ContainerBottomModelSheet({
+  const ContainerBottomModalSheet({
     super.key,
     this.padding = const EdgeInsets.only(left: 20, right: 20, top: 0),
     this.height,
@@ -16,6 +17,7 @@ class ContainerBottomModelSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = context.colorScheme;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -28,7 +30,7 @@ class ContainerBottomModelSheet extends StatelessWidget {
         height: height,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: cs.surface,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
@@ -42,7 +44,7 @@ class ContainerBottomModelSheet extends StatelessWidget {
               width: 50,
               height: 5,
               decoration: BoxDecoration(
-                color: Color(0xFF1469AE).withOpacity(0.3),
+                color: cs.onSurface,
                 borderRadius: BorderRadius.circular(3),
               ),
             ),

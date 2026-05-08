@@ -1,0 +1,420 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ltc/common/widgets/drop_down/drop_down_widget.dart';
+import 'package:ltc/common/widgets/search_bar/search_bar_widget.dart';
+import 'package:ltc/common/widgets/states/empty_data_widget.dart';
+import 'package:ltc/core/extensions/color_schema_ext.dart';
+import 'package:ltc/core/extensions/context_ext.dart';
+import 'package:ltc/core/theme/app_spacing.dart';
+import 'package:ltc/features/service/domain/entities/service_entity.dart';
+
+class ServiceModalWidget extends ConsumerStatefulWidget {
+  final List<ServiceEntity> services;
+  final List<ServiceEntity> selectedServices;
+  final ValueChanged<List<ServiceEntity>>? onConfirm;
+
+  const ServiceModalWidget({
+    super.key,
+    required this.services,
+    this.selectedServices = const [],
+    this.onConfirm,
+  });
+
+  @override
+  ConsumerState<ServiceModalWidget> createState() => _ServiceModalWidgetState();
+}
+
+class _ServiceModalWidgetState extends ConsumerState<ServiceModalWidget> {
+  late final TextEditingController _searchController;
+  late List<ServiceEntity> _selected;
+  String _searchQuery = '';
+  String _activeGroupName = _kAll;
+
+  static const String _kAll = 'Tất cả';
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+    _selected = List.from(widget.selectedServices);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  // ── Helpers ──────────────────────────────────
+
+  /// Danh sách tên nhóm duy nhất (dùng serGroupName vì DropDownWidget nhận String)
+  List<String> get _groupNames {
+    final seen = <String>{};
+    final result = <String>[_kAll];
+    for (final s in widget.services) {
+      if (s.isActive && !s.isLogicDel && seen.add(s.serGroupName)) {
+        result.add(s.serGroupName);
+      }
+    }
+    return result;
+  }
+
+  List<ServiceEntity> get _filtered {
+    var list = widget.services
+        .where((s) => s.isActive && !s.isLogicDel)
+        .toList();
+
+    if (_activeGroupName != _kAll) {
+      list = list.where((s) => s.serGroupName == _activeGroupName).toList();
+    }
+
+    if (_searchQuery.isNotEmpty) {
+      list = list
+          .where(
+            (s) => s.serName.toLowerCase().contains(_searchQuery.toLowerCase()),
+          )
+          .toList();
+    }
+
+    // Khi "Tất cả" + không search → đưa đã chọn lên đầu
+    if (_activeGroupName == _kAll && _searchQuery.isEmpty) {
+      final selectedFirst = _selected
+          .where((sel) => list.any((s) => s.serId == sel.serId))
+          .toList();
+      final rest = list
+          .where((s) => !_selected.any((sel) => sel.serId == s.serId))
+          .toList();
+      return [...selectedFirst, ...rest];
+    }
+
+    return list;
+  }
+
+  bool _isSelected(ServiceEntity s) => _selected.any((e) => e.serId == s.serId);
+
+  void _toggle(ServiceEntity s) {
+    setState(() {
+      if (_isSelected(s)) {
+        _selected.removeWhere((e) => e.serId == s.serId);
+      } else {
+        _selected.add(s);
+      }
+    });
+  }
+
+  double get _totalPrice => _selected.fold(0, (sum, s) => sum + s.serTotal);
+
+  String _formatPrice(double price) {
+    if (price <= 0) return 'Miễn phí';
+    return '${price.toStringAsFixed(0).replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (m) => '.')}đ';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = context.colorScheme;
+    final tt = context.textTheme;
+    final filtered = _filtered;
+
+    return Column(
+      spacing: 5,
+      children: [
+        // ── Dropdown nhóm dịch vụ ────────────
+        Padding(
+          padding: const EdgeInsets.only(
+            left: AppSpacing.horizontalPaddingScreen,
+            right: AppSpacing.horizontalPaddingScreen,
+          ),
+          child: DropDownWidget(
+            categories: _groupNames,
+            selectedCategory: _activeGroupName,
+            customIcons: const {'Tất cả': Icons.apps_rounded},
+            onChanged: (v) {
+              if (v != null) {
+                setState(() {
+                  _activeGroupName = v;
+                  _searchQuery = '';
+                  _searchController.clear();
+                });
+              }
+            },
+          ),
+        ),
+
+        // ── Search ───────────────────────────
+        Padding(
+          padding: const EdgeInsets.only(
+            left: AppSpacing.horizontalPaddingScreen,
+            right: AppSpacing.horizontalPaddingScreen,
+          ),
+          child: SearchBarWidget(
+            controller: _searchController,
+            hint: 'Tìm kiếm dịch vụ...',
+            onChanged: (v) => setState(() {
+              _searchQuery = v;
+              if (v.isNotEmpty) _activeGroupName = _kAll;
+            }),
+            onSubmitted: (v) => setState(() {
+              _searchQuery = v;
+              if (v.isNotEmpty) _activeGroupName = _kAll;
+            }),
+          ),
+        ),
+
+        Expanded(
+          child: filtered.isEmpty
+              ? EmptyDataWidget()
+              : Scrollbar(
+                  child: ListView.builder(
+                    padding: EdgeInsets.fromLTRB(
+                      AppSpacing.horizontalPaddingScreen,
+                      5,
+                      AppSpacing.horizontalPaddingScreen,
+                      5,
+                    ),
+                    itemCount: filtered.length,
+                    itemBuilder: (_, i) {
+                      final service = filtered[i];
+                      return _ServiceCard(
+                        service: service,
+                        isSelected: _isSelected(service),
+                        showGroup: _activeGroupName == _kAll,
+                        formatPrice: _formatPrice,
+                        onTap: () => _toggle(service),
+                      );
+                    },
+                  ),
+                ),
+        ),
+
+        _BottomBar(
+          selectedCount: _selected.length,
+          totalPrice: _totalPrice,
+          formatPrice: _formatPrice,
+          onConfirm: _selected.isEmpty
+              ? null
+              : () {
+                  widget.onConfirm?.call(_selected);
+                  Navigator.pop(context, _selected);
+                },
+        ),
+      ],
+    );
+  }
+}
+
+class _ServiceCard extends StatelessWidget {
+  final ServiceEntity service;
+  final bool isSelected;
+  final bool showGroup;
+  final String Function(double) formatPrice;
+  final VoidCallback onTap;
+
+  const _ServiceCard({
+    required this.service,
+    required this.isSelected,
+    required this.showGroup,
+    required this.formatPrice,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = context.colorScheme;
+    final tt = context.textTheme;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.only(
+            bottom: 8,
+            top: 8,
+            left: 12,
+            right: 12,
+          ),
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          decoration: BoxDecoration(
+            color: cs.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected
+                  ? cs.primary.withOpacity(0.35)
+                  : cs.outlineVariant,
+              width: isSelected ? 1.5 : 1,
+            ),
+            boxShadow: cs.softShadow,
+          ),
+          child: Row(
+            children: [
+              // ── Leading gradient box ─────
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      cs.primary.withOpacity(0.18),
+                      cs.primary.withOpacity(0.07),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: isSelected
+                    ? Icon(
+                        FontAwesomeIcons.circleCheck,
+                        size: 18,
+                        color: cs.primary,
+                      )
+                    : null,
+              ),
+              const SizedBox(width: 12),
+
+              // ── Name / group / price ─────
+              Expanded(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            service.serName,
+                            style: tt.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: cs.onSurface,
+                              height: 1.3,
+                            ),
+                          ),
+                          if (showGroup) ...[
+                            const SizedBox(height: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: cs.primaryContainer,
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(
+                                  color: cs.primary.withOpacity(0.2),
+                                  width: 0.5,
+                                ),
+                              ),
+                              child: Text(
+                                service.serGroupName,
+                                style: tt.labelSmall?.copyWith(
+                                  color: cs.primary,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                          const SizedBox(height: 4),
+                          Text(
+                            formatPrice(service.serTotal),
+                            style: tt.bodySmall?.copyWith(
+                              color: cs.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // ── +/- button ──────────
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: cs.primaryContainer,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        isSelected
+                            ? FontAwesomeIcons.minus
+                            : FontAwesomeIcons.plus,
+                        size: 14,
+                        color: isSelected ? cs.error : cs.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+// BOTTOM BAR
+// ─────────────────────────────────────────────
+
+class _BottomBar extends StatelessWidget {
+  final int selectedCount;
+  final double totalPrice;
+  final String Function(double) formatPrice;
+  final VoidCallback? onConfirm;
+
+  const _BottomBar({
+    required this.selectedCount,
+    required this.totalPrice,
+    required this.formatPrice,
+    required this.onConfirm,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = context.colorScheme;
+    final tt = context.textTheme;
+    final md = MediaQuery.of(context);
+
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+      decoration: BoxDecoration(
+        color: cs.surface,
+        border: Border(top: BorderSide(color: cs.outlineVariant)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  selectedCount == 0
+                      ? 'Chưa chọn dịch vụ'
+                      : '$selectedCount dịch vụ',
+                  style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
+                ),
+                if (selectedCount > 0) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    formatPrice(totalPrice),
+                    style: tt.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: cs.primary,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          ElevatedButton(
+            onPressed: onConfirm,
+            style: ElevatedButton.styleFrom(minimumSize: const Size(130, 46)),
+            child: Text('Xác nhận'),
+          ),
+        ],
+      ),
+    );
+  }
+}

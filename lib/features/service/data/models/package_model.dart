@@ -31,8 +31,8 @@ class PackageModel extends PackageEntity {
       packageName: json['pkg_name'],
       description: json['description'],
       image: json['image'],
-      discountAmount: json['discount_amount'],
-      discountPercent: json['discount_percent'],
+      discountAmount: (json['discount_amount'] as num).toDouble(),
+      discountPercent: (json['discount_percent'] as num).toDouble(),
       services: servicesJson != null
           ? servicesJson.map((e) => PackageItemModel.fromJson(json: e)).toList()
           : [],

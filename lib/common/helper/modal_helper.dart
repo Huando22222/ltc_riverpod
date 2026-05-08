@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ltc/common/widgets/modal/container_bottom_model_sheet.dart';
+import 'package:ltc/common/widgets/modal/container_bottom_modal_sheet.dart';
 import 'package:ltc/common/widgets/modal/login_required_widget.dart';
+import 'package:ltc/common/widgets/modal/service_modal_widget.dart';
+import 'package:ltc/features/service/domain/entities/service_entity.dart';
 
 /// [PopupAction] use for [popup] to spread property
 class PopupAction {
@@ -30,7 +32,7 @@ class ModalHelper {
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return ContainerBottomModelSheet(height: height, child: child);
+        return ContainerBottomModalSheet(height: height, child: child);
       },
     );
   }
@@ -42,6 +44,28 @@ class ModalHelper {
     return modal<bool>(
       context: context,
       child: LoginRequiredWidget(featureName: featureName),
+    );
+  }
+
+  static void showServiceModal({
+    required BuildContext context,
+    required List<ServiceEntity> services,
+    List<ServiceEntity> selectedServices = const [],
+    ValueChanged<List<ServiceEntity>>? onConfirm,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => ContainerBottomModalSheet(
+        height: MediaQuery.of(context).size.height * 0.85,
+        padding: EdgeInsets.zero,
+        child: ServiceModalWidget(
+          services: services,
+          selectedServices: selectedServices,
+          onConfirm: onConfirm,
+        ),
+      ),
     );
   }
 

@@ -9,10 +9,12 @@ import 'package:ltc/features/service/domain/usecases/search_service_usecase.dart
 import 'package:ltc/features/specialty/domain/usecases/get_clinic_specialty_usecase.dart';
 
 class BookingNotifier extends Notifier<BookingState> {
+  BookingNotifier(this.dcomId);
+  final String dcomId;
+
   @override
   BookingState build() {
-    Future.microtask(() => loadClinic());
-    return const BookingState(dcomId: 'A018');
+    return BookingState(dcomId: dcomId);
   }
 
   // ── Helpers ──────────────────────────────────────────
@@ -78,6 +80,9 @@ class BookingNotifier extends Notifier<BookingState> {
       state = state.copyWith(selectedTimeSlot: slot);
 }
 
-final bookingProvider = NotifierProvider<BookingNotifier, BookingState>(
-  BookingNotifier.new,
-);
+final bookingProvider = NotifierProvider.autoDispose
+    .family<BookingNotifier, BookingState, String>(BookingNotifier.new);
+
+// final bookingProvider = NotifierProvider<BookingNotifier, BookingState>(
+//   BookingNotifier.new,
+// );

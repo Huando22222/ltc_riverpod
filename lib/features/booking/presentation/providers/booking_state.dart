@@ -1,7 +1,6 @@
 // booking_state.dart
 import 'package:ltc/features/doctor/domain/entities/doctor_entity.dart';
 import 'package:ltc/features/service/domain/entities/package_entity.dart';
-import 'package:ltc/features/service/domain/entities/package_item_entity.dart';
 import 'package:ltc/features/service/domain/entities/service_entity.dart';
 import 'package:ltc/features/specialty/domain/entities/specialty_entity.dart';
 
@@ -14,7 +13,6 @@ class BookingState {
   final List<SpecialtyEntity> specialties;
   final List<ServiceEntity> services;
   final List<DoctorEntity> doctors;
-
   // — User đã chọn
   final List<ServiceEntity> selectedServices;
   final List<PackageEntity> selectedPackages;
@@ -22,8 +20,6 @@ class BookingState {
   final SpecialtyEntity? selectedSpecialty;
   final DateTime? selectedDate;
   final String? selectedTimeSlot;
-
-  // — Form input
 
   // — Async state
   final bool isLoadingSpecialty;
@@ -76,7 +72,7 @@ class BookingState {
       specialties: specialties ?? this.specialties,
       services: services ?? this.services,
       doctors: doctors ?? this.doctors,
-      selectedServices: services ?? this.selectedServices,
+      selectedServices: selectedServices ?? this.selectedServices,
       selectedPackages: selectedPackages ?? this.selectedPackages,
       selectedSpecialty: selectedSpecialty ?? this.selectedSpecialty,
       selectedDoctor: selectedDoctor ?? this.selectedDoctor,
@@ -87,6 +83,17 @@ class BookingState {
       isLoadingPackages: isLoadingPackages ?? this.isLoadingPackages,
       isLoadingDoctors: isLoadingDoctors ?? this.isLoadingDoctors,
       errorMessage: errorMessage,
+    );
+  }
+
+  BookingState resetSelections() {
+    return copyWith(
+      selectedServices: [],
+      selectedPackages: [],
+      selectedSpecialty: null,
+      selectedDoctor: null,
+      selectedDate: null,
+      selectedTimeSlot: null,
     );
   }
 }

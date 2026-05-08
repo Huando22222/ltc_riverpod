@@ -18,8 +18,8 @@ class PackageItemModel extends PackageItemEntity {
       serGroupId: json['ser_grp_id'],
       serId: json['ser_id'],
       serName: json['ser_name'],
-      serPrice: json['ser_price'],
-      serTotal: json['ser_total'],
+      serPrice: (json['ser_price'] as num).toDouble(),
+      serTotal: (json['ser_total'] as num).toDouble(),
     );
   }
 }
