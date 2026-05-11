@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ltc/common/widgets/stepper/vertical_stepper_widget.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
+import 'package:ltc/core/localization/locale_provider.dart';
 
-class PatientInfoStepHeaderWidget extends StatelessWidget {
+class PatientInfoStepHeaderWidget extends ConsumerWidget {
   final bool isActive;
   final bool isCheck;
   final VoidCallback? onTap;
@@ -20,10 +22,10 @@ class PatientInfoStepHeaderWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final tt = context.textTheme;
     final cs = context.colorScheme;
-
+    final tr = ref.watch(stringsProvider);
     return HeaderStepperContainerWidget(
       isActive: isActive,
       isCheck: isCheck,
@@ -34,7 +36,7 @@ class PatientInfoStepHeaderWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Thông tin bệnh nhân',
+            tr.patientInfo,
             style: tt.bodyMedium?.copyWith(
               fontWeight: FontWeight.w600,
               color: isActive
@@ -55,7 +57,7 @@ class PatientInfoStepHeaderWidget extends StatelessWidget {
           ] else if (isActive) ...[
             const SizedBox(height: 2),
             Text(
-              'Điền thông tin người đặt khám',
+              tr.fillPatientInfo,
               style: tt.bodySmall?.copyWith(color: cs.primary.withOpacity(0.7)),
             ),
           ],

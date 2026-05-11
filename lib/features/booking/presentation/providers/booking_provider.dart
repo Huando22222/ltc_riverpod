@@ -1,8 +1,10 @@
 // booking_notifier.dart
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ltc/features/booking/presentation/providers/booking_state.dart';
 import 'package:ltc/features/doctor/domain/usecases/search_doctor_usecase.dart';
 import 'package:ltc/features/service/domain/entities/package_entity.dart';
+import 'package:ltc/features/service/domain/entities/service_entity.dart';
 import 'package:ltc/features/service/domain/usecases/get_package_detail_usecase.dart';
 import 'package:ltc/features/service/domain/usecases/get_package_usecase.dart';
 import 'package:ltc/features/service/domain/usecases/search_service_usecase.dart';
@@ -28,6 +30,34 @@ class BookingNotifier extends Notifier<BookingState> {
   SearchDoctorUsecase get _searchDoctor =>
       ref.read(searchDoctorUsecaseProvider);
 
+  //? MARK: FUNC
+  // void toggleService(ServiceEntity service) {
+  //   final current = List<ServiceEntity>.from(state.selectedServices);
+  //   final idx = current.indexWhere((s) => s.serId == service.serId);
+  //   if (idx >= 0) {
+  //     current.removeAt(idx);
+  //   } else {
+  //     current.add(service);
+  //   }
+  //   state = state.copyWith(selectedServices: current);
+  // }
+  void addServices(List<ServiceEntity> services) {
+    state = state.copyWith(
+      selectedServices: [...state.selectedServices, ...services],
+    );
+  }
+
+  void removeServices(List<ServiceEntity> services) {
+    final serviceIdsToRemove = services.map((e) => e.serId).toSet();
+
+    state = state.copyWith(
+      selectedServices: state.selectedServices
+          .where((e) => !serviceIdsToRemove.contains(e.serId))
+          .toList(),
+    );
+  }
+
+  //? MARK: LOAD
   Future<void> loadClinic() async {}
 
   Future<void> loadServices(String? search) async {
@@ -76,13 +106,9 @@ class BookingNotifier extends Notifier<BookingState> {
   }
 
   void selectDate(DateTime date) => state = state.copyWith(selectedDate: date);
-  void selectTimeSlot(String slot) =>
+  void selectTimeSlot(TimeOfDay slot) =>
       state = state.copyWith(selectedTimeSlot: slot);
 }
 
 final bookingProvider = NotifierProvider.autoDispose
     .family<BookingNotifier, BookingState, String>(BookingNotifier.new);
-
-// final bookingProvider = NotifierProvider<BookingNotifier, BookingState>(
-//   BookingNotifier.new,
-// );

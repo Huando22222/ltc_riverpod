@@ -1,4 +1,5 @@
 // booking_state.dart
+import 'package:flutter/material.dart';
 import 'package:ltc/features/doctor/domain/entities/doctor_entity.dart';
 import 'package:ltc/features/service/domain/entities/package_entity.dart';
 import 'package:ltc/features/service/domain/entities/service_entity.dart';
@@ -19,7 +20,7 @@ class BookingState {
   final DoctorEntity? selectedDoctor;
   final SpecialtyEntity? selectedSpecialty;
   final DateTime? selectedDate;
-  final String? selectedTimeSlot;
+  final TimeOfDay? selectedTimeSlot;
 
   // — Async state
   final bool isLoadingSpecialty;
@@ -59,7 +60,7 @@ class BookingState {
     SpecialtyEntity? selectedSpecialty,
     DoctorEntity? selectedDoctor,
     DateTime? selectedDate,
-    String? selectedTimeSlot,
+    TimeOfDay? selectedTimeSlot,
     bool? isLoadingSpecialty,
     bool? isLoadingServices,
     bool? isLoadingPackages,

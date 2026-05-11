@@ -1,6 +1,19 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:ltc/common/util/date_time_util.dart';
 import 'package:ltc/core/localization/app_strings.dart';
 
 class ViStrings extends AppStrings {
+  static const _weekdays = [
+    'Thứ Hai',
+    'Thứ Ba',
+    'Thứ Tư',
+    'Thứ Năm',
+    'Thứ Sáu',
+    'Thứ Bảy',
+    'Chủ Nhật',
+  ];
+  static const _short = ['', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
   ViStrings();
   @override
   String get appName => 'LTC';
@@ -144,4 +157,168 @@ class ViStrings extends AppStrings {
   String get benefitHealthRecord => 'Lưu trữ hồ sơ sức khoẻ cá nhân';
   @override
   String get benefitMore => 'Và nhiều tính năng khác nữa';
+  @override
+  String get monday => 'Thứ Hai';
+  @override
+  String get tuesday => 'Thứ Ba';
+  @override
+  String get wednesday => 'Thứ Tư';
+  @override
+  String get thursday => 'Thứ Năm';
+  @override
+  String get friday => 'Thứ Sáu';
+  @override
+  String get saturday => 'Thứ Bảy';
+  @override
+  String get sunday => 'Chủ Nhật';
+
+  @override
+  String get monShort => 'T2';
+  @override
+  String get tueShort => 'T3';
+  @override
+  String get wedShort => 'T4';
+  @override
+  String get thuShort => 'T5';
+  @override
+  String get friShort => 'T6';
+  @override
+  String get satShort => 'T7';
+  @override
+  String get sunShort => 'CN';
+
+  @override
+  String weekdayName(int w) => _weekdays[w];
+  @override
+  String shortWeekday(int w) => _short[w];
+  @override
+  String dayLabel(DateTime d) =>
+      DateTimeUtil.isToday(d) ? 'Hôm nay' : shortWeekday(d.weekday);
+  @override
+  String bookingSummary(DateTime? d, TimeOfDay? t) {
+    if (d == null && t == null) return '';
+    if (d == null) return DateTimeUtil.formatTimeOfDay(t!);
+    if (t == null) {
+      return '${weekdayName(d.weekday)}, ${DateFormat('dd/MM/yyyy').format(d)}';
+    }
+    return '${weekdayName(d.weekday)}, ${DateFormat('dd/MM/yyyy').format(d)} · ${DateTimeUtil.formatTimeOfDay(t)}';
+  }
+
+  @override
+  String get morning => 'Buổi sáng';
+  @override
+  String get afternoon => 'Buổi chiều';
+  @override
+  String get january => 'Tháng 1';
+  @override
+  String get february => 'Tháng 2';
+  @override
+  String get march => 'Tháng 3';
+  @override
+  String get april => 'Tháng 4';
+  @override
+  String get may => 'Tháng 5';
+  @override
+  String get june => 'Tháng 6';
+  @override
+  String get july => 'Tháng 7';
+  @override
+  String get august => 'Tháng 8';
+  @override
+  String get september => 'Tháng 9';
+  @override
+  String get october => 'Tháng 10';
+  @override
+  String get november => 'Tháng 11';
+  @override
+  String get december => 'Tháng 12';
+
+  @override
+  String get janShort => 'Th1';
+  @override
+  String get febShort => 'Th2';
+  @override
+  String get marShort => 'Th3';
+  @override
+  String get aprShort => 'Th4';
+  @override
+  String get mayShort => 'Th5';
+  @override
+  String get junShort => 'Th6';
+  @override
+  String get julShort => 'Th7';
+  @override
+  String get augShort => 'Th8';
+  @override
+  String get sepShort => 'Th9';
+  @override
+  String get octShort => 'Th10';
+  @override
+  String get novShort => 'Th11';
+  @override
+  String get decShort => 'Th12';
+  @override
+  String monthName(int m) => [
+    january,
+    february,
+    march,
+    april,
+    may,
+    june,
+    july,
+    august,
+    september,
+    october,
+    november,
+    december,
+  ][m];
+
+  @override
+  String shortMonth(int m) => [
+    janShort,
+    febShort,
+    marShort,
+    aprShort,
+    mayShort,
+    junShort,
+    julShort,
+    augShort,
+    sepShort,
+    octShort,
+    novShort,
+    decShort,
+  ][m];
+  @override
+  String get pickDate => 'Chọn ngày';
+  @override
+  String get pickTime => 'Chọn giờ';
+  @override
+  String get pickDateAndTime => 'Chọn ngày và khung giờ khám';
+  @override
+  String get today => 'Hôm nay';
+  @override
+  String get next => 'Tiếp theo';
+
+  // MARK: BOOKING STEPS
+  @override
+  String get patientInfo => 'Thông tin bệnh nhân';
+  @override
+  String get fillPatientInfo => 'Điền thông tin người đặt khám';
+  @override
+  String get confirmBooking => 'Xác nhận đặt lịch';
+  @override
+  String get checkAndConfirm => 'Kiểm tra và xác nhận thông tin';
+  @override
+  String get bookingSuccess => 'Đã đặt lịch thành công';
+  @override
+  String get estimatedFee => 'Phí tạm tính';
+  @override
+  String get editService => 'Chỉnh sửa dịch vụ';
+  @override
+  String get free => 'Miễn phí';
+  @override
+  String get pickService => 'Chọn dịch vụ khám';
+
+  @override
+  String selectedServiceCount(int count) => count ==0 ? pickService : '$count dịch vụ đã chọn';
 }

@@ -51,7 +51,8 @@ class ModalHelper {
     required BuildContext context,
     required List<ServiceEntity> services,
     List<ServiceEntity> selectedServices = const [],
-    ValueChanged<List<ServiceEntity>>? onConfirm,
+    ValueChanged<List<ServiceEntity>>? onAdd,
+    ValueChanged<List<ServiceEntity>>? onRemove,
   }) {
     showModalBottomSheet(
       context: context,
@@ -63,7 +64,8 @@ class ModalHelper {
         child: ServiceModalWidget(
           services: services,
           selectedServices: selectedServices,
-          onConfirm: onConfirm,
+          onAdd: onAdd,
+          onRemove: onRemove,
         ),
       ),
     );

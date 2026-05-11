@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 abstract class AppStrings {
   // MARK: APP
   String get appName;
@@ -73,7 +75,73 @@ abstract class AppStrings {
   String get serviceBooking;
   String get packageBooking;
   String get specialtyBooking;
+  String get patientInfo;
+  String get fillPatientInfo;
+  String get confirmBooking;
+  String get checkAndConfirm;
+  String get bookingSuccess;
+  String get estimatedFee;
+  String get editService;
+  String get free;
+  String get pickService;
+  String get pickDate;
+  String get pickTime;
+  String get pickDateAndTime;
+  String get today;
+  String get next;
+  // MARK: DATETIME
+  String get monday;
+  String get tuesday;
+  String get wednesday;
+  String get thursday;
+  String get friday;
+  String get saturday;
+  String get sunday;
 
+  String get monShort;
+  String get tueShort;
+  String get wedShort;
+  String get thuShort;
+  String get friShort;
+  String get satShort;
+  String get sunShort;
+
+  String get january;
+  String get february;
+  String get march;
+  String get april;
+  String get may;
+  String get june;
+  String get july;
+  String get august;
+  String get september;
+  String get october;
+  String get november;
+  String get december;
+
+  String get janShort;
+  String get febShort;
+  String get marShort;
+  String get aprShort;
+  String get mayShort;
+  String get junShort;
+  String get julShort;
+  String get augShort;
+  String get sepShort;
+  String get octShort;
+  String get novShort;
+  String get decShort;
+
+  String get morning;
+  String get afternoon;
+
+  String selectedServiceCount(int count);
+  String monthName(int month);
+  String shortMonth(int month);
+  String weekdayName(int weekday);
+  String shortWeekday(int weekday);
+  String dayLabel(DateTime date); // tự handle "Hôm nay" / "Today" bên trong
+  String bookingSummary(DateTime? date, TimeOfDay? time);
   // MARK: DYNAMIC
   String welcome(String name);
   String required(String field);

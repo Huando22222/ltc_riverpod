@@ -12,13 +12,15 @@ import 'package:ltc/features/service/domain/entities/service_entity.dart';
 class ServiceModalWidget extends ConsumerStatefulWidget {
   final List<ServiceEntity> services;
   final List<ServiceEntity> selectedServices;
-  final ValueChanged<List<ServiceEntity>>? onConfirm;
+  final ValueChanged<List<ServiceEntity>>? onAdd;
+  final ValueChanged<List<ServiceEntity>>? onRemove;
 
   const ServiceModalWidget({
     super.key,
     required this.services,
     this.selectedServices = const [],
-    this.onConfirm,
+    this.onAdd,
+    this.onRemove,
   });
 
   @override
@@ -30,7 +32,8 @@ class _ServiceModalWidgetState extends ConsumerState<ServiceModalWidget> {
   late List<ServiceEntity> _selected;
   String _searchQuery = '';
   String _activeGroupName = _kAll;
-
+  late List<ServiceEntity> _toAdd;
+  late List<ServiceEntity> _toRemove;
   static const String _kAll = 'Tất cả';
 
   @override
@@ -38,6 +41,8 @@ class _ServiceModalWidgetState extends ConsumerState<ServiceModalWidget> {
     super.initState();
     _searchController = TextEditingController();
     _selected = List.from(widget.selectedServices);
+    _toAdd = [];
+    _toRemove = [];
   }
 
   @override
@@ -79,11 +84,11 @@ class _ServiceModalWidgetState extends ConsumerState<ServiceModalWidget> {
 
     // Khi "Tất cả" + không search → đưa đã chọn lên đầu
     if (_activeGroupName == _kAll && _searchQuery.isEmpty) {
-      final selectedFirst = _selected
+      final selectedFirst = _currentSelected
           .where((sel) => list.any((s) => s.serId == sel.serId))
           .toList();
       final rest = list
-          .where((s) => !_selected.any((sel) => sel.serId == s.serId))
+          .where((s) => !_currentSelected.any((sel) => sel.serId == s.serId))
           .toList();
       return [...selectedFirst, ...rest];
     }
@@ -91,19 +96,44 @@ class _ServiceModalWidgetState extends ConsumerState<ServiceModalWidget> {
     return list;
   }
 
-  bool _isSelected(ServiceEntity s) => _selected.any((e) => e.serId == s.serId);
+  bool _isSelected(ServiceEntity s) {
+    final inOriginal = widget.selectedServices.any((e) => e.serId == s.serId);
+    final removed = _toRemove.any((e) => e.serId == s.serId);
+    final added = _toAdd.any((e) => e.serId == s.serId);
+    return (inOriginal && !removed) || added;
+  }
 
   void _toggle(ServiceEntity s) {
     setState(() {
+      final inOriginal = widget.selectedServices.any((e) => e.serId == s.serId);
       if (_isSelected(s)) {
-        _selected.removeWhere((e) => e.serId == s.serId);
+        if (inOriginal) {
+          _toRemove.add(s);
+        } else {
+          _toAdd.removeWhere((e) => e.serId == s.serId);
+        }
       } else {
-        _selected.add(s);
+        if (inOriginal) {
+          _toRemove.removeWhere((e) => e.serId == s.serId);
+        } else {
+          _toAdd.add(s);
+        }
       }
     });
   }
 
-  double get _totalPrice => _selected.fold(0, (sum, s) => sum + s.serTotal);
+  // Computed final selection = original - removed + added
+  List<ServiceEntity> get _currentSelected {
+    return [
+      ...widget.selectedServices.where(
+        (s) => !_toRemove.any((r) => r.serId == s.serId),
+      ),
+      ..._toAdd,
+    ];
+  }
+
+  double get _totalPrice =>
+      _currentSelected.fold(0, (sum, s) => sum + s.serTotal);
 
   String _formatPrice(double price) {
     if (price <= 0) return 'Miễn phí';
@@ -188,14 +218,15 @@ class _ServiceModalWidgetState extends ConsumerState<ServiceModalWidget> {
         ),
 
         _BottomBar(
-          selectedCount: _selected.length,
+          selectedCount: _currentSelected.length,
           totalPrice: _totalPrice,
           formatPrice: _formatPrice,
-          onConfirm: _selected.isEmpty
+          onConfirm: (_toAdd.isEmpty && _toRemove.isEmpty)
               ? null
               : () {
-                  widget.onConfirm?.call(_selected);
-                  Navigator.pop(context, _selected);
+                  widget.onAdd?.call(_toAdd);
+                  widget.onRemove?.call(_toRemove);
+                  Navigator.pop(context);
                 },
         ),
       ],

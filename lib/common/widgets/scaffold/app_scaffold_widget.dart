@@ -23,50 +23,56 @@ class AppScaffoldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final md = MediaQuery.of(context);
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(top: md.padding.top),
-        child: Column(
-          spacing: 5,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.horizontalPaddingScreen,
-              ),
-              child: Row(
-                spacing: 20,
-                children: [
-                  GestureDetector(
-                    onTap:
-                        onBack ??
-                        () {
-                          context.pop();
-                        },
-                    behavior: HitTestBehavior.opaque,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        FontAwesomeIcons.arrowLeft,
-                        color: context.colorScheme.primary,
-                        size: AppSpacing.iconMd,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        body: Padding(
+          padding: EdgeInsets.only(top: md.padding.top),
+          child: Column(
+            spacing: 5,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.horizontalPaddingScreen,
+                ),
+                child: Row(
+                  spacing: 20,
+                  children: [
+                    GestureDetector(
+                      onTap:
+                          onBack ??
+                          () {
+                            context.pop();
+                          },
+                      behavior: HitTestBehavior.opaque,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          FontAwesomeIcons.arrowLeft,
+                          color: context.colorScheme.primary,
+                          size: AppSpacing.iconMd,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: context.textTheme.headlineSmall!.copyWith(
-                        color: context.colorScheme.primary,
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: context.textTheme.headlineSmall!.copyWith(
+                          color: context.colorScheme.primary,
+                        ),
                       ),
                     ),
-                  ),
-                  // AvatarWidget(borderRadius: 500, showBorder: true),
-                ],
+                    // AvatarWidget(borderRadius: 500, showBorder: true),
+                  ],
+                ),
               ),
-            ),
-            AppBarDividerWidget(),
-            child,
-          ],
+              AppBarDividerWidget(),
+              child,
+            ],
+          ),
         ),
       ),
     );
