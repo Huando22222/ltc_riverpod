@@ -7,7 +7,7 @@ import 'package:ltc/core/constants/api_constants.dart';
 import 'package:ltc/core/constants/pref_constants.dart';
 import 'package:ltc/features/auth/data/models/user_model.dart';
 import 'package:ltc/features/auth/presentation/providers/auth_provider.dart';
-import 'package:ltc/features/auth/presentation/providers/auth_state.dart';
+import 'package:ltc/features/auth/presentation/states/auth_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final authInterceptorProvider = Provider<AuthInterceptor>(

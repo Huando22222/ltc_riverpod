@@ -5,6 +5,7 @@ class Routes {
   static const String login = '/login';
   static const String dashboard = '/dashboard';
   static const String serviceBooking = '/service-booking';
+  static const String patientDeclaration = '/patient-declaration';
 }
 
 class RouteName {
@@ -14,4 +15,5 @@ class RouteName {
   static const String login = 'login';
   static const String dashboard = 'dashboard';
   static const String serviceBooking = 'service-booking';
+  static const String patientDeclaration = 'patient-declaration';
 }

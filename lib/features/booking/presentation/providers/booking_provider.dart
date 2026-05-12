@@ -1,6 +1,7 @@
 // booking_notifier.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ltc/features/booking/domain/entities/patient_booking_entity.dart';
 import 'package:ltc/features/booking/presentation/providers/booking_state.dart';
 import 'package:ltc/features/doctor/domain/usecases/search_doctor_usecase.dart';
 import 'package:ltc/features/service/domain/entities/package_entity.dart';
@@ -30,17 +31,6 @@ class BookingNotifier extends Notifier<BookingState> {
   SearchDoctorUsecase get _searchDoctor =>
       ref.read(searchDoctorUsecaseProvider);
 
-  //? MARK: FUNC
-  // void toggleService(ServiceEntity service) {
-  //   final current = List<ServiceEntity>.from(state.selectedServices);
-  //   final idx = current.indexWhere((s) => s.serId == service.serId);
-  //   if (idx >= 0) {
-  //     current.removeAt(idx);
-  //   } else {
-  //     current.add(service);
-  //   }
-  //   state = state.copyWith(selectedServices: current);
-  // }
   void addServices(List<ServiceEntity> services) {
     state = state.copyWith(
       selectedServices: [...state.selectedServices, ...services],
@@ -57,6 +47,8 @@ class BookingNotifier extends Notifier<BookingState> {
     );
   }
 
+  void selectPatient(PatientBookingEntity patient) =>
+      state = state.copyWith(selectedPatient: patient);
   //? MARK: LOAD
   Future<void> loadClinic() async {}
 

@@ -13,6 +13,7 @@ class UserEntity {
   final bool isUpdatePassword;
   final DateTime bod;
   final String sex;
+  String? address;
   String? token;
   String? refreshToken;
   final String? userIdGTLTC;
@@ -30,6 +31,7 @@ class UserEntity {
     required this.isUpdatePassword,
     required this.bod,
     required this.sex,
+    this.address,
     this.token,
     this.refreshToken,
     required this.userIdGTLTC,

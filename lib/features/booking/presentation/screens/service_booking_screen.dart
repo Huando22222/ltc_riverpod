@@ -10,6 +10,7 @@ import 'package:ltc/core/theme/app_spacing.dart';
 import 'package:ltc/features/booking/presentation/providers/booking_provider.dart';
 import 'package:ltc/features/booking/presentation/providers/booking_state.dart';
 import 'package:ltc/features/booking/presentation/widgets/confirm_step_header_widget.dart';
+import 'package:ltc/features/booking/presentation/widgets/patient_info_step_body_widget.dart';
 import 'package:ltc/features/booking/presentation/widgets/patient_info_step_header_widget.dart';
 import 'package:ltc/features/booking/presentation/widgets/service_step_body_widget.dart';
 import 'package:ltc/features/booking/presentation/widgets/service_step_header_widget.dart';
@@ -66,6 +67,7 @@ class _ServiceBookingScreenState extends ConsumerState<ServiceBookingScreen> {
   @override
   Widget build(BuildContext context) {
     final tr = ref.watch(stringsProvider);
+    final bk = ref.read(bookingProvider('A018').notifier);
     final bkState = ref.watch(bookingProvider('A018'));
 
     return AppScaffoldWidget(
@@ -162,6 +164,16 @@ class _ServiceBookingScreenState extends ConsumerState<ServiceBookingScreen> {
                   onTap: _currentStep > 2
                       ? () => setState(() => _currentStep = 2)
                       : null,
+                ),
+                body: AnimatedSizeWidget(
+                  isExpanded: _currentStep == 2,
+                  child: PatientInfoStepBodyWidget(
+                    selected: bkState.selectedPatient, // ← truyền từ state
+                    onConfirm: (patient) {
+                      bk.selectPatient(patient);
+                      setState(() => _currentStep = 3);
+                    },
+                  ),
                 ),
               ),
 

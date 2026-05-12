@@ -19,6 +19,7 @@ class DashboardRemoteDatasource {
       responseAuth.data,
       (data) => DashboardModel.fromJson(data),
     );
+
     return res;
   }
 }

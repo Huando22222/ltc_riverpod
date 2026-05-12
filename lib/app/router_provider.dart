@@ -7,8 +7,10 @@ import 'package:ltc/app/shell/main_shell.dart';
 import 'package:ltc/common/screens/splash_screen.dart';
 import 'package:ltc/core/config/routes.dart';
 import 'package:ltc/features/auth/presentation/providers/auth_provider.dart';
-import 'package:ltc/features/auth/presentation/providers/auth_state.dart';
+import 'package:ltc/features/auth/presentation/states/auth_state.dart';
 import 'package:ltc/features/auth/presentation/screens/login_screen.dart';
+import 'package:ltc/features/auth/presentation/screens/register_screen.dart';
+import 'package:ltc/features/booking/presentation/screens/patient_declaration_screen.dart';
 import 'package:ltc/features/booking/presentation/screens/service_booking_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -63,6 +65,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, __) => const LoginScreen(),
       ),
       GoRoute(
+        name: RouteName.register,
+        path: Routes.register,
+        builder: (_, __) => const RegisterScreen(),
+      ),
+      GoRoute(
         name: RouteName.main,
         path: Routes.main,
         builder: (_, __) => MainShell(),
@@ -71,6 +78,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: RouteName.serviceBooking,
         path: Routes.serviceBooking,
         builder: (_, __) => const ServiceBookingScreen(),
+      ),
+      GoRoute(
+        name: RouteName.patientDeclaration,
+        path: Routes.patientDeclaration,
+        builder: (_, __) => const PatientDeclarationScreen(),
       ),
     ],
   );

@@ -1,5 +1,6 @@
 // booking_state.dart
 import 'package:flutter/material.dart';
+import 'package:ltc/features/booking/domain/entities/patient_booking_entity.dart';
 import 'package:ltc/features/doctor/domain/entities/doctor_entity.dart';
 import 'package:ltc/features/service/domain/entities/package_entity.dart';
 import 'package:ltc/features/service/domain/entities/service_entity.dart';
@@ -18,6 +19,7 @@ class BookingState {
   final List<ServiceEntity> selectedServices;
   final List<PackageEntity> selectedPackages;
   final DoctorEntity? selectedDoctor;
+  final PatientBookingEntity? selectedPatient;
   final SpecialtyEntity? selectedSpecialty;
   final DateTime? selectedDate;
   final TimeOfDay? selectedTimeSlot;
@@ -39,6 +41,7 @@ class BookingState {
     this.selectedServices = const [],
     this.selectedPackages = const [],
     this.selectedDoctor,
+    this.selectedPatient,
     this.selectedSpecialty,
     this.selectedDate,
     this.selectedTimeSlot,
@@ -55,6 +58,7 @@ class BookingState {
     List<ServiceEntity>? services,
     List<DoctorEntity>? doctors,
     //
+    PatientBookingEntity? selectedPatient,
     List<ServiceEntity>? selectedServices,
     List<PackageEntity>? selectedPackages,
     SpecialtyEntity? selectedSpecialty,
@@ -73,6 +77,7 @@ class BookingState {
       specialties: specialties ?? this.specialties,
       services: services ?? this.services,
       doctors: doctors ?? this.doctors,
+      selectedPatient: selectedPatient ?? this.selectedPatient,
       selectedServices: selectedServices ?? this.selectedServices,
       selectedPackages: selectedPackages ?? this.selectedPackages,
       selectedSpecialty: selectedSpecialty ?? this.selectedSpecialty,

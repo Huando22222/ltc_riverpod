@@ -14,7 +14,7 @@ class InputFieldWidget extends StatefulWidget {
   final bool isEnable;
   final TextStyle? labelStyle;
   final TextInputType keyboardType;
-
+  final void Function(String)? onChanged;
   const InputFieldWidget({
     super.key,
     required this.controller,
@@ -27,6 +27,7 @@ class InputFieldWidget extends StatefulWidget {
     this.isEnable = true,
     this.labelStyle,
     this.keyboardType = TextInputType.text,
+    this.onChanged,
   });
 
   @override
@@ -42,9 +43,7 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
   void initState() {
     super.initState();
     _focusNode.addListener(() {
-      setState(() {
-        _isFocused = _focusNode.hasFocus;
-      });
+      setState(() => _isFocused = _focusNode.hasFocus);
     });
   }
 
@@ -56,55 +55,63 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = context.colorScheme;
+    final tt = context.textTheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.isShowLabel) ...[
           Padding(
-            padding: EdgeInsets.only(left: 4, bottom: 8),
+            padding: const EdgeInsets.only(left: 4, bottom: 8),
             child: Text(
               widget.label,
-              style: widget.labelStyle ?? context.textTheme.bodyMedium,
+              // ✅ labelStyle hoặc bodyMedium với onSurface thay vì default (có thể inherit sai màu)
+              style:
+                  widget.labelStyle ??
+                  tt.bodyMedium?.copyWith(color: cs.onSurface),
             ),
           ),
         ],
         AnimatedContainer(
-          duration: Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
-            color: widget.isEnable ? Colors.white : Colors.grey[100],
+            // ✅ surface thay vì Colors.white / Colors.grey[100]
+            color: widget.isEnable ? cs.surface : cs.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(AppSpacing.radiusMd + 2),
             border: Border.all(
-              color: _isFocused
-                  ? context.colorScheme.primary
-                  : context.colorScheme.outline.withOpacity(0.4),
-              width: 2,
+              // ✅ outline thay vì outline.withOpacity(0.4) — đã đủ nhạt theo schema
+              color: _isFocused ? cs.primary : cs.outline,
+              width: _isFocused ? 1.5 : 1,
             ),
-            boxShadow: _isFocused ? context.colorScheme.softShadow : null,
+            boxShadow: _isFocused ? cs.softShadow : null,
           ),
           child: TextField(
+            onChanged: widget.onChanged,
             enabled: widget.isEnable,
             focusNode: _focusNode,
             controller: widget.controller,
             keyboardType: widget.keyboardType,
             obscureText: widget.isPassword ? _obscureText : false,
-            style: TextStyle(
-              fontSize: 15,
+            style: tt.bodyMedium?.copyWith(
+              // ✅ onSurface thay vì Colors.grey[800]
+              color: cs.onSurface,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[800],
             ),
             decoration: InputDecoration(
               hintText: widget.isShowHint ? widget.hint ?? widget.label : null,
-              hintStyle: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[400],
+              hintStyle: tt.bodyMedium?.copyWith(
+                // ✅ textDisabled (onSurfaceVariant) thay vì Colors.grey[400]
+                color: cs.onSurfaceVariant,
                 fontWeight: FontWeight.w400,
               ),
               prefixIcon: widget.icon != null
                   ? Container(
-                      margin: EdgeInsets.only(left: 12, right: 8),
+                      margin: const EdgeInsets.only(left: 12, right: 8),
                       child: Icon(
                         widget.icon,
-                        //  color: iconColor,
+                        // ✅ onSurfaceVariant khi idle, primary khi focused
+                        color: _isFocused ? cs.primary : cs.onSurfaceVariant,
                         size: 22,
                       ),
                     )
@@ -115,14 +122,12 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
                         _obscureText
                             ? Icons.visibility_outlined
                             : Icons.visibility_off_outlined,
-                        color: Colors.grey[400],
+                        // ✅ onSurfaceVariant thay vì Colors.grey[400]
+                        color: cs.onSurfaceVariant,
                         size: 22,
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
+                      onPressed: () =>
+                          setState(() => _obscureText = !_obscureText),
                     )
                   : null,
               border: InputBorder.none,

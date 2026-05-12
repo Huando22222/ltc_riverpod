@@ -72,6 +72,11 @@ class DateTimeUtil {
     return slots;
   }
 
-  static bool isMorning(TimeOfDay t) => t.hour < 12;
+  static bool isEarlyMorning(TimeOfDay t) => t.hour < 6;
+
+  static bool isMorning(TimeOfDay t) => t.hour >= 6 && t.hour < 12;
+
   static bool isAfternoon(TimeOfDay t) => t.hour >= 12 && t.hour < 18;
+
+  static bool isEvening(TimeOfDay t) => t.hour >= 18 && t.hour < 24;
 }

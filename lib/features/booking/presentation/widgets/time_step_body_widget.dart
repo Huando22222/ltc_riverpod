@@ -36,6 +36,23 @@ class TimeStepBodyWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tr = ref.watch(stringsProvider);
+    final now = TimeOfDay.now();
+    bool isValidSlot(TimeOfDay slot) {
+      if (selectedDate == null) return true;
+
+      final isToday = DateTimeUtil.isSameDay(selectedDate!, DateTime.now());
+
+      if (!isToday) return true;
+
+      final slotMinutes = slot.hour * 60 + slot.minute;
+      final nowMinutes = now.hour * 60 + now.minute;
+
+      return slotMinutes >= nowMinutes;
+    }
+
+    final morningSlots = _morning.where(isValidSlot).toList();
+    final afternoonSlots = _afternoon.where(isValidSlot).toList();
+
     return StepBodyContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,10 +191,6 @@ class _SlotGroup extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────
-// SLOT CHIP
-// ─────────────────────────────────────────────
-
 class _SlotChip extends StatelessWidget {
   final TimeOfDay slot;
   final bool isSelected;
@@ -218,10 +231,6 @@ class _SlotChip extends StatelessWidget {
     );
   }
 }
-
-// ─────────────────────────────────────────────
-// SECTION LABEL
-// ─────────────────────────────────────────────
 
 class _SectionLabel extends StatelessWidget {
   final String label;

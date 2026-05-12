@@ -5,21 +5,15 @@ import '../repositories/auth_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 
-class LoginParams {
-  const LoginParams({required this.username, required this.password});
-  final String username;
-  final String password;
-}
-
 class LoginUsecase {
   const LoginUsecase(this._repository);
   final AuthRepository _repository;
 
-  Future<Either<Failure, UserEntity>> call(LoginParams params) {
-    return _repository.login(
-      username: params.username,
-      password: params.password,
-    );
+  Future<Either<Failure, UserEntity>> call({
+    required String username,
+    required String password,
+  }) {
+    return _repository.login(username: username, password: password);
   }
 }
 

@@ -42,6 +42,37 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> register({
+    required String username,
+    required String password,
+    required List<String> roleId,
+    required String phone,
+    String? email,
+  }) async {
+    try {
+      final response = await _datasource.register(
+        username: username,
+        password: password,
+        phone: phone,
+        roleId: roleId,
+        email: email,
+      );
+      if (response.success) {
+        return Right(true);
+      }
+      return Left(Failure(response.message ?? 'Lỗi đăng ký'));
+    } on DioException catch (e, stackTrace) {
+      log('AuthRepositoryImpl: ${e.message} = $stackTrace');
+      return Left(Failure(e.message ?? 'ERROR DIO'));
+    } catch (e, stackTrace) {
+      log('AuthRepositoryImpl: Unexpected error: ${e.toString()} $stackTrace');
+      return Left(
+        Failure('ERROR UNEXPECTED: login ${e.toString()} $stackTrace'),
+      );
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> logout() async {
     try {
       await _datasource.logout();

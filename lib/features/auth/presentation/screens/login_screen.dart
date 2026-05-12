@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ltc/common/widgets/buttons/primary_button_widget.dart';
 import 'package:ltc/common/widgets/images/asset_image_widget.dart';
 import 'package:ltc/common/widgets/text_fields/input_field_widget.dart';
 import 'package:ltc/core/config/routes.dart';
@@ -26,10 +23,6 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final TextEditingController _usernameCtrl = TextEditingController();
   final TextEditingController _passwordCtrl = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -43,6 +36,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final tr = ref.watch(stringsProvider);
     final size = MediaQuery.of(context).size;
     final logoSize = size.width * 0.28;
+    final cs = context.colorScheme;
+    final tt = context.textTheme;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -67,22 +62,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // ── Back button ──────────────────
                       const Spacer(flex: 3),
 
                       // ── Logo + Title ─────────────────
                       Column(
                         children: [
-                          // Logo
                           Container(
                             width: logoSize,
                             height: logoSize,
                             decoration: BoxDecoration(
-                              color: context.colorScheme.surface,
+                              color: cs.surface,
                               borderRadius: BorderRadius.circular(
                                 logoSize * 0.28,
                               ),
-                              boxShadow: context.colorScheme.softShadow,
+                              boxShadow: cs.softShadow,
                             ),
                             padding: const EdgeInsets.all(AppSpacing.sm),
                             child: AssetImageWidget(
@@ -91,11 +84,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ),
                           ),
                           const SizedBox(height: AppSpacing.md),
-                          // App name
                           Text(
                             tr.appName,
-                            style: context.textTheme.headlineMedium?.copyWith(
-                              color: context.colorScheme.surface,
+                            style: tt.headlineMedium?.copyWith(
+                              // ✅ onPrimary — text trên nền gradient primary
+                              color: cs.onPrimary,
                               fontWeight: FontWeight.w700,
                               letterSpacing: 2,
                             ),
@@ -103,10 +96,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           const SizedBox(height: AppSpacing.xs),
                           Text(
                             tr.appTagline,
-                            style: context.textTheme.bodyMedium?.copyWith(
-                              color: context.colorScheme.surface.withOpacity(
-                                0.8,
-                              ),
+                            style: tt.bodyMedium?.copyWith(
+                              // ✅ onPrimary mờ hơn cho tagline
+                              color: cs.onPrimary.withOpacity(0.75),
                             ),
                           ),
                         ],
@@ -117,47 +109,41 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       // ── Form card ────────────────────
                       TweenAnimationBuilder(
                         tween: Tween<double>(begin: 2, end: 1),
-                        duration: Duration(milliseconds: 550),
+                        duration: const Duration(milliseconds: 550),
                         builder: (context, value, child) {
                           return Transform.scale(
-                            scale: double.parse(value.toString()),
+                            scale: value,
                             child: Container(
                               margin: const EdgeInsets.symmetric(
                                 horizontal: AppSpacing.lg,
                               ),
                               padding: const EdgeInsets.all(AppSpacing.lg),
                               decoration: BoxDecoration(
-                                color: context.colorScheme.surface,
+                                color: cs.surface,
                                 borderRadius: BorderRadius.circular(
                                   AppSpacing.radiusXl,
                                 ),
-                                boxShadow: context.colorScheme.softShadow,
+                                boxShadow: cs.softShadow,
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // Header
                                   Text(
                                     tr.login,
-                                    style: context.textTheme.titleLarge
-                                        ?.copyWith(
-                                          color: context.colorScheme.onSurface,
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                    style: tt.titleLarge?.copyWith(
+                                      color: cs.onSurface,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                   const SizedBox(height: AppSpacing.xs),
                                   Text(
                                     tr.loginInstruction,
-                                    style: context.textTheme.bodySmall
-                                        ?.copyWith(
-                                          color: context
-                                              .colorScheme
-                                              .onSurfaceVariant,
-                                        ),
+                                    style: tt.bodySmall?.copyWith(
+                                      color: cs.onSurfaceVariant,
+                                    ),
                                   ),
                                   const SizedBox(height: AppSpacing.lg),
 
-                                  // Username
                                   InputFieldWidget(
                                     controller: _usernameCtrl,
                                     label: tr.username,
@@ -165,7 +151,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   ),
                                   const SizedBox(height: AppSpacing.md),
 
-                                  // Password
                                   InputFieldWidget(
                                     controller: _passwordCtrl,
                                     label: tr.password,
@@ -173,7 +158,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     isPassword: true,
                                   ),
 
-                                  // Forgot password
                                   Align(
                                     alignment: Alignment.centerRight,
                                     child: TextButton(
@@ -186,44 +170,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       ),
                                       child: Text(
                                         tr.forgotPassword,
-                                        style: context.textTheme.bodySmall
-                                            ?.copyWith(
-                                              color:
-                                                  context.colorScheme.primary,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                        style: tt.bodySmall?.copyWith(
+                                          color: cs.primary,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ),
                                   ),
                                   const SizedBox(height: AppSpacing.md),
 
-                                  // Action row
                                   Row(
                                     children: [
-                                      // Login button
-                                      // Expanded(
-                                      //   child: PrimaryButtonWidget(
-                                      //     isEnabled: true,
-                                      //     title: tr.login,
-                                      //     onPressed: () async {
-                                      //       final result = await ref
-                                      //           .read(authProvider.notifier)
-                                      //           .login(
-                                      //             username: _usernameCtrl.text,
-                                      //             password: _passwordCtrl.text,
-                                      //           );
-
-                                      //       if (!result) {
-                                      //         InAppNotificationHelper.showError(
-                                      //           context,
-                                      //           message: 'k thành công',
-                                      //         );
-                                      //       } else {
-                                      //         context.goNamed(RouteName.main);
-                                      //       }
-                                      //     },
-                                      //   ),
-                                      // ),
                                       Expanded(
                                         child: ElevatedButton(
                                           onPressed: () async {
@@ -247,8 +204,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: AppSpacing.sm),
-
-                                      // QR button
                                       _QrButton(),
                                     ],
                                   ),
@@ -262,24 +217,34 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       const Spacer(flex: 1),
 
                       // ── Register row ─────────────────
+                      // ✅ Nằm dưới curve → nền là surface → dùng onSurface
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             tr.noAccountMessage,
-                            style: context.textTheme.bodyMedium?.copyWith(
-                              color: context.colorScheme.onSurface,
+                            style: tt.bodyMedium?.copyWith(
+                              color: cs.onSurfaceVariant,
                             ),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              final result = await context
+                                  .pushNamed<Map<String, dynamic>>(
+                                    RouteName.register,
+                                  );
+                              if (result != null) {
+                                _usernameCtrl.text = result['username'];
+                                _passwordCtrl.text = result['password'];
+                              }
+                            },
                             child: Text(
                               tr.register,
-                              style: context.textTheme.bodyMedium?.copyWith(
-                                color: context.colorScheme.primary,
+                              style: tt.bodyMedium?.copyWith(
+                                color: cs.primary,
                                 fontWeight: FontWeight.w700,
                                 decoration: TextDecoration.underline,
-                                decorationColor: context.colorScheme.primary,
+                                decorationColor: cs.primary,
                               ),
                             ),
                           ),
@@ -291,26 +256,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
             ),
 
+            // ── Back button ──────────────────────────────
             SafeArea(
               child: Align(
                 alignment: Alignment.topLeft,
                 child: Container(
-                  margin: EdgeInsets.only(top: 10, left: 20),
+                  margin: const EdgeInsets.only(top: 10, left: 20),
                   child: Material(
-                    color: context.colorScheme.surface.withAlpha(100),
-                    shape: CircleBorder(),
+                    // ✅ onPrimary translucent — nút nằm trên nền gradient
+                    color: cs.onPrimary.withOpacity(0.15),
+                    shape: const CircleBorder(),
                     child: InkWell(
-                      customBorder: CircleBorder(),
+                      customBorder: const CircleBorder(),
                       onTap: () {
-                        if (context.canPop()) {
-                          context.pop();
-                        }
+                        if (context.canPop()) context.pop();
                       },
                       child: Padding(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child: Icon(
                           FontAwesomeIcons.angleLeft,
-                          color: context.colorScheme.surface,
+                          // ✅ onPrimary — icon trên nền gradient
+                          color: cs.onPrimary,
+                          size: 18,
                         ),
                       ),
                     ),
@@ -329,6 +296,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 class _QrButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final cs = context.colorScheme;
     return GestureDetector(
       onTap: () {},
       child: Container(
@@ -336,7 +304,8 @@ class _QrButton extends StatelessWidget {
         width: 48,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-          color: context.colorScheme.primaryContainer,
+          // ✅ primaryContainer — bg button phụ trên surface
+          color: cs.primaryContainer,
         ),
         child: Stack(
           alignment: Alignment.center,
@@ -346,12 +315,14 @@ class _QrButton extends StatelessWidget {
               height: 28,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: context.colorScheme.primary.withOpacity(0.15),
+                // ✅ primary với opacity — halo effect
+                color: cs.primary.withOpacity(0.12),
               ),
             ),
             Icon(
               Icons.qr_code_scanner_rounded,
-              color: context.colorScheme.primary,
+              // ✅ onPrimaryContainer — icon trên primaryContainer
+              color: cs.onPrimaryContainer,
             ),
           ],
         ),
@@ -367,6 +338,7 @@ class _Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final cs = context.colorScheme;
 
     return SizedBox(
       width: size.width,
@@ -374,8 +346,9 @@ class _Background extends StatelessWidget {
       child: CustomPaint(
         painter: _BackgroundPainter(
           context: context,
-          topColor: context.colorScheme.primary,
-          bottomColor: context.colorScheme.surfaceContainerLow,
+          primaryColor: cs.primary,
+          // ✅ surface (#FFFFFF) — nền trắng rõ cho phần dưới form
+          bottomColor: cs.surface,
         ),
       ),
     );
@@ -383,22 +356,25 @@ class _Background extends StatelessWidget {
 }
 
 class _BackgroundPainter extends CustomPainter {
-  final Color topColor;
+  final Color primaryColor;
   final Color bottomColor;
   final BuildContext context;
+
   const _BackgroundPainter({
     required this.context,
-    required this.topColor,
+    required this.primaryColor,
     required this.bottomColor,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
+    // Nền trắng toàn màn hình
     canvas.drawRect(
       Rect.fromLTWH(0, 0, size.width, size.height),
       Paint()..color = bottomColor,
     );
 
+    // Gradient primary phần trên
     final rect = Rect.fromLTWH(0, 0, size.width, size.height * 0.62);
     final paint = Paint()
       ..shader = context.colorScheme.primaryGradient.createShader(rect);
@@ -423,8 +399,9 @@ class _BackgroundPainter extends CustomPainter {
 
     canvas.drawPath(path, paint);
 
+    // Decorative circles
     final circlePaint = Paint()
-      ..color = context.colorScheme.primary.withOpacity(0.06)
+      ..color = primaryColor.withOpacity(0.08)
       ..style = PaintingStyle.fill;
 
     canvas.drawCircle(
@@ -441,5 +418,5 @@ class _BackgroundPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _BackgroundPainter old) =>
-      old.topColor != topColor || old.bottomColor != bottomColor;
+      old.primaryColor != primaryColor || old.bottomColor != bottomColor;
 }

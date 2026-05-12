@@ -22,6 +22,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
       return Right(response.data!);
     } catch (e, stackTrace) {
       log('DashboardRepositoryImpl: $e = $stackTrace');
+
       return Left(
         Failure(
           'ERROR UNEXPECTED: getDashBoardData ${e.toString()} $stackTrace',

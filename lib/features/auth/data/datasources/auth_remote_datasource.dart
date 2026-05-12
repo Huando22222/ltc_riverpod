@@ -54,6 +54,28 @@ class AuthRemoteDatasource {
     return BaseResponse<UserModel>(success: true, message: null, data: user);
   }
 
+  Future<BaseResponse<bool>> register({
+    required String username,
+    required String password,
+    required List<String> roleId,
+    required String phone,
+    String? email,
+  }) async {
+    final response = await _dio.post(
+      ApiConstants.register,
+      data: {
+        'server_id': AppConstants.serverId,
+        'application_id': AppConstants.appId,
+        'user_name': username,
+        'password': password,
+        "phone_number": phone,
+        "email": email,
+        "role_id": roleId,
+      },
+    );
+    return BaseResponse.fromJson(response.data);
+  }
+
   Future<void> logout() async {
     await _dio.post('/auth/logout');
   }

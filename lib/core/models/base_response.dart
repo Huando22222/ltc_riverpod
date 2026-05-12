@@ -12,13 +12,15 @@ class BaseResponse<T> {
     this.pagination,
   });
   factory BaseResponse.fromJson(
-    Map<String, dynamic> json,
-    T Function(dynamic json) fromJsonT,
-  ) {
+    Map<String, dynamic> json, [
+    T Function(dynamic json)? fromJsonT,
+  ]) {
     return BaseResponse(
       success: json['succeeded'] ?? json['success'],
       message: json['message'],
-      data: json['data'] != null ? fromJsonT(json['data']) : null,
+      data: json['data'] != null && fromJsonT != null
+          ? fromJsonT(json['data'])
+          : null,
       pagination: json['pagination'] != null
           ? PaginatedResponse.fromJson(json['pagination'])
           : null,

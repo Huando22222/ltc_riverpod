@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/user_model.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
-import 'auth_state.dart';
+import '../states/auth_state.dart';
 
 // ✅ Notifier<S> thay StateNotifier<S>
 class AuthNotifier extends Notifier<AuthState> {
@@ -61,9 +61,7 @@ class AuthNotifier extends Notifier<AuthState> {
   }) async {
     state = const AuthLoading();
 
-    final result = await _login(
-      LoginParams(username: username, password: password),
-    );
+    final result = await _login(username: username, password: password);
 
     return result.fold(
       (failure) {
@@ -87,7 +85,6 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 }
 
-// ✅ NotifierProvider thay StateNotifierProvider
 final authProvider = NotifierProvider<AuthNotifier, AuthState>(
   AuthNotifier.new, // ← gọn hơn () => AuthNotifier()
 );
