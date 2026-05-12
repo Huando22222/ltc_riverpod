@@ -17,4 +17,7 @@ class ApiConstants {
       '/api/LTC/Specialty/clinic-specialties';
   // MARK: DOCTOR
   static const String getListDoctor = '/api/LTC/Doctor/get-list-doctor';
+
+  // MARK: BOOKING
+  static const String createSche = '/api/LTC/Appointment/ltc-create-sche';
 }

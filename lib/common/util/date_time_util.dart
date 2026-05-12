@@ -3,6 +3,33 @@ import 'package:intl/intl.dart';
 
 class DateTimeUtil {
   DateTimeUtil._();
+
+  static String formatAge(DateTime dob, {DateTime? now}) {
+    final today = now ?? DateTime.now();
+
+    var months = (today.year - dob.year) * 12 + (today.month - dob.month);
+
+    if (today.day < dob.day) {
+      months--;
+    }
+
+    if (months < 0) {
+      return '0 ngày';
+    }
+
+    if (months == 0) {
+      final days = today.difference(dob).inDays;
+      return '$days ngày';
+    }
+
+    if (months < 36) {
+      return '$months tháng';
+    }
+
+    final years = months ~/ 12;
+    return '$years tuổi';
+  }
+
   static const List<String> _weekdays = [
     '',
     'Thứ Hai',

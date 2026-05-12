@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ltc/common/helper/modal_helper.dart';
+import 'package:ltc/common/util/date_time_util.dart';
 import 'package:ltc/common/widgets/scaffold/app_scaffold_widget.dart';
 import 'package:ltc/common/widgets/size/animated_size_widget.dart';
 import 'package:ltc/common/widgets/stepper/vertical_stepper_widget.dart';
@@ -29,11 +30,10 @@ class _ServiceBookingScreenState extends ConsumerState<ServiceBookingScreen> {
   ProviderSubscription? _sub;
   int _currentStep = 0;
   int _maxValidStep(BookingState s) {
-    if (s.selectedServices.isEmpty) return 0; // phải có dịch vụ
-    if (s.selectedDate == null || s.selectedTimeSlot == null)
-      return 1; // phải có thời gian
-    // if (s.selectedPatient == null) return 2; // phải có bệnh nhân
-    return 3; // đủ hết → confirm
+    if (s.selectedServices.isEmpty) return 0;
+    if (s.selectedDate == null || s.selectedTimeSlot == null) return 1;
+    if (s.selectedPatient == null) return 2;
+    return 3;
   }
 
   @override
@@ -158,8 +158,8 @@ class _ServiceBookingScreenState extends ConsumerState<ServiceBookingScreen> {
                 header: PatientInfoStepHeaderWidget(
                   isActive: _currentStep == 2,
                   isCheck: _currentStep > 2,
-                  patientName: _currentStep > 2
-                      ? 'Nguyễn Văn A · 01/01/1990'
+                  patientName: bkState.selectedPatient != null
+                      ? '${bkState.selectedPatient!.fullname} · ${DateTimeUtil.formatAge(bkState.selectedPatient!.dob)}'
                       : null,
                   onTap: _currentStep > 2
                       ? () => setState(() => _currentStep = 2)
@@ -168,10 +168,14 @@ class _ServiceBookingScreenState extends ConsumerState<ServiceBookingScreen> {
                 body: AnimatedSizeWidget(
                   isExpanded: _currentStep == 2,
                   child: PatientInfoStepBodyWidget(
-                    selected: bkState.selectedPatient, // ← truyền từ state
-                    onConfirm: (patient) {
+                    selected: bkState.selectedPatient,
+                    onChanged: (patient) {
                       bk.selectPatient(patient);
-                      setState(() => _currentStep = 3);
+                    },
+                    onConfirm: () {
+                      if (bkState.selectedPatient != null) {
+                        setState(() => _currentStep = 3);
+                      }
                     },
                   ),
                 ),

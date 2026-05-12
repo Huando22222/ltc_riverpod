@@ -47,7 +47,7 @@ class BookingNotifier extends Notifier<BookingState> {
     );
   }
 
-  void selectPatient(PatientBookingEntity patient) =>
+  void selectPatient(PatientBookingEntity? patient) =>
       state = state.copyWith(selectedPatient: patient);
   //? MARK: LOAD
   Future<void> loadClinic() async {}
