@@ -40,19 +40,21 @@ class ConfirmStepHeaderWidget extends StatelessWidget {
                   : cs.onSurfaceVariant,
             ),
           ),
-          if (isActive) ...[
-            const SizedBox(height: 2),
-            Text(
-              'Kiểm tra và xác nhận thông tin',
-              style: tt.bodySmall?.copyWith(color: cs.primary.withOpacity(0.7)),
+          const SizedBox(height: 2),
+          Text(
+            isCheck
+                ? 'Đã đặt lịch thành công'
+                : isActive
+                ? 'Kiểm tra và xác nhận thông tin'
+                : 'Bước cuối cùng',
+            style: tt.bodySmall?.copyWith(
+              color: isCheck
+                  ? cs.primary
+                  : isActive
+                  ? cs.primary.withOpacity(0.7)
+                  : cs.onSurfaceVariant.withOpacity(0.6),
             ),
-          ] else if (isCheck) ...[
-            const SizedBox(height: 2),
-            Text(
-              'Đã đặt lịch thành công',
-              style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
-            ),
-          ],
+          ),
         ],
       ),
     );

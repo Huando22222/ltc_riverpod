@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ltc/core/extensions/string_ext.dart';
 import 'package:ltc/features/auth/data/models/permission_model.dart';
 
 import '../../domain/entities/user_entity.dart';
@@ -30,7 +31,9 @@ class UserModel extends UserEntity {
       userId: json['UserId'],
       username: json['UserName'] ?? 'Guest',
       userSessionId: json['UserSessionId'],
-      fullname: json['FullName'],
+      fullname: (json['FullName'] as String?)?.isNullOrEmpty ?? true
+          ? 'unknown'
+          : json['FullName'] as String,
       email: json['Email'],
       isEmailConfirmed: json['EmailConfirmed'],
       phoneNumber: json['PhoneNumber'],

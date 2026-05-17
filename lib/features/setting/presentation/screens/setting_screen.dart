@@ -9,6 +9,7 @@ import 'package:ltc/common/widgets/header/header_widget.dart';
 import 'package:ltc/common/widgets/splash_tap_widget.dart';
 import 'package:ltc/core/config/routes.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
+import 'package:ltc/core/extensions/string_ext.dart';
 import 'package:ltc/core/localization/locale_provider.dart';
 import 'package:ltc/core/theme/app_colors.dart';
 import 'package:ltc/core/theme/app_spacing.dart';
@@ -188,15 +189,15 @@ class _ProfileCard extends ConsumerWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                user!.email,
-                style: context.textTheme.bodySmall?.copyWith(
-                  color: context.colorScheme.onSurfaceVariant,
+              if (user!.email.isNotNullOrEmpty)
+                Text(
+                  user!.email,
+                  style: context.textTheme.bodySmall?.copyWith(
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
                 ),
-              ),
-              if (user?.phoneNumber != null) ...[
-                const SizedBox(height: 2),
+              if (user?.phoneNumber != null &&
+                  user!.phoneNumber.trim().isNotEmpty) ...[
                 Text(
                   user!.phoneNumber,
                   style: context.textTheme.bodySmall?.copyWith(

@@ -13,7 +13,7 @@ class ViStrings extends AppStrings {
     'Thứ Bảy',
     'Chủ Nhật',
   ];
-  static const _short = ['', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+  static const _short = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
   ViStrings();
   @override
   String get appName => 'LTC';
@@ -188,9 +188,9 @@ class ViStrings extends AppStrings {
   String get sunShort => 'CN';
 
   @override
-  String weekdayName(int w) => _weekdays[w];
+  String weekdayName(int w) => _weekdays[w - 1];
   @override
-  String shortWeekday(int w) => _short[w];
+  String shortWeekday(int w) => _short[w - 1];
   @override
   String dayLabel(DateTime d) =>
       DateTimeUtil.isToday(d) ? 'Hôm nay' : shortWeekday(d.weekday);
@@ -320,5 +320,6 @@ class ViStrings extends AppStrings {
   String get pickService => 'Chọn dịch vụ khám';
 
   @override
-  String selectedServiceCount(int count) => count ==0 ? pickService : '$count dịch vụ đã chọn';
+  String selectedServiceCount(int count) =>
+      count == 0 ? pickService : '$count dịch vụ đã chọn';
 }

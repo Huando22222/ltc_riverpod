@@ -3,9 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
 
 class TextInputWidget extends StatelessWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
+  final Function(String)? onChanged;
   final String hint;
-  final int maxLines;
+  final int? maxLines;
   final int? maxLength;
   final TextInputType keyboardType;
   final TextCapitalization textCapitalization;
@@ -14,9 +15,10 @@ class TextInputWidget extends StatelessWidget {
 
   const TextInputWidget({
     super.key,
-    required this.controller,
+    this.controller,
+    this.onChanged,
     required this.hint,
-    this.maxLines = 1,
+    this.maxLines, //= 1,
     this.maxLength,
     this.keyboardType = TextInputType.text,
     this.textCapitalization = TextCapitalization.none,
@@ -31,6 +33,7 @@ class TextInputWidget extends StatelessWidget {
 
     return TextFormField(
       controller: controller,
+      onChanged: onChanged,
       maxLines: maxLines,
       maxLength: maxLength,
       keyboardType: keyboardType,

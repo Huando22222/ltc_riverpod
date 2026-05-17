@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 extension DateTimeExt on DateTime {
@@ -30,4 +31,8 @@ extension DateTimeExt on DateTime {
 
   /// Trước hoặc bằng ngày
   bool isBeforeOrSameDate(DateTime other) => compareDate(other) <= 0;
+
+  DateTime withTime(TimeOfDay time) {
+    return DateTime(year, month, day, time.hour, time.minute);
+  }
 }

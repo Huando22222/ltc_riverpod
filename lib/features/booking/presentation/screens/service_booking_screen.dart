@@ -1,15 +1,25 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ltc/common/helper/modal_helper.dart';
+import 'package:ltc/common/util/booking_util.dart';
 import 'package:ltc/common/util/date_time_util.dart';
 import 'package:ltc/common/widgets/scaffold/app_scaffold_widget.dart';
 import 'package:ltc/common/widgets/size/animated_size_widget.dart';
 import 'package:ltc/common/widgets/stepper/vertical_stepper_widget.dart';
+import 'package:ltc/core/extensions/date_time_ext.dart';
+import 'package:ltc/core/extensions/gender_ext.dart';
+import 'package:ltc/core/helpers/in_app_notification_helper.dart';
 import 'package:ltc/core/localization/app_strings.dart';
 import 'package:ltc/core/localization/locale_provider.dart';
 import 'package:ltc/core/theme/app_spacing.dart';
+import 'package:ltc/features/auth/presentation/providers/auth_provider.dart';
+import 'package:ltc/features/auth/presentation/states/auth_state.dart';
+import 'package:ltc/features/booking/data/models/booking_param_mode.dart';
 import 'package:ltc/features/booking/presentation/providers/booking_provider.dart';
 import 'package:ltc/features/booking/presentation/providers/booking_state.dart';
+import 'package:ltc/features/booking/presentation/widgets/confirm_step_body_widget.dart';
 import 'package:ltc/features/booking/presentation/widgets/confirm_step_header_widget.dart';
 import 'package:ltc/features/booking/presentation/widgets/patient_info_step_body_widget.dart';
 import 'package:ltc/features/booking/presentation/widgets/patient_info_step_header_widget.dart';
@@ -69,7 +79,7 @@ class _ServiceBookingScreenState extends ConsumerState<ServiceBookingScreen> {
     final tr = ref.watch(stringsProvider);
     final bk = ref.read(bookingProvider('A018').notifier);
     final bkState = ref.watch(bookingProvider('A018'));
-
+    final auth = ref.read(currentUserProvider);
     return AppScaffoldWidget(
       title: tr.service,
       child: Expanded(
@@ -122,7 +132,7 @@ class _ServiceBookingScreenState extends ConsumerState<ServiceBookingScreen> {
                 ),
               ),
 
-              // ── Step 2: Chọn thời gian ────────────
+              // MARK: DATETIME
               VerticalStepperItemWidget(
                 isActive: _currentStep == 1,
                 isCheck: _currentStep > 1,
@@ -151,7 +161,7 @@ class _ServiceBookingScreenState extends ConsumerState<ServiceBookingScreen> {
                 ),
               ),
 
-              // ── Step 3: Thông tin bệnh nhân ───────
+              // MARK: PATIENT
               VerticalStepperItemWidget(
                 isActive: _currentStep == 2,
                 isCheck: _currentStep > 2,
@@ -181,7 +191,7 @@ class _ServiceBookingScreenState extends ConsumerState<ServiceBookingScreen> {
                 ),
               ),
 
-              // ── Step 4: Xác nhận ──────────────────
+              //  MARK: STEP 4
               VerticalStepperItemWidget(
                 isLast: true,
                 isActive: _currentStep == 3,
@@ -190,6 +200,67 @@ class _ServiceBookingScreenState extends ConsumerState<ServiceBookingScreen> {
                   isActive: _currentStep == 3,
                   isCheck: _currentStep > 3,
                 ),
+                body:
+                    (bkState.selectedDate == null ||
+                        bkState.selectedTimeSlot == null ||
+                        bkState.selectedPatient == null)
+                    ? SizedBox.shrink()
+                    : AnimatedSizeWidget(
+                        isExpanded: _currentStep == 3,
+                        child: ConfirmStepBodyWidget(
+                          services: bkState.selectedServices,
+                          selectedDate: bkState.selectedDate!,
+                          selectedSlot: bkState.selectedTimeSlot!,
+                          patient: bkState.selectedPatient!,
+                          onSubmit: () async {
+                            if (bkState.selectedPatient == null) return;
+                            final result = await bk.bookingService(
+                              BookingParamModel(
+                                sex: bkState.selectedPatient!.gender.isMale,
+                                address: bkState.selectedPatient!.address ?? '',
+                                dob: bkState.selectedPatient!.dob,
+                                name: bkState.selectedPatient!.fullname,
+                                phone: bkState.selectedPatient!.phoneNumber,
+                                refName: null, //bkState.selectedPatient!.,
+                                refPhone: null, //bkState.selectedPatient!.,
+                                userRefId: null,
+                                dcomId: bkState.dcomId,
+                                userId: auth!.userId,
+                                bookingDateTime: bkState.selectedDate!.withTime(
+                                  bkState.selectedTimeSlot!,
+                                ),
+                                discountAmount: 0,
+                                discountPercent: 0,
+                                status: 0,
+                                price: BookingUtil.calculateServicePrice(
+                                  bkState.selectedServices,
+                                ),
+                                createdBy: auth.userId,
+                                details: BookingUtil.toBookingModel(
+                                  services: bkState.selectedServices,
+                                  packages: bkState.selectedPackages,
+                                ),
+                                note: bkState.selectedPatient!.note,
+                                request: bkState.selectedPatient!.request,
+                                symptom: bkState.selectedPatient!.symptom,
+                              ),
+                            );
+                            if (result != null) {
+                              InAppNotificationHelper.showSuccess(
+                                context,
+                                message:
+                                    'Đặt hẹn thành công với mã hẹn: $result',
+                              );
+                            } else {
+                              InAppNotificationHelper.showError(
+                                context,
+                                message:
+                                    'Đặt hẹn không thành công, thử lại sau',
+                              );
+                            }
+                          },
+                        ),
+                      ),
               ),
             ],
           ),

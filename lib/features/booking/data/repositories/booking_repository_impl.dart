@@ -3,61 +3,30 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ltc/core/error/failure.dart';
-import 'package:ltc/features/service/data/datasources/service_remote_datasource.dart';
-import 'package:ltc/features/service/domain/entities/package_entity.dart';
-import 'package:ltc/features/service/domain/entities/package_item_entity.dart';
-import 'package:ltc/features/service/domain/entities/service_entity.dart';
-import 'package:ltc/features/service/domain/repositories/service_repository.dart';
+import 'package:ltc/features/booking/data/datasources/booking_remote_datasource.dart';
+import 'package:ltc/features/booking/data/models/booking_param_mode.dart';
+import 'package:ltc/features/booking/domain/repositories/booking_repository.dart';
 
-final serviceRepositoryProvider = Provider<ServiceRepository>(
-  (ref) => ServiceRepositoryImpl(ref.read(serviceRemoteDatasourceProvider)),
+final bookingRepositoryProvider = Provider<BookingRepository>(
+  (ref) => BookingRepositoryImpl(ref.read(bookingRemoteDatasourceProvider)),
 );
 
-class ServiceRepositoryImpl implements ServiceRepository {
-  final ServiceRemoteDatasource _datasource;
-  const ServiceRepositoryImpl(this._datasource);
-  @override
-  Future<Either<Failure, List<ServiceEntity>>> searchService({
-    String? search,
-  }) async {
-    try {
-      final response = await _datasource.search(search: search);
-      if (response.data != null) {
-        return Right(response.data!);
-      }
-      return Left(Failure(response.message ?? 'Lỗi get service'));
-    } catch (e, stackTrace) {
-      log("ServiceRepositoryImpl ERROR: $e = $stackTrace");
-      return Left(Failure('ERROR UNEXPECTED: ${e.toString()} $stackTrace'));
-    }
-  }
+class BookingRepositoryImpl implements BookingRepository {
+  final BookingRemoteDatasource _datasource;
+  const BookingRepositoryImpl(this._datasource);
 
   @override
-  Future<Either<Failure, List<PackageEntity>>> getPackages() async {
-    try {
-      final response = await _datasource.getPackages();
-      if (response.data != null) {
-        return Right(response.data!);
-      }
-      return Left(Failure(response.message ?? 'Lỗi get service'));
-    } catch (e, stackTrace) {
-      log("ServiceRepositoryImpl ERROR: $e = $stackTrace");
-      return Left(Failure('ERROR UNEXPECTED: ${e.toString()} $stackTrace'));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<PackageItemEntity>>> getPackageDetail({
-    String? packageId,
+  Future<Either<Failure, String>> booking({
+    required BookingParamModel params,
   }) async {
     try {
-      final response = await _datasource.getPackageDetail();
+      final response = await _datasource.booking(params: params);
       if (response.data != null) {
         return Right(response.data!);
       }
-      return Left(Failure(response.message ?? 'Lỗi get service'));
+      return Left(Failure(response.message ?? 'Lỗi get booking'));
     } catch (e, stackTrace) {
-      log("ServiceRepositoryImpl ERROR: $e = $stackTrace");
+      log("BookingRepositoryImpl ERROR: $e = $stackTrace");
       return Left(Failure('ERROR UNEXPECTED: ${e.toString()} $stackTrace'));
     }
   }

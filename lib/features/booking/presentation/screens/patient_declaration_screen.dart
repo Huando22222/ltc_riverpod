@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ltc/common/util/gender_util.dart';
 import 'package:ltc/common/widgets/scaffold/app_scaffold_widget.dart';
 import 'package:ltc/common/widgets/text_fields/field_wrapper_widget.dart';
 import 'package:ltc/common/widgets/text_fields/text_input_widget.dart';
@@ -47,12 +48,6 @@ class _PatientDeclarationScreenState
     super.dispose();
   }
 
-  Gender _toGender(String v) => switch (v) {
-    'male' => Gender.male,
-    'female' => Gender.female,
-    _ => Gender.other,
-  };
-
   DateTime? _parseDob() {
     try {
       final parts = _dobCtrl.text.trim().split('/');
@@ -84,19 +79,19 @@ class _PatientDeclarationScreenState
     context.pop(
       PatientBookingEntity(
         fullname: _nameCtrl.text.trim(),
-        gender: _toGender(_gender!),
+        gender: GenderUtil.toGender(_gender!),
         dob: dob,
         phoneNumber: _phoneCtrl.text.trim(),
         address: _addressCtrl.text.trim().isEmpty
             ? null
             : _addressCtrl.text.trim(),
-        symptom: _symptomCtrl.text.trim().isEmpty
-            ? null
-            : _symptomCtrl.text.trim(),
-        request: _requestCtrl.text.trim().isEmpty
-            ? null
-            : _requestCtrl.text.trim(),
-        note: _noteCtrl.text.trim().isEmpty ? null : _noteCtrl.text.trim(),
+        // symptom: _symptomCtrl.text.trim().isEmpty
+        //     ? null
+        //     : _symptomCtrl.text.trim(),
+        // request: _requestCtrl.text.trim().isEmpty
+        //     ? null
+        //     : _requestCtrl.text.trim(),
+        // note: _noteCtrl.text.trim().isEmpty ? null : _noteCtrl.text.trim(),
       ),
     );
   }
@@ -217,65 +212,65 @@ class _PatientDeclarationScreenState
                                 child: TextInputWidget(
                                   controller: _addressCtrl,
                                   hint: 'Số nhà, đường, phường/xã...',
-                                  maxLines: 2,
+                                  // maxLines: 2,
                                 ),
                               ),
                             ),
                           ],
                         ),
 
-                        const SizedBox(height: 30),
+                        // const SizedBox(height: 30),
 
-                        const _SectionHeader(
-                          icon: FontAwesomeIcons.stethoscope,
-                          label: 'Thông tin khám',
-                          subtitle:
-                              'Mô tả tình trạng để bác sĩ chuẩn bị tốt hơn',
-                        ),
-                        const SizedBox(height: 14),
+                        // const _SectionHeader(
+                        //   icon: FontAwesomeIcons.stethoscope,
+                        //   label: 'Thông tin khám',
+                        //   subtitle:
+                        //       'Mô tả tình trạng để bác sĩ chuẩn bị tốt hơn',
+                        // ),
+                        // const SizedBox(height: 14),
 
-                        _FormCard(
-                          children: [
-                            _FormItem(
-                              child: FieldWrapperWidget(
-                                label: 'Triệu chứng',
-                                icon: FontAwesomeIcons.heartPulse,
-                                child: TextInputWidget(
-                                  controller: _symptomCtrl,
-                                  hint: 'Mô tả triệu chứng hiện tại...',
-                                  maxLines: 3,
-                                  maxLength: 500,
-                                ),
-                              ),
-                            ),
-                            const _CardDivider(),
-                            _FormItem(
-                              child: FieldWrapperWidget(
-                                label: 'Yêu cầu khám',
-                                icon: FontAwesomeIcons.clipboardList,
-                                child: TextInputWidget(
-                                  controller: _requestCtrl,
-                                  hint: 'Yêu cầu đặc biệt với bác sĩ...',
-                                  maxLines: 2,
-                                  maxLength: 300,
-                                ),
-                              ),
-                            ),
-                            const _CardDivider(),
-                            _FormItem(
-                              child: FieldWrapperWidget(
-                                label: 'Ghi chú',
-                                icon: FontAwesomeIcons.noteSticky,
-                                child: TextInputWidget(
-                                  controller: _noteCtrl,
-                                  hint: 'Thông tin thêm cần lưu ý...',
-                                  maxLines: 2,
-                                  maxLength: 300,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // _FormCard(
+                        //   children: [
+                        //     _FormItem(
+                        //       child: FieldWrapperWidget(
+                        //         label: 'Triệu chứng',
+                        //         icon: FontAwesomeIcons.heartPulse,
+                        //         child: TextInputWidget(
+                        //           controller: _symptomCtrl,
+                        //           hint: 'Mô tả triệu chứng hiện tại...',
+                        //           maxLines: 3,
+                        //           maxLength: 500,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     const _CardDivider(),
+                        //     _FormItem(
+                        //       child: FieldWrapperWidget(
+                        //         label: 'Yêu cầu khám',
+                        //         icon: FontAwesomeIcons.clipboardList,
+                        //         child: TextInputWidget(
+                        //           controller: _requestCtrl,
+                        //           hint: 'Yêu cầu đặc biệt với bác sĩ...',
+                        //           maxLines: 2,
+                        //           maxLength: 300,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     const _CardDivider(),
+                        //     _FormItem(
+                        //       child: FieldWrapperWidget(
+                        //         label: 'Ghi chú',
+                        //         icon: FontAwesomeIcons.noteSticky,
+                        //         child: TextInputWidget(
+                        //           controller: _noteCtrl,
+                        //           hint: 'Thông tin thêm cần lưu ý...',
+                        //           maxLines: 2,
+                        //           maxLength: 300,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ),

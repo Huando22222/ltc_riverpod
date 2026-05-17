@@ -15,7 +15,7 @@ class EnStrings extends AppStrings {
     'Saturday',
     'Sunday',
   ];
-  static const _short = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  static const _short = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   @override
   String get appName => 'LTC';
   @override
@@ -196,7 +196,7 @@ class EnStrings extends AppStrings {
   String get afternoon => 'Afternoon';
 
   @override
-  String shortWeekday(int w) => _short[w];
+  String shortWeekday(int w) => _short[w - 1];
   @override
   String dayLabel(DateTime d) =>
       DateTimeUtil.isToday(d) ? 'Today' : shortWeekday(d.weekday);
@@ -212,7 +212,7 @@ class EnStrings extends AppStrings {
   }
 
   @override
-  String weekdayName(int w) => _weekdays[w];
+  String weekdayName(int w) => _weekdays[w - 1];
   @override
   String get january => 'January';
   @override

@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ltc/common/widgets/size/animated_size_widget.dart';
 import 'package:ltc/common/widgets/stepper/vertical_stepper_widget.dart';
+import 'package:ltc/common/widgets/text_fields/field_wrapper_widget.dart';
+import 'package:ltc/common/widgets/text_fields/text_input_widget.dart';
 import 'package:ltc/core/config/routes.dart';
 import 'package:ltc/core/extensions/color_schema_ext.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
+import 'package:ltc/core/extensions/gender_ext.dart';
+import 'package:ltc/core/validators/validators.dart';
 import 'package:ltc/features/auth/domain/entities/user_entity.dart';
 import 'package:ltc/features/auth/presentation/providers/auth_provider.dart';
 import 'package:ltc/features/booking/domain/entities/patient_booking_entity.dart';
@@ -30,6 +36,42 @@ class PatientInfoStepBodyWidget extends ConsumerStatefulWidget {
 class _PatientInfoStepBodyWidgetState
     extends ConsumerState<PatientInfoStepBodyWidget> {
   final List<PatientBookingEntity> _patients = [];
+  late final TextEditingController _symptomCtrl;
+  late final TextEditingController _requestCtrl;
+  late final TextEditingController _noteCtrl;
+  @override
+  void initState() {
+    super.initState();
+    _symptomCtrl = TextEditingController(text: widget.selected?.symptom ?? '');
+    _requestCtrl = TextEditingController(text: widget.selected?.request ?? '');
+    _noteCtrl = TextEditingController(text: widget.selected?.note ?? '');
+
+    _symptomCtrl.addListener(_onNoteChanged);
+    _requestCtrl.addListener(_onNoteChanged);
+    _noteCtrl.addListener(_onNoteChanged);
+  }
+
+  void _onNoteChanged() {
+    final current = widget.selected;
+    if (current == null) return;
+
+    widget.onChanged(
+      PatientBookingEntity(
+        fullname: current.fullname,
+        gender: current.gender,
+        dob: current.dob,
+        phoneNumber: current.phoneNumber,
+        address: current.address,
+        symptom: _symptomCtrl.text.trim().isEmpty
+            ? null
+            : _symptomCtrl.text.trim(),
+        request: _requestCtrl.text.trim().isEmpty
+            ? null
+            : _requestCtrl.text.trim(),
+        note: _noteCtrl.text.trim().isEmpty ? null : _noteCtrl.text.trim(),
+      ),
+    );
+  }
 
   bool _isSamePatient(PatientBookingEntity a, PatientBookingEntity b) {
     return a.fullname == b.fullname &&
@@ -41,8 +83,19 @@ class _PatientInfoStepBodyWidgetState
     final selected = widget.selected;
 
     if (selected != null && _isSamePatient(selected, patient)) {
+      // Bỏ chọn → clear notes
+      _symptomCtrl.clear();
+      _requestCtrl.clear();
+      _noteCtrl.clear();
       widget.onChanged(null);
       return;
+    }
+
+    // Chọn patient mới → giữ notes nếu cùng người, reset nếu khác
+    if (selected == null || !_isSamePatient(selected, patient)) {
+      _symptomCtrl.clear();
+      _requestCtrl.clear();
+      _noteCtrl.clear();
     }
 
     widget.onChanged(patient);
@@ -61,14 +114,22 @@ class _PatientInfoStepBodyWidgetState
   }
 
   @override
+  void dispose() {
+    _symptomCtrl.dispose();
+    _requestCtrl.dispose();
+    _noteCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
 
-    final selfPatient = user == null
+    final PatientBookingEntity? selfPatient = user == null
         ? null
         : PatientBookingEntity.fromUser(user);
 
-    final patients = [if (selfPatient != null) selfPatient, ..._patients];
+    final patients = [?selfPatient, ..._patients];
 
     return StepBodyContainer(
       child: Column(
@@ -123,6 +184,42 @@ class _PatientInfoStepBodyWidgetState
                   borderRadius: BorderRadius.circular(14),
                 ),
               ),
+            ),
+          ),
+          AnimatedSizeWidget(
+            isExpanded: widget.selected != null,
+            child: Column(
+              children: [
+                FieldWrapperWidget(
+                  label: 'Triệu chứng',
+                  icon: FontAwesomeIcons.heartPulse,
+                  child: TextInputWidget(
+                    controller: _symptomCtrl,
+                    onChanged: (value) {},
+                    hint: 'Mô tả triệu chứng hiện tại...',
+                  ),
+                ),
+
+                FieldWrapperWidget(
+                  label: 'Yêu cầu khám',
+                  icon: FontAwesomeIcons.clipboardList,
+                  child: TextInputWidget(
+                    controller: _requestCtrl,
+                    hint: 'Yêu cầu đặc biệt với bác sĩ (nếu có)...',
+                    keyboardType: TextInputType.phone,
+                  ),
+                ),
+
+                FieldWrapperWidget(
+                  label: 'Ghi chú',
+                  icon: FontAwesomeIcons.noteSticky,
+                  child: TextInputWidget(
+                    controller: _noteCtrl,
+                    hint: 'Thông tin thêm cần lưu ý...',
+                    keyboardType: TextInputType.phone,
+                  ),
+                ),
+              ],
             ),
           ),
 
@@ -207,14 +304,6 @@ class _PatientSelectCard extends StatelessWidget {
         '${d.year}';
   }
 
-  String _genderLabel(Gender g) {
-    return switch (g) {
-      Gender.male => 'Nam',
-      Gender.female => 'Nữ',
-      Gender.other => 'Khác',
-    };
-  }
-
   @override
   Widget build(BuildContext context) {
     final cs = context.colorScheme;
@@ -283,7 +372,7 @@ class _PatientSelectCard extends StatelessWidget {
                     children: [
                       _InfoChip(
                         icon: FontAwesomeIcons.venusMars,
-                        text: _genderLabel(patient.gender),
+                        text: patient.gender.genderLabel(),
                       ),
                       _InfoChip(
                         icon: FontAwesomeIcons.cakeCandles,

@@ -1,7 +1,9 @@
 // booking_notifier.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ltc/features/booking/data/models/booking_param_mode.dart';
 import 'package:ltc/features/booking/domain/entities/patient_booking_entity.dart';
+import 'package:ltc/features/booking/domain/usecases/booking_service_usecase.dart';
 import 'package:ltc/features/booking/presentation/providers/booking_state.dart';
 import 'package:ltc/features/doctor/domain/usecases/search_doctor_usecase.dart';
 import 'package:ltc/features/service/domain/entities/package_entity.dart';
@@ -30,6 +32,7 @@ class BookingNotifier extends Notifier<BookingState> {
       ref.read(getClinicSpecialtyUsecaseProvider);
   SearchDoctorUsecase get _searchDoctor =>
       ref.read(searchDoctorUsecaseProvider);
+  BookingServiceUsecase get _bookingService => ref.read(bookingUsecaseProvider);
 
   void addServices(List<ServiceEntity> services) {
     state = state.copyWith(
@@ -49,9 +52,9 @@ class BookingNotifier extends Notifier<BookingState> {
 
   void selectPatient(PatientBookingEntity? patient) =>
       state = state.copyWith(selectedPatient: patient);
-  //? MARK: LOAD
-  Future<void> loadClinic() async {}
 
+  // MARK: LOAD
+  Future<void> loadClinic() async {}
   Future<void> loadServices(String? search) async {
     state = state.copyWith(isLoadingServices: true);
     final result = await _searchService.call(search);
@@ -100,6 +103,19 @@ class BookingNotifier extends Notifier<BookingState> {
   void selectDate(DateTime date) => state = state.copyWith(selectedDate: date);
   void selectTimeSlot(TimeOfDay slot) =>
       state = state.copyWith(selectedTimeSlot: slot);
+
+  // MARK: BOOKING
+  Future<String?> bookingService(BookingParamModel params) async {
+    final result = await _bookingService.call(params: params);
+    return result.fold(
+      (l) {
+        return null;
+      },
+      (r) {
+        return r;
+      },
+    );
+  }
 }
 
 final bookingProvider = NotifierProvider.autoDispose
