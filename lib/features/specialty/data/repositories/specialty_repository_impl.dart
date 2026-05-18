@@ -17,10 +17,10 @@ class SpecialtyRepositoryImpl implements SpecialtyRepository {
 
   @override
   Future<Either<Failure, List<SpecialtyEntity>>> getClinicSpecialty({
-    String? dcomId,
+    required String dcomId,
   }) async {
     try {
-      final response = await _datasource.getClinicSpecialty();
+      final response = await _datasource.getClinicSpecialty(dcomId: dcomId);
       if (response.data != null) {
         return Right(response.data!);
       }

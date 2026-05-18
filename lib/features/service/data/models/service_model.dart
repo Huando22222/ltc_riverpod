@@ -12,6 +12,7 @@ class ServiceModel extends ServiceEntity {
     required super.serType,
     required super.isActive,
     required super.isLogicDel,
+    super.specId,
   });
 
   factory ServiceModel.fromJson({required Map<String, dynamic> json}) {
@@ -26,6 +27,7 @@ class ServiceModel extends ServiceEntity {
       serType: json['grp_type'],
       isActive: json['is_active'],
       isLogicDel: json['is_logic_del'],
+      specId: json['spec_id'],
     );
   }
 }

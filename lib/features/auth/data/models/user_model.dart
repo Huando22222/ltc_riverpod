@@ -32,7 +32,7 @@ class UserModel extends UserEntity {
       username: json['UserName'] ?? 'Guest',
       userSessionId: json['UserSessionId'],
       fullname: (json['FullName'] as String?)?.isNullOrEmpty ?? true
-          ? 'unknown'
+          ? 'Tôi'
           : json['FullName'] as String,
       email: json['Email'],
       isEmailConfirmed: json['EmailConfirmed'],

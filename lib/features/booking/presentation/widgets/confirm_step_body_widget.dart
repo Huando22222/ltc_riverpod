@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ltc/common/util/booking_util.dart';
+import 'package:ltc/common/util/currency_util.dart';
 import 'package:ltc/common/widgets/stepper/vertical_stepper_widget.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
 import 'package:ltc/core/extensions/gender_ext.dart';
 import 'package:ltc/core/localization/locale_provider.dart';
 import 'package:ltc/core/theme/app_spacing.dart';
 import 'package:ltc/features/booking/domain/entities/patient_booking_entity.dart';
+import 'package:ltc/features/doctor/domain/entities/doctor_entity.dart';
+import 'package:ltc/features/service/domain/entities/package_entity.dart';
 import 'package:ltc/features/service/domain/entities/service_entity.dart';
+import 'package:ltc/features/specialty/domain/entities/specialty_entity.dart';
 
 class ConfirmStepBodyWidget extends ConsumerWidget {
   final List<ServiceEntity> services;
+  final List<PackageEntity> packages;
+  final DoctorEntity? selectedDoctor;
+  final SpecialtyEntity? selectedSpecialty;
   final DateTime selectedDate;
   final TimeOfDay selectedSlot;
   final PatientBookingEntity patient;
@@ -20,6 +28,9 @@ class ConfirmStepBodyWidget extends ConsumerWidget {
   const ConfirmStepBodyWidget({
     super.key,
     required this.services,
+    required this.packages,
+    this.selectedDoctor,
+    this.selectedSpecialty,
     required this.selectedDate,
     required this.selectedSlot,
     required this.patient,
@@ -28,11 +39,6 @@ class ConfirmStepBodyWidget extends ConsumerWidget {
   });
 
   double get _total => services.fold(0, (s, e) => s + e.serTotal);
-
-  String _formatPrice(double price) {
-    if (price <= 0) return 'Miễn phí';
-    return '${price.toStringAsFixed(0).replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (m) => '.')}đ';
-  }
 
   String _formatDate(DateTime d) =>
       '${d.day.toString().padLeft(2, '0')}/'
@@ -50,6 +56,40 @@ class ConfirmStepBodyWidget extends ConsumerWidget {
         spacing: AppSpacing.xs,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // ── Chuyên khoa (nếu có) ──────────────
+          if (selectedSpecialty != null) ...[
+            _ConfirmSection(
+              icon: FontAwesomeIcons.stethoscope,
+              label: 'Chuyên khoa',
+              child: _ConfirmRow(label: selectedSpecialty!.name, value: ''),
+            ),
+            Divider(),
+          ],
+
+          // ── Bác sĩ (nếu có) ───────────────────
+          if (selectedDoctor != null) ...[
+            _ConfirmSection(
+              icon: FontAwesomeIcons.userDoctor,
+              label: 'Bác sĩ',
+              child: Column(
+                children: [
+                  _ConfirmRow(
+                    label: 'Họ tên',
+                    value: selectedDoctor!.title != null
+                        ? '${selectedDoctor!.title} ${selectedDoctor!.name}'
+                        : 'Bs. ${selectedDoctor!.name}',
+                  ),
+                  if (selectedDoctor!.description != null)
+                    _ConfirmRow(
+                      label: 'Chuyên môn',
+                      value: selectedDoctor!.description!,
+                    ),
+                ],
+              ),
+            ),
+            Divider(),
+          ],
+
           // ── Dịch vụ ───────────────────────────
           _ConfirmSection(
             icon: FontAwesomeIcons.hospital,
@@ -59,15 +99,25 @@ class ConfirmStepBodyWidget extends ConsumerWidget {
                 ...services.map(
                   (s) => _ConfirmRow(
                     label: s.serName,
-                    value: _formatPrice(s.serTotal),
+                    value: CurrencyUtil.formatPrice(s.serTotal),
                   ),
                 ),
+                if (packages.isNotEmpty) ...[
+                  ...packages.map(
+                    (p) => _ConfirmRow(
+                      label: p.packageName,
+                      value: CurrencyUtil.formatPrice(
+                        BookingUtil.calculatePackagePrice([p]),
+                      ),
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 4),
                 Divider(color: cs.outlineVariant, height: 1),
                 const SizedBox(height: 4),
                 _ConfirmRow(
                   label: tr.estimatedFee,
-                  value: _formatPrice(_total),
+                  value: CurrencyUtil.formatPrice(_total),
                   isTotal: true,
                 ),
               ],

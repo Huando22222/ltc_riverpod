@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
 
-class ContainerBottomModalSheet extends StatelessWidget {
+class ContainerBottomModalSheetWidget extends StatelessWidget {
   final EdgeInsets padding;
 
   ///[height] general height is 380
   final double? height;
 
   final Widget child;
-  const ContainerBottomModalSheet({
+  const ContainerBottomModalSheetWidget({
     super.key,
     this.padding = const EdgeInsets.only(left: 20, right: 20, top: 0),
     this.height,

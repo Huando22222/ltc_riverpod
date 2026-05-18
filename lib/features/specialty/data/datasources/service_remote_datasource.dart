@@ -14,7 +14,7 @@ class SpecialtyRemoteDatasource {
   const SpecialtyRemoteDatasource(this._dio);
 
   Future<BaseResponse<List<SpecialtyModel>>> getClinicSpecialty({
-    String? dcomId,
+    required String dcomId,
   }) async {
     final response = await _dio.get(
       ApiConstants.getClinicSpecialty,

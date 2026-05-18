@@ -10,8 +10,10 @@ class GetPackageDetailUsecase {
 
   GetPackageDetailUsecase(this._repository);
 
-  Future<Either<Failure, List<PackageItemEntity>>> call() {
-    return _repository.getPackageDetail();
+  Future<Either<Failure, List<PackageItemEntity>>> call({
+    required String packageId,
+  }) {
+    return _repository.getPackageDetail(packageId: packageId);
   }
 }
 

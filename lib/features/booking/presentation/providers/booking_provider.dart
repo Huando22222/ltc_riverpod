@@ -5,12 +5,14 @@ import 'package:ltc/features/booking/data/models/booking_param_mode.dart';
 import 'package:ltc/features/booking/domain/entities/patient_booking_entity.dart';
 import 'package:ltc/features/booking/domain/usecases/booking_service_usecase.dart';
 import 'package:ltc/features/booking/presentation/providers/booking_state.dart';
+import 'package:ltc/features/doctor/domain/entities/doctor_entity.dart';
 import 'package:ltc/features/doctor/domain/usecases/search_doctor_usecase.dart';
 import 'package:ltc/features/service/domain/entities/package_entity.dart';
 import 'package:ltc/features/service/domain/entities/service_entity.dart';
 import 'package:ltc/features/service/domain/usecases/get_package_detail_usecase.dart';
 import 'package:ltc/features/service/domain/usecases/get_package_usecase.dart';
 import 'package:ltc/features/service/domain/usecases/search_service_usecase.dart';
+import 'package:ltc/features/specialty/domain/entities/specialty_entity.dart';
 import 'package:ltc/features/specialty/domain/usecases/get_clinic_specialty_usecase.dart';
 
 class BookingNotifier extends Notifier<BookingState> {
@@ -38,6 +40,25 @@ class BookingNotifier extends Notifier<BookingState> {
     state = state.copyWith(
       selectedServices: [...state.selectedServices, ...services],
     );
+  }
+
+  void selectSpecialty(SpecialtyEntity specialty) {
+    state = state.copyWith(selectedSpecialty: specialty);
+  }
+
+  void selectDoctor(DoctorEntity doctor) {
+    state = state.copyWith(selectedDoctor: doctor);
+  }
+
+  void togglePackage(PackageEntity pkg) {
+    final current = List<PackageEntity>.from(state.selectedPackages);
+    final idx = current.indexWhere((p) => p.packageId == pkg.packageId);
+    if (idx >= 0) {
+      current.removeAt(idx);
+    } else {
+      current.add(pkg);
+    }
+    state = state.copyWith(selectedPackages: current);
   }
 
   void removeServices(List<ServiceEntity> services) {
@@ -69,10 +90,25 @@ class BookingNotifier extends Notifier<BookingState> {
   Future<void> loadPackages() async {
     state = state.copyWith(isLoadingPackages: true);
     final result = await _getPackages.call();
+    await result.fold(
+      (failure) async {
+        state = state.copyWith(errorMessage: failure.message);
+      },
+      (packages) async {
+        final detailed = await Future.wait(
+          packages.map((pkg) async {
+            final detailResult = await _getPackageDetail.call(
+              packageId: pkg.packageId,
+            );
+            return detailResult.fold((failure) => pkg, (items) {
+              pkg.services = items;
+              return pkg;
+            });
+          }),
+        );
 
-    result.fold(
-      (failure) => state = state.copyWith(errorMessage: failure.message),
-      (packages) => state = state.copyWith(packages: packages),
+        state = state.copyWith(packages: detailed);
+      },
     );
     state = state.copyWith(isLoadingPackages: false);
   }

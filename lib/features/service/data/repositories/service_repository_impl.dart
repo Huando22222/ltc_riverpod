@@ -48,10 +48,10 @@ class ServiceRepositoryImpl implements ServiceRepository {
 
   @override
   Future<Either<Failure, List<PackageItemEntity>>> getPackageDetail({
-    String? packageId,
+    required String packageId,
   }) async {
     try {
-      final response = await _datasource.getPackageDetail();
+      final response = await _datasource.getPackageDetail(packageId: packageId);
       if (response.data != null) {
         return Right(response.data!);
       }

@@ -18,8 +18,8 @@ class BaseResponse<T> {
     return BaseResponse(
       success: json['succeeded'] ?? json['success'],
       message: json['message'],
-      data: json['data'] != null && fromJsonT != null
-          ? fromJsonT(json['data'])
+      data: json['data'] != null
+          ? (fromJsonT != null ? fromJsonT(json['data']) : json['data'] as T)
           : null,
       pagination: json['pagination'] != null
           ? PaginatedResponse.fromJson(json['pagination'])

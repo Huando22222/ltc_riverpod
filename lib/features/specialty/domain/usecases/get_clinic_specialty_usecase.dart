@@ -10,7 +10,7 @@ class GetClinicSpecialtyUsecase {
 
   GetClinicSpecialtyUsecase(this._repository);
 
-  Future<Either<Failure, List<SpecialtyEntity>>> call(String? dcomId) {
+  Future<Either<Failure, List<SpecialtyEntity>>> call(String dcomId) {
     return _repository.getClinicSpecialty(dcomId: dcomId);
   }
 }

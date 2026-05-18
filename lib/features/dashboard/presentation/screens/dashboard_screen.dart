@@ -10,6 +10,7 @@ import 'package:ltc/common/widgets/splash_tap_widget.dart';
 import 'package:ltc/core/config/routes.dart';
 import 'package:ltc/core/constants/image_path_constants.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
+import 'package:ltc/core/extensions/widget_ref_ext.dart';
 import 'package:ltc/core/localization/locale_provider.dart';
 import 'package:ltc/core/theme/app_spacing.dart';
 import 'package:ltc/features/auth/presentation/providers/auth_provider.dart';
@@ -265,6 +266,7 @@ class _QuickActionsGrid extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final tr = ref.watch(stringsProvider);
     final user = ref.watch(currentUserProvider);
+
     return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: AppSpacing.horizontalPaddingScreen,
@@ -294,17 +296,18 @@ class _QuickActionsGrid extends ConsumerWidget {
                     icon: FontAwesomeIcons.calendarCheck,
                     label: tr.booking,
                     onTap: () {
-                      if (user == null) {
-                        ModalHelper.showLoginRequired(context);
-                        return;
-                      }
+                      if (!ref.isAuthenticated(context)) return;
                       context.pushNamed(RouteName.serviceBooking);
                     },
                   ),
                 ),
                 Expanded(
                   child: _QuickActionButton(
-                    icon: FontAwesomeIcons.hospital,
+                    onTap: () {
+                      if (!ref.isAuthenticated(context)) return;
+                      context.pushNamed(RouteName.specialtyBooking);
+                    },
+                    icon: FontAwesomeIcons.hospitalUser,
                     label: tr.specialty,
                   ),
                 ),
@@ -317,6 +320,10 @@ class _QuickActionsGrid extends ConsumerWidget {
                 ),
                 Expanded(
                   child: _QuickActionButton(
+                    onTap: () {
+                      if (!ref.isAuthenticated(context)) return;
+                      context.pushNamed(RouteName.packageBooking);
+                    },
                     icon: FontAwesomeIcons.layerGroup,
                     label: tr.package,
                   ),
@@ -390,7 +397,7 @@ class _QuickActionButton extends StatelessWidget {
 
     return SplashTapWidget(
       borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-      onTap: onTap ?? () {},
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: AppSpacing.sm,

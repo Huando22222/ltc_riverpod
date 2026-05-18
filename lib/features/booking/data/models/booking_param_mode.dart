@@ -51,14 +51,18 @@ class BookingParamModel {
       'booking_dob': dob.toIso8601String(),
       'booking_name': name,
       'booking_phone': phone,
-      'ref_name': refName,
-      'ref_phone': refPhone,
+
+      if (refName != null) 'ref_name': refName,
+      if (refPhone != null) 'ref_phone': refPhone,
+      if (userRefId != null) 'user_ref_id': userRefId,
+
       'dcom_id': dcomId,
-      'symptom': symptom,
-      'note': note,
-      'request': request,
+
+      if (symptom != null) 'symptom': symptom,
+      if (note != null) 'note': note,
+      if (request != null) 'request': request,
+
       'user_id': userId,
-      'user_ref_id': userRefId,
       'date_time': bookingDateTime.toIso8601String(),
       'discount_amount': discountAmount,
       'discount_percent': discountPercent,
@@ -90,13 +94,15 @@ class BookingServiceParamModel {
   });
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'apt_id': aptId,
-      'doc_id': docId,
-      'pkg_id': pkgId,
+      if (id != null) 'id': id,
+      if (aptId != null) 'apt_id': aptId,
+      if (docId != null) 'doc_id': docId,
+      if (pkgId != null) 'pkg_id': pkgId,
+
       'ser_id': serId,
       'ser_current_total': serCurrentTotal,
-      'spec_id': specId,
+
+      if (specId != null) 'spec_id': specId,
     };
   }
 }

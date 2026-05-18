@@ -10,8 +10,10 @@ import 'package:ltc/features/auth/presentation/providers/auth_provider.dart';
 import 'package:ltc/features/auth/presentation/states/auth_state.dart';
 import 'package:ltc/features/auth/presentation/screens/login_screen.dart';
 import 'package:ltc/features/auth/presentation/screens/register_screen.dart';
+import 'package:ltc/features/booking/presentation/screens/package_booking_screen.dart';
 import 'package:ltc/features/booking/presentation/screens/patient_declaration_screen.dart';
 import 'package:ltc/features/booking/presentation/screens/service_booking_screen.dart';
+import 'package:ltc/features/booking/presentation/screens/specialty_booking_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   // Tạo Listenable lắng nghe authProvider
@@ -78,6 +80,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: RouteName.serviceBooking,
         path: Routes.serviceBooking,
         builder: (_, __) => const ServiceBookingScreen(),
+      ),
+      GoRoute(
+        name: RouteName.specialtyBooking,
+        path: Routes.specialtyBooking,
+        builder: (_, __) => const SpecialtyBookingScreen(),
+      ),
+      GoRoute(
+        name: RouteName.packageBooking,
+        path: Routes.packageBooking,
+        builder: (_, __) => const PackageBookingScreen(),
       ),
       GoRoute(
         name: RouteName.patientDeclaration,

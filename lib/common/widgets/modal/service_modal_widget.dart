@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ltc/common/util/currency_util.dart';
+import 'package:ltc/common/util/filter_util.dart';
 import 'package:ltc/common/widgets/drop_down/drop_down_widget.dart';
 import 'package:ltc/common/widgets/search_bar/search_bar_widget.dart';
 import 'package:ltc/common/widgets/states/empty_data_widget.dart';
@@ -14,13 +16,14 @@ class ServiceModalWidget extends ConsumerStatefulWidget {
   final List<ServiceEntity> selectedServices;
   final ValueChanged<List<ServiceEntity>>? onAdd;
   final ValueChanged<List<ServiceEntity>>? onRemove;
-
+  final bool? isShowDropDown;
   const ServiceModalWidget({
     super.key,
     required this.services,
     this.selectedServices = const [],
     this.onAdd,
     this.onRemove,
+    this.isShowDropDown,
   });
 
   @override
@@ -29,7 +32,6 @@ class ServiceModalWidget extends ConsumerStatefulWidget {
 
 class _ServiceModalWidgetState extends ConsumerState<ServiceModalWidget> {
   late final TextEditingController _searchController;
-  late List<ServiceEntity> _selected;
   String _searchQuery = '';
   String _activeGroupName = _kAll;
   late List<ServiceEntity> _toAdd;
@@ -40,7 +42,6 @@ class _ServiceModalWidgetState extends ConsumerState<ServiceModalWidget> {
   void initState() {
     super.initState();
     _searchController = TextEditingController();
-    _selected = List.from(widget.selectedServices);
     _toAdd = [];
     _toRemove = [];
   }
@@ -75,11 +76,11 @@ class _ServiceModalWidgetState extends ConsumerState<ServiceModalWidget> {
     }
 
     if (_searchQuery.isNotEmpty) {
-      list = list
-          .where(
-            (s) => s.serName.toLowerCase().contains(_searchQuery.toLowerCase()),
-          )
-          .toList();
+      list = FilterUtil.filterData(
+        list,
+        _searchQuery,
+        searchFields: (item) => [item.serName],
+      );
     }
 
     // Khi "Tất cả" + không search → đưa đã chọn lên đầu
@@ -135,11 +136,6 @@ class _ServiceModalWidgetState extends ConsumerState<ServiceModalWidget> {
   double get _totalPrice =>
       _currentSelected.fold(0, (sum, s) => sum + s.serTotal);
 
-  String _formatPrice(double price) {
-    if (price <= 0) return 'Miễn phí';
-    return '${price.toStringAsFixed(0).replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (m) => '.')}đ';
-  }
-
   @override
   Widget build(BuildContext context) {
     final cs = context.colorScheme;
@@ -150,26 +146,27 @@ class _ServiceModalWidgetState extends ConsumerState<ServiceModalWidget> {
       spacing: 5,
       children: [
         // ── Dropdown nhóm dịch vụ ────────────
-        Padding(
-          padding: const EdgeInsets.only(
-            left: AppSpacing.horizontalPaddingScreen,
-            right: AppSpacing.horizontalPaddingScreen,
+        if (widget.isShowDropDown ?? true)
+          Padding(
+            padding: const EdgeInsets.only(
+              left: AppSpacing.horizontalPaddingScreen,
+              right: AppSpacing.horizontalPaddingScreen,
+            ),
+            child: DropDownWidget(
+              categories: _groupNames,
+              selectedCategory: _activeGroupName,
+              customIcons: const {'Tất cả': Icons.apps_rounded},
+              onChanged: (v) {
+                if (v != null) {
+                  setState(() {
+                    _activeGroupName = v;
+                    _searchQuery = '';
+                    _searchController.clear();
+                  });
+                }
+              },
+            ),
           ),
-          child: DropDownWidget(
-            categories: _groupNames,
-            selectedCategory: _activeGroupName,
-            customIcons: const {'Tất cả': Icons.apps_rounded},
-            onChanged: (v) {
-              if (v != null) {
-                setState(() {
-                  _activeGroupName = v;
-                  _searchQuery = '';
-                  _searchController.clear();
-                });
-              }
-            },
-          ),
-        ),
 
         // ── Search ───────────────────────────
         Padding(
@@ -209,7 +206,6 @@ class _ServiceModalWidgetState extends ConsumerState<ServiceModalWidget> {
                         service: service,
                         isSelected: _isSelected(service),
                         showGroup: _activeGroupName == _kAll,
-                        formatPrice: _formatPrice,
                         onTap: () => _toggle(service),
                       );
                     },
@@ -220,7 +216,6 @@ class _ServiceModalWidgetState extends ConsumerState<ServiceModalWidget> {
         _BottomBar(
           selectedCount: _currentSelected.length,
           totalPrice: _totalPrice,
-          formatPrice: _formatPrice,
           onConfirm: (_toAdd.isEmpty && _toRemove.isEmpty)
               ? null
               : () {
@@ -238,14 +233,12 @@ class _ServiceCard extends StatelessWidget {
   final ServiceEntity service;
   final bool isSelected;
   final bool showGroup;
-  final String Function(double) formatPrice;
   final VoidCallback onTap;
 
   const _ServiceCard({
     required this.service,
     required this.isSelected,
     required this.showGroup,
-    required this.formatPrice,
     required this.onTap,
   });
 
@@ -347,7 +340,7 @@ class _ServiceCard extends StatelessWidget {
                           ],
                           const SizedBox(height: 4),
                           Text(
-                            formatPrice(service.serTotal),
+                            CurrencyUtil.formatPrice(service.serTotal),
                             style: tt.bodySmall?.copyWith(
                               color: cs.onSurfaceVariant,
                             ),
@@ -390,13 +383,11 @@ class _ServiceCard extends StatelessWidget {
 class _BottomBar extends StatelessWidget {
   final int selectedCount;
   final double totalPrice;
-  final String Function(double) formatPrice;
   final VoidCallback? onConfirm;
 
   const _BottomBar({
     required this.selectedCount,
     required this.totalPrice,
-    required this.formatPrice,
     required this.onConfirm,
   });
 
@@ -428,7 +419,7 @@ class _BottomBar extends StatelessWidget {
                 if (selectedCount > 0) ...[
                   const SizedBox(height: 2),
                   Text(
-                    formatPrice(totalPrice),
+                    CurrencyUtil.formatPrice(totalPrice),
                     style: tt.titleSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                       color: cs.primary,

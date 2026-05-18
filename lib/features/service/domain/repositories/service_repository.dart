@@ -8,6 +8,6 @@ abstract class ServiceRepository {
   Future<Either<Failure, List<ServiceEntity>>> searchService({String? search});
   Future<Either<Failure, List<PackageEntity>>> getPackages();
   Future<Either<Failure, List<PackageItemEntity>>> getPackageDetail({
-    String packageId,
+    required String packageId,
   });
 }

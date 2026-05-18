@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ltc/common/widgets/modal/container_bottom_modal_sheet.dart';
+import 'package:ltc/common/widgets/modal/container_bottom_modal_sheet_widget.dart';
+import 'package:ltc/common/widgets/modal/detail_package_modal_widget.dart';
 import 'package:ltc/common/widgets/modal/login_required_widget.dart';
 import 'package:ltc/common/widgets/modal/service_modal_widget.dart';
+import 'package:ltc/features/service/domain/entities/package_entity.dart';
 import 'package:ltc/features/service/domain/entities/service_entity.dart';
 
 /// [PopupAction] use for [popup] to spread property
@@ -32,7 +34,7 @@ class ModalHelper {
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return ContainerBottomModalSheet(height: height, child: child);
+        return ContainerBottomModalSheetWidget(height: height, child: child);
       },
     );
   }
@@ -53,12 +55,13 @@ class ModalHelper {
     List<ServiceEntity> selectedServices = const [],
     ValueChanged<List<ServiceEntity>>? onAdd,
     ValueChanged<List<ServiceEntity>>? onRemove,
+    bool? isShowDropDown = true,
   }) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => ContainerBottomModalSheet(
+      builder: (context) => ContainerBottomModalSheetWidget(
         height: MediaQuery.of(context).size.height * 0.85,
         padding: EdgeInsets.zero,
         child: ServiceModalWidget(
@@ -66,7 +69,24 @@ class ModalHelper {
           selectedServices: selectedServices,
           onAdd: onAdd,
           onRemove: onRemove,
+          isShowDropDown: isShowDropDown,
         ),
+      ),
+    );
+  }
+
+  static void showDetailPackageModal({
+    required BuildContext context,
+    required PackageEntity package,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => ContainerBottomModalSheetWidget(
+        height: MediaQuery.of(context).size.height * 0.85,
+        padding: EdgeInsets.zero,
+        child: DetailPackageModalWidget(package: package),
       ),
     );
   }
