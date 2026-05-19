@@ -2,6 +2,7 @@ class PackageItemEntity {
   final String dcomId;
   final String packageId;
   final String serGroupId;
+  final String serGroupName;
   final String serId;
   final String serName;
   final double serPrice;
@@ -11,6 +12,7 @@ class PackageItemEntity {
     required this.dcomId,
     required this.packageId,
     required this.serGroupId,
+    required this.serGroupName,
     required this.serId,
     required this.serName,
     required this.serPrice,

@@ -3,9 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ltc/common/util/booking_util.dart';
+import 'package:ltc/common/util/currency_util.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
-import 'package:ltc/core/localization/locale_provider.dart';
 import 'package:ltc/features/service/domain/entities/package_entity.dart';
 import 'package:ltc/features/service/domain/entities/package_item_entity.dart';
 
@@ -14,32 +13,11 @@ class DetailPackageModalWidget extends ConsumerWidget {
 
   const DetailPackageModalWidget({super.key, required this.package});
 
-  String _formatPrice(double price) {
-    if (price <= 0) return 'Miễn phí';
-    return '${price.toStringAsFixed(0).replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (m) => '.')}đ';
-  }
-
-  double get _total => package.services.fold(0, (s, e) => s + e.serTotal);
-
-  double get _discounted {
-    if (package.discountAmount != null && package.discountAmount! > 0) {
-      return _total - package.discountAmount!;
-    }
-    if (package.discountPercent != null && package.discountPercent! > 0) {
-      return _total * (1 - package.discountPercent! / 100);
-    }
-    return _total;
-  }
-
-  bool get _hasDiscount =>
-      (package.discountAmount != null && package.discountAmount! > 0) ||
-      (package.discountPercent != null && package.discountPercent! > 0);
-
   // Group services by serGroupId
   Map<String, List<PackageItemEntity>> get _grouped {
     final map = <String, List<PackageItemEntity>>{};
     for (final s in package.services) {
-      map.putIfAbsent(s.serGroupId, () => []).add(s);
+      map.putIfAbsent(s.serGroupName, () => []).add(s);
     }
     return map;
   }
@@ -53,19 +31,6 @@ class DetailPackageModalWidget extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // ── Handle ────────────────────────────
-        Center(
-          child: Container(
-            width: 40,
-            height: 4,
-            margin: const EdgeInsets.only(top: 12, bottom: 16),
-            decoration: BoxDecoration(
-              color: cs.outlineVariant,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-        ),
-
         // ── Header ────────────────────────────
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
@@ -114,80 +79,81 @@ class DetailPackageModalWidget extends ConsumerWidget {
           ),
         ),
 
-        // ── Price card ────────────────────────
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: cs.primaryContainer.withOpacity(0.35),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: cs.primary.withOpacity(0.15)),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Tổng chi phí',
-                        style: tt.labelSmall?.copyWith(
-                          color: cs.onSurfaceVariant,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            _formatPrice(_discounted),
-                            style: tt.titleMedium?.copyWith(
-                              color: cs.primary,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          if (_hasDiscount) ...[
-                            const SizedBox(width: 8),
-                            Text(
-                              _formatPrice(_total),
-                              style: tt.bodySmall?.copyWith(
-                                color: cs.onSurfaceVariant,
-                                decoration: TextDecoration.lineThrough,
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                if (_hasDiscount)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: cs.errorContainer,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      package.discountPercent != null &&
-                              package.discountPercent! > 0
-                          ? 'Giảm ${package.discountPercent!.toStringAsFixed(0)}%'
-                          : 'Giảm ${_formatPrice(package.discountAmount!)}',
-                      style: tt.labelMedium?.copyWith(
-                        color: cs.error,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-
+        // // ── Price card ────────────────────────
+        // Padding(
+        //   padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+        //   child: Container(
+        //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        //     decoration: BoxDecoration(
+        //       color: cs.primaryContainer.withOpacity(0.35),
+        //       borderRadius: BorderRadius.circular(14),
+        //       border: Border.all(color: cs.primary.withOpacity(0.15)),
+        //     ),
+        //     child: Row(
+        //       children: [
+        //         Expanded(
+        //           child: Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             children: [
+        //               Text(
+        //                 'Tổng chi phí',
+        //                 style: tt.labelSmall?.copyWith(
+        //                   color: cs.onSurfaceVariant,
+        //                 ),
+        //               ),
+        //               const SizedBox(height: 4),
+        //               Row(
+        //                 crossAxisAlignment: CrossAxisAlignment.end,
+        //                 children: [
+        //                   Text(
+        //                     CurrencyUtil.formatPrice(
+        //                       BookingUtil.calculatePackagePrice([package]),
+        //                     ),
+        //                     style: tt.titleMedium?.copyWith(
+        //                       color: cs.primary,
+        //                       fontWeight: FontWeight.w800,
+        //                     ),
+        //                   ),
+        //                   // if (_hasDiscount) ...[
+        //                   //   const SizedBox(width: 8),
+        //                   //   Text(
+        //                   //     CurrencyUtil.formatPrice(_total),
+        //                   //     style: tt.bodySmall?.copyWith(
+        //                   //       color: cs.onSurfaceVariant,
+        //                   //       decoration: TextDecoration.lineThrough,
+        //                   //     ),
+        //                   //   ),
+        //                   // ],
+        //                 ],
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //         // if (_hasDiscount)
+        //         //   Container(
+        //         //     padding: const EdgeInsets.symmetric(
+        //         //       horizontal: 10,
+        //         //       vertical: 5,
+        //         //     ),
+        //         //     decoration: BoxDecoration(
+        //         //       color: cs.errorContainer,
+        //         //       borderRadius: BorderRadius.circular(8),
+        //         //     ),
+        //         //     child: Text(
+        //         //       package.discountPercent != null &&
+        //         //               package.discountPercent! > 0
+        //         //           ? 'Giảm ${package.discountPercent!.toStringAsFixed(0)}%'
+        //         //           : 'Giảm ${_formatPrice(package.discountAmount!)}',
+        //         //       style: tt.labelMedium?.copyWith(
+        //         //         color: cs.error,
+        //         //         fontWeight: FontWeight.w700,
+        //         //       ),
+        //         //     ),
+        //         //   ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         Divider(color: cs.outlineVariant.withOpacity(0.5), height: 1),
 
         // ── Services list ─────────────────────
@@ -298,7 +264,7 @@ class DetailPackageModalWidget extends ConsumerWidget {
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
-                                      _formatPrice(item.serTotal),
+                                      CurrencyUtil.formatPrice(item.serTotal),
                                       style: tt.labelSmall?.copyWith(
                                         color: cs.onSurfaceVariant,
                                         fontWeight: FontWeight.w500,

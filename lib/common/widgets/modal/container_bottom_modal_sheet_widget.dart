@@ -44,7 +44,7 @@ class ContainerBottomModalSheetWidget extends StatelessWidget {
               width: 50,
               height: 5,
               decoration: BoxDecoration(
-                color: cs.onSurface,
+                color: cs.outlineVariant, //cs.onSurface,
                 borderRadius: BorderRadius.circular(3),
               ),
             ),

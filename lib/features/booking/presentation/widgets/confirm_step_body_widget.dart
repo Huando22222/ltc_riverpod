@@ -38,8 +38,6 @@ class ConfirmStepBodyWidget extends ConsumerWidget {
     this.isLoading = false,
   });
 
-  double get _total => services.fold(0, (s, e) => s + e.serTotal);
-
   String _formatDate(DateTime d) =>
       '${d.day.toString().padLeft(2, '0')}/'
       '${d.month.toString().padLeft(2, '0')}/'
@@ -117,7 +115,10 @@ class ConfirmStepBodyWidget extends ConsumerWidget {
                 const SizedBox(height: 4),
                 _ConfirmRow(
                   label: tr.estimatedFee,
-                  value: CurrencyUtil.formatPrice(_total),
+                  value: CurrencyUtil.formatPrice(
+                    BookingUtil.calculatePackagePrice(packages) +
+                        BookingUtil.calculateServicePrice(services),
+                  ),
                   isTotal: true,
                 ),
               ],

@@ -39,7 +39,8 @@ class AuthRemoteDatasource {
     final responseInfo = await _dio.get(
       ApiConstants.profile,
       queryParameters: {
-        'PhoneNumber': res.data['phone_number'],
+        'UserId': res.data['phone_number'],
+        // 'PhoneNumber': res.data['phone_number'],
         'application_id': AppConstants.appId,
       },
     );

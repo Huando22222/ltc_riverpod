@@ -274,7 +274,7 @@ class _SpecialtyBookingScreenState
                               InAppNotificationHelper.showSuccess(
                                 context,
                                 message:
-                                    'Đặt hẹn thành công với mã hẹn: $result',
+                                    'Đặt hẹn thành công với mã hẹn: \n$result',
                               );
                               context.pop();
                             } else {
