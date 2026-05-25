@@ -9,7 +9,7 @@ import 'package:ltc/core/theme/app_spacing.dart';
 class HeaderWidget extends ConsumerWidget {
   final String title;
   final String? image; // url
-  const HeaderWidget({super.key, required this.title, required this.image});
+  const HeaderWidget({super.key, required this.title, this.image});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

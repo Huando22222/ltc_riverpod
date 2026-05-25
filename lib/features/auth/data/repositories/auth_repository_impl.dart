@@ -6,15 +6,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/error/failure.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
-import '../datasources/auth_remote_datasource.dart';
+import '../datasources/auth_datasource.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>(
-  (ref) => AuthRepositoryImpl(ref.read(authRemoteDatasourceProvider)),
+  (ref) => AuthRepositoryImpl(ref.read(authDatasourceProvider)),
 );
 
 class AuthRepositoryImpl implements AuthRepository {
   const AuthRepositoryImpl(this._datasource);
-  final AuthRemoteDatasource _datasource;
+  final AuthDatasource _datasource;
 
   @override
   Future<Either<Failure, UserEntity>> login({

@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ltc/common/widgets/modal/booking_data_modal_sheet_widget.dart';
 import 'package:ltc/common/widgets/modal/container_bottom_modal_sheet_widget.dart';
 import 'package:ltc/common/widgets/modal/detail_package_modal_widget.dart';
 import 'package:ltc/common/widgets/modal/login_required_widget.dart';
 import 'package:ltc/common/widgets/modal/service_modal_widget.dart';
+import 'package:ltc/features/lookup/domain/entities/booking_data_entity.dart';
 import 'package:ltc/features/service/domain/entities/package_entity.dart';
 import 'package:ltc/features/service/domain/entities/service_entity.dart';
 
@@ -157,6 +159,22 @@ class ModalHelper {
           ),
         );
       },
+    );
+  }
+
+  static void showDetailBookingDataModal({
+    required BuildContext context,
+    required BookingDataEntity data,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => ContainerBottomModalSheetWidget(
+        height: MediaQuery.of(context).size.height * 0.7,
+        padding: EdgeInsets.zero,
+        child: BookingDataModalSheetWidget(data: data),
+      ),
     );
   }
 }

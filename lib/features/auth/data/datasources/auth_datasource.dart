@@ -1,18 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ltc/core/config/app_constants.dart';
 import 'package:ltc/core/constants/api_constants.dart';
 import 'package:ltc/core/constants/app_constants.dart';
 import 'package:ltc/core/models/base_response.dart';
 import '../../../../core/network/dio_provider.dart';
 import '../models/user_model.dart';
 
-final authRemoteDatasourceProvider = Provider<AuthRemoteDatasource>(
-  (ref) => AuthRemoteDatasource(ref.read(dioProvider)),
+final authDatasourceProvider = Provider<AuthDatasource>(
+  (ref) => AuthDatasource(ref.read(dioProvider)),
 );
 
-class AuthRemoteDatasource {
-  const AuthRemoteDatasource(this._dio);
+class AuthDatasource {
+  const AuthDatasource(this._dio);
   final Dio _dio;
 
   Future<BaseResponse<UserModel>> login({
@@ -39,7 +38,7 @@ class AuthRemoteDatasource {
     final responseInfo = await _dio.get(
       ApiConstants.profile,
       queryParameters: {
-        'UserId': res.data['phone_number'],
+        'UserId': res.data['user_id'],
         // 'PhoneNumber': res.data['phone_number'],
         'application_id': AppConstants.appId,
       },

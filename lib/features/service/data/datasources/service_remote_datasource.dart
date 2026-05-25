@@ -7,9 +7,6 @@ import 'package:ltc/features/service/data/models/package_item_model.dart';
 import 'package:ltc/features/service/data/models/package_model.dart';
 import 'package:ltc/features/service/data/models/service_model.dart';
 
-final serviceRemoteDatasourceProvider = Provider<ServiceRemoteDatasource>(
-  (ref) => ServiceRemoteDatasource(ref.read(dioProvider)),
-);
 
 class ServiceRemoteDatasource {
   final Dio _dio;
@@ -60,3 +57,7 @@ class ServiceRemoteDatasource {
     return res;
   }
 }
+
+final serviceRemoteDatasourceProvider = Provider<ServiceRemoteDatasource>(
+  (ref) => ServiceRemoteDatasource(ref.read(dioProvider)),
+);

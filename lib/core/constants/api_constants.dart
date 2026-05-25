@@ -21,4 +21,7 @@ class ApiConstants {
 
   // MARK: BOOKING
   static const String createSche = '/api/LTC/Appointment/ltc-create-sche';
+
+  // MARK: LOOKUP
+  static const String getBookingDataHistory = '/api/Booking/history-search';
 }

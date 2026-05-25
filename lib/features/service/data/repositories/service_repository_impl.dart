@@ -9,10 +9,6 @@ import 'package:ltc/features/service/domain/entities/package_item_entity.dart';
 import 'package:ltc/features/service/domain/entities/service_entity.dart';
 import 'package:ltc/features/service/domain/repositories/service_repository.dart';
 
-final serviceRepositoryProvider = Provider<ServiceRepository>(
-  (ref) => ServiceRepositoryImpl(ref.read(serviceRemoteDatasourceProvider)),
-);
-
 class ServiceRepositoryImpl implements ServiceRepository {
   final ServiceRemoteDatasource _datasource;
   const ServiceRepositoryImpl(this._datasource);
@@ -62,3 +58,7 @@ class ServiceRepositoryImpl implements ServiceRepository {
     }
   }
 }
+
+final serviceRepositoryProvider = Provider<ServiceRepository>(
+  (ref) => ServiceRepositoryImpl(ref.read(serviceRemoteDatasourceProvider)),
+);

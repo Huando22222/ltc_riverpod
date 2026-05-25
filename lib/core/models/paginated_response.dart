@@ -21,7 +21,7 @@ class PaginatedResponse {
     return PaginatedResponse(
       page: json['page'],
       pageSize: json['page_size'],
-      totalPage: json['total_page'],
+      totalPage: json['total_pages'],
       total: json['total'],
       hasNext: json['has_next'],
       hasPrev: json['has_prev'],
