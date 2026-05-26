@@ -14,8 +14,6 @@ import 'package:ltc/common/widgets/states/loading_widget.dart';
 import 'package:ltc/common/widgets/states/refresh_widget.dart';
 import 'package:ltc/core/localization/locale_provider.dart';
 import 'package:ltc/core/theme/app_spacing.dart';
-import 'package:ltc/features/lookup/data/models/booking_data_model.dart';
-import 'package:ltc/features/lookup/domain/entities/booking_data_detail_entity.dart';
 import 'package:ltc/features/lookup/domain/entities/booking_data_entity.dart';
 import 'package:ltc/features/lookup/presentation/providers/booking_data_provider.dart';
 import 'package:ltc/features/lookup/presentation/widgets/status_badge_widget.dart';
@@ -53,65 +51,62 @@ class _BookingDataScreenState extends ConsumerState<BookingDataScreen> {
   Widget build(BuildContext context) {
     final asyncData = ref.watch(bookingDataProvider);
     final tr = ref.read(stringsProvider);
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            HeaderWidget(title: tr.lookup),
-
-            Padding(
-              padding: const EdgeInsets.only(
-                left: AppSpacing.horizontalPaddingScreen,
-                right: AppSpacing.horizontalPaddingScreen,
-                top: AppSpacing.sm,
-                bottom: AppSpacing.sm,
-              ),
-              child: SearchBarWidget(
-                hint: 'tr.search',
-                controller: _searchController,
-                onChanged: (value) {
-                  setState(() {});
-                },
-              ),
-            ),
-            Expanded(
-              child: asyncData.when(
-                loading: () => const LoadingWidget(),
-                error: (_, _) => ErrorDataWidget(
-                  onRetry: () => ref.invalidate(bookingDataProvider),
-                ),
-                data: (items) {
-                  final filtered = filterData(items);
-
-                  if (filtered.isEmpty &&
-                      _searchController.text.trim().isNotEmpty) {
-                    return EmptyDataWidget();
-                  }
-                  return RefreshWidget(
-                    onRefresh: () async {
-                      ref.refresh(bookingDataProvider.future);
-                    },
-                    childIsScrollable: true,
-                    child: ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSpacing.horizontalPaddingScreen,
-                        0,
-                        AppSpacing.horizontalPaddingScreen,
-                        110,
-                      ),
-                      itemCount: filtered.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 12),
-                      itemBuilder: (_, index) {
-                        return _BookingCard(booking: filtered[index]);
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
+    final md = MediaQuery.of(context);
+    return Column(
+      children: [
+        SizedBox(height: md.padding.top),
+        HeaderWidget(title: tr.lookup),
+        Padding(
+          padding: const EdgeInsets.only(
+            left: AppSpacing.horizontalPaddingScreen,
+            right: AppSpacing.horizontalPaddingScreen,
+            top: AppSpacing.sm,
+            bottom: AppSpacing.sm,
+          ),
+          child: SearchBarWidget(
+            hint: 'tr.search',
+            controller: _searchController,
+            onChanged: (value) {
+              setState(() {});
+            },
+          ),
         ),
-      ),
+        Expanded(
+          child: asyncData.when(
+            loading: () => const LoadingWidget(),
+            error: (_, _) => ErrorDataWidget(
+              onRetry: () => ref.invalidate(bookingDataProvider),
+            ),
+            data: (items) {
+              final filtered = filterData(items);
+
+              if (filtered.isEmpty &&
+                  _searchController.text.trim().isNotEmpty) {
+                return EmptyDataWidget();
+              }
+              return RefreshWidget(
+                onRefresh: () async {
+                  ref.refresh(bookingDataProvider.future);
+                },
+                childIsScrollable: true,
+                child: ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.horizontalPaddingScreen,
+                    0,
+                    AppSpacing.horizontalPaddingScreen,
+                    110,
+                  ),
+                  itemCount: filtered.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (_, index) {
+                    return _BookingCard(booking: filtered[index]);
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

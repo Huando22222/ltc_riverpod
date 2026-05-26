@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ltc/app/shell/bottom_nav_provider.dart';
 import 'package:ltc/app/shell/bottom_nav_shell.dart';
 import 'package:ltc/features/dashboard/presentation/screens/dashboard_screen.dart';
-import 'package:ltc/features/health/presentation/screens/health_screen.dart';
+import 'package:ltc/features/health/presentation/screens/health_overview_screen.dart';
 import 'package:ltc/features/lookup/presentation/screens/booking_data_screen.dart';
 import 'package:ltc/features/setting/presentation/screens/setting_screen.dart';
 

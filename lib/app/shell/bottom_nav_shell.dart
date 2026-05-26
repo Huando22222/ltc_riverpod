@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ltc/app/shell/bottom_nav_provider.dart';
-import 'package:ltc/common/widgets/splash_tap_widget.dart';
-import 'package:ltc/core/extensions/color_schema_ext.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
 import 'package:ltc/core/localization/locale_provider.dart';
 import 'package:ltc/core/theme/app_spacing.dart';
@@ -43,7 +41,7 @@ class BottomNavShell extends ConsumerWidget {
       _NavItemData(
         icon: FontAwesomeIcons.file,
         activeIcon: FontAwesomeIcons.solidFileLines,
-        label: tr.document,
+        label: tr.lookup,
       ),
       _NavItemData(
         icon: FontAwesomeIcons.user,
