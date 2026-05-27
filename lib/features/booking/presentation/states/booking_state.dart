@@ -15,7 +15,6 @@ class BookingState {
   final List<SpecialtyEntity> specialties;
   final List<ServiceEntity> services;
   final List<DoctorEntity> doctors;
-  // — User đã chọn
   final List<ServiceEntity> selectedServices;
   final List<PackageEntity> selectedPackages;
   final DoctorEntity? selectedDoctor;

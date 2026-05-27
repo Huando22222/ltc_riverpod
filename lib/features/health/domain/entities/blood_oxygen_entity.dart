@@ -10,7 +10,7 @@ class BloodOxygenEntity extends BaseMetricEntity {
     required super.userId,
     required super.recordDate,
     required this.spo2,
-    required this.context,
-    required this.note,
+    this.context,
+    this.note,
   });
 }

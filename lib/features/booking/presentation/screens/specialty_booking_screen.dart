@@ -14,7 +14,7 @@ import 'package:ltc/core/theme/app_spacing.dart';
 import 'package:ltc/features/auth/presentation/providers/auth_provider.dart';
 import 'package:ltc/features/booking/data/models/booking_param_mode.dart';
 import 'package:ltc/features/booking/presentation/providers/booking_provider.dart';
-import 'package:ltc/features/booking/presentation/providers/booking_state.dart';
+import 'package:ltc/features/booking/presentation/states/booking_state.dart';
 import 'package:ltc/features/booking/presentation/widgets/confirm_step_body_widget.dart';
 import 'package:ltc/features/booking/presentation/widgets/confirm_step_header_widget.dart';
 import 'package:ltc/features/booking/presentation/widgets/doctor_step_body_widget.dart';

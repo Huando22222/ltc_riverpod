@@ -24,4 +24,15 @@ class ApiConstants {
 
   // MARK: LOOKUP
   static const String getBookingDataHistory = '/api/Booking/history-search';
+
+  // MARK: HEALTH
+  static const String standardMetric = '/api/LTC/Metric/standard';
+  static const String overview = '/api/LTC/Metric/dashboard';
+  static const String dateRecordMetric = '/api/LTC/Metric/date-record';
+  static const String bloodOxygen = '/api/LTC/Metric/blood-oxygen';
+  static const String bloodPressure = '/api/LTC/Metric/blood-pressure';
+  static const String bmi = '/api/LTC/Metric/bmi';
+  static const String heartBeat = '/api/LTC/Metric/heart-beat';
+  static const String sleep = '/api/LTC/Metric/sleep';
+  static const String water = '/api/LTC/Metric/water';
 }

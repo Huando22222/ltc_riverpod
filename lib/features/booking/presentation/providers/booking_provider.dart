@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ltc/features/booking/data/models/booking_param_mode.dart';
 import 'package:ltc/features/booking/domain/entities/patient_booking_entity.dart';
 import 'package:ltc/features/booking/domain/usecases/booking_service_usecase.dart';
-import 'package:ltc/features/booking/presentation/providers/booking_state.dart';
+import 'package:ltc/features/booking/presentation/states/booking_state.dart';
 import 'package:ltc/features/doctor/domain/entities/doctor_entity.dart';
 import 'package:ltc/features/doctor/domain/usecases/search_doctor_usecase.dart';
 import 'package:ltc/features/service/domain/entities/package_entity.dart';
