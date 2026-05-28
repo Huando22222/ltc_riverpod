@@ -1,8 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ltc/features/auth/presentation/providers/auth_provider.dart';
-import 'package:ltc/features/health/domain/entities/heart_beat_entity.dart';
 import 'package:ltc/features/health/domain/entities/water_entity.dart';
-import 'package:ltc/features/health/domain/usecases/heart_beat_usecases.dart';
 import 'package:ltc/features/health/domain/usecases/water_usecases.dart';
 
 class WaterNotifier extends AsyncNotifier<List<WaterEntity>> {

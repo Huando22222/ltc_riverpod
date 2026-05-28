@@ -15,7 +15,7 @@ class BloodPressureModel extends BloodPressureEntity {
     return BloodPressureModel(
       metricId: json['metric_id'],
       userId: json['user_id'],
-      recordDate: json['record_date'],
+      recordDate: DateTime.parse(json['record_date']),
       systolic: json['systolic'],
       diastolic: json['diastolic'],
       context: json['context'],

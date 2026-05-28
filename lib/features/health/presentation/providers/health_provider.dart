@@ -1,48 +1,66 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ltc/features/health/domain/entities/blood_oxygen_entity.dart';
-import 'package:ltc/features/health/domain/entities/heart_beat_entity.dart';
+import 'package:ltc/features/auth/presentation/providers/auth_provider.dart';
 import 'package:ltc/features/health/domain/entities/overview_entity.dart';
-import 'package:ltc/features/health/presentation/states/heath_state.dart';
+import 'package:ltc/features/health/domain/usecases/overview_usecases.dart';
 
-class HealthNotifier extends Notifier<HeathState> {
+class HealthOverviewNotifier extends AsyncNotifier<OverviewEntity?> {
+  late DateTime _from;
+  late DateTime _to;
+
+  DateTime get from => _from;
+  DateTime get to => _to;
+
   @override
-  HeathState build() {
-    return HeathState(overview: OverviewEntity());
+  Future<OverviewEntity?> build() async {
+    final user = ref.watch(currentUserProvider);
+
+    if (user == null) return null;
+
+    final now = DateTime.now();
+
+    _from = DateTime(now.year, now.month, 1);
+    _to = now;
+
+    return fetchOverview(userId: user.userId, from: _from, to: _to);
   }
 
-  void setOverview(OverviewEntity overview) {
-    state = HeathState(
-      overview: overview,
-      bloodOxygen: state.bloodOxygen,
-      bloodPressure: state.bloodPressure,
-      bmi: state.bmi,
-      heartBeat: state.heartBeat,
-      sleep: state.sleep,
-      water: state.water,
-    );
+  Future<OverviewEntity?> fetchOverview({
+    required String userId,
+    required DateTime from,
+    required DateTime to,
+  }) async {
+    final usecase = ref.read(getOverviewUsecaseProvider);
+
+    final result = await usecase(userId: userId, from: from, to: to);
+
+    return result.fold((failure) => throw failure.message, (data) => data);
   }
 
-  void setHeartBeat(List<HeartBeatEntity> data) {
-    state = HeathState(
-      overview: state.overview,
-      bloodOxygen: state.bloodOxygen,
-      bloodPressure: state.bloodPressure,
-      bmi: state.bmi,
-      heartBeat: data,
-      sleep: state.sleep,
-      water: state.water,
-    );
+  Future<void> changeRange({
+    required String userId,
+    required DateTime from,
+    required DateTime to,
+  }) async {
+    _from = from;
+    _to = to;
+
+    state = const AsyncLoading();
+
+    state = await AsyncValue.guard(() {
+      return fetchOverview(userId: userId, from: from, to: to);
+    });
   }
 
-  void setBloodOxygen(List<BloodOxygenEntity> data) {
-    state = HeathState(
-      overview: state.overview,
-      bloodOxygen: data,
-      bloodPressure: state.bloodPressure,
-      bmi: state.bmi,
-      heartBeat: state.heartBeat,
-      sleep: state.sleep,
-      water: state.water,
-    );
+  Future<void> refreshData({required String userId}) async {
+    state = const AsyncLoading();
+
+    state = await AsyncValue.guard(() {
+      return fetchOverview(userId: userId, from: _from, to: _to);
+    });
   }
 }
+
+final healthOverviewProvider =
+    AsyncNotifierProvider<HealthOverviewNotifier, OverviewEntity?>(
+      HealthOverviewNotifier.new,
+    );

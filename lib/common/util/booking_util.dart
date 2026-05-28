@@ -1,4 +1,6 @@
+import 'package:ltc/core/extensions/date_time_ext.dart';
 import 'package:ltc/features/booking/data/models/booking_param_mode.dart';
+import 'package:ltc/features/lookup/domain/entities/booking_data_entity.dart';
 import 'package:ltc/features/service/domain/entities/package_entity.dart';
 import 'package:ltc/features/service/domain/entities/service_entity.dart';
 
@@ -55,5 +57,21 @@ class BookingUtil {
         .toList();
 
     return [...fromServiceList, ...fromPackageList];
+  }
+
+  static bool showQrCodeAppointment(BookingDataEntity booking) {
+    // CHUATOI
+    // CHUAXULY
+    // DANGXULY
+    // DATOI
+    // DENMUON
+    // HUYLICH
+
+    final now = DateTime.now();
+    if (booking.appointmentDateTime.onlyDate().isAfterOrSameDate(now) &&
+        booking.status != 'HUYLICH') {
+      return true;
+    }
+    return false;
   }
 }

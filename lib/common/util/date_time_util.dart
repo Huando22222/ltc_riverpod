@@ -69,6 +69,12 @@ class DateTimeUtil {
     return '${weekdayName(d.weekday)}, $date';
   }
 
+  static String formatDateTimeFull(DateTime d) {
+    return '${formatDateFull(d)} · ${formatTime(d)}';
+  }
+
+  static String formatTime(DateTime d) => DateFormat('HH:mm').format(d);
+
   /// "Thứ Ba, 06/05/2025 · 09:00"
   static String formatBookingSummary(DateTime d, TimeOfDay t) =>
       '${formatDateFull(d)} · ${formatTimeOfDay(t)}';

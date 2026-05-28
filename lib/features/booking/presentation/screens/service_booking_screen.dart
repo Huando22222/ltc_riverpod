@@ -111,7 +111,7 @@ class _ServiceBookingScreenState extends ConsumerState<ServiceBookingScreen> {
                     selectedServices: bkState.selectedServices,
                     allServices: bkState.services,
                     isLoading: bkState.isLoadingServices,
-                    onOpenModal: () => ModalHelper.showServiceModal(
+                    onOpenModal: () => ModalHelper.serviceModal(
                       context: context,
                       services: bkState.services,
                       selectedServices: bkState.selectedServices,

@@ -17,9 +17,9 @@ class SleepModel extends SleepEntity {
     return SleepModel(
       metricId: json['metric_id'],
       userId: json['user_id'],
-      recordDate: json['record_date'],
-      startSleepDateTime: json['start_sleep_date_time'],
-      wakeUpDateTime: json['wake_up_date_time'],
+      recordDate: DateTime.parse(json['record_date']),
+      startSleepDateTime: DateTime.parse(json['start_sleep_date_time']),
+      wakeUpDateTime: DateTime.parse(json['wake_up_date_time']),
       timeNeedToSleep: json['time_need_to_sleep'],
       timeNeedToWakeUp: json['time_need_to_wake_up'],
       note: json['note'],

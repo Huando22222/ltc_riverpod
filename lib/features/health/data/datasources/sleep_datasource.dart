@@ -98,7 +98,7 @@ class SleepDatasource {
           'time_need_to_wake_up': timeNeedToWakeUp,
           'sleep_rating': sleepRating,
           'metric_id': metricId,
-          'is_logic_del': isDeleted,
+          'Is_deleted': isDeleted,
         },
       );
       return BaseResponse<List<SleepModel>>.fromJson(

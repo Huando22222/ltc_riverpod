@@ -11,8 +11,8 @@ class WaterModel extends WaterEntity {
     return WaterModel(
       metricId: json['metric_id'],
       userId: json['user_id'],
-      recordDate: json['record_date'],
-      ml: json['ml'],
+      recordDate: DateTime.parse(json['record_date']),
+      ml: (json['ml'] as num).toInt(),
     );
   }
 }

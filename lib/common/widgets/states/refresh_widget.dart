@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-///[RefreshWidget] if this widget not stand alone , you MUST wrap it with [Expanded]
+/// [RefreshWidget]
+///
+/// Nếu widget này không standalone trong Column/Row
+/// thì nên wrap bằng [Expanded].
 class RefreshWidget extends StatelessWidget {
   final Future<void> Function() onRefresh;
   final bool childIsScrollable;
@@ -15,30 +18,36 @@ class RefreshWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget buildChild;
+    final cs = Theme.of(context).colorScheme;
 
-    if (childIsScrollable) {
-      buildChild = this.child;
-    } else {
-      buildChild = SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: this.child,
-      );
-    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final hasBoundedHeight = constraints.hasBoundedHeight;
+        final buildChild = childIsScrollable
+            ? child
+            : SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(),
+                ),
+                child: hasBoundedHeight
+                    ? ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight,
+                        ),
+                        child: child,
+                      )
+                    : child,
+              );
 
-    return RefreshIndicator(
-      backgroundColor: Colors.lightBlue,
-      color: Colors.white,
-      onRefresh: onRefresh,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final availableHeight = constraints.maxHeight;
-          return SizedBox(
-            height: availableHeight,
-            child: buildChild,
-          );
-        },
-      ),
+        return RefreshIndicator(
+          elevation: 0,
+          strokeWidth: 2.6,
+          backgroundColor: cs.surface,
+          color: cs.primary,
+          onRefresh: onRefresh,
+          child: buildChild,
+        );
+      },
     );
   }
 }

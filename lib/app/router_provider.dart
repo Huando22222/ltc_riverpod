@@ -14,6 +14,13 @@ import 'package:ltc/features/booking/presentation/screens/package_booking_screen
 import 'package:ltc/features/booking/presentation/screens/patient_declaration_screen.dart';
 import 'package:ltc/features/booking/presentation/screens/service_booking_screen.dart';
 import 'package:ltc/features/booking/presentation/screens/specialty_booking_screen.dart';
+import 'package:ltc/features/health/presentation/screens/metrics/blood_oxygen_metric_screen.dart';
+import 'package:ltc/features/health/presentation/screens/metrics/blood_pressure_metric_screen.dart';
+import 'package:ltc/features/health/presentation/screens/metrics/bmi_metric_screen.dart';
+import 'package:ltc/features/health/presentation/screens/metrics/heart_beat_metric_screen.dart';
+import 'package:ltc/features/health/presentation/screens/metrics/sleep_metric_screen.dart';
+import 'package:ltc/features/health/presentation/screens/metrics/water_metric_screen.dart';
+import 'package:ltc/features/health/presentation/utils/health_metric_type.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   // Tạo Listenable lắng nghe authProvider
@@ -95,6 +102,24 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: RouteName.patientDeclaration,
         path: Routes.patientDeclaration,
         builder: (_, __) => const PatientDeclarationScreen(),
+      ),
+      GoRoute(
+        name: RouteName.healthMetricDetail,
+        path: Routes.healthMetricDetail,
+        builder: (_, state) {
+          final type = HealthMetricType.fromRouteValue(
+            state.pathParameters['metricType'],
+          );
+
+          return switch (type) {
+            HealthMetricType.heartBeat => const HeartBeatMetricScreen(),
+            HealthMetricType.bloodOxygen => const BloodOxygenMetricScreen(),
+            HealthMetricType.bloodPressure => const BloodPressureMetricScreen(),
+            HealthMetricType.bmi => const BmiMetricScreen(),
+            HealthMetricType.sleep => const SleepMetricScreen(),
+            HealthMetricType.water => const WaterMetricScreen(),
+          };
+        },
       ),
     ],
   );

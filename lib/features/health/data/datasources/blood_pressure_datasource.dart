@@ -42,8 +42,8 @@ class BloodPressureDatasource {
     required DateTime from,
     required DateTime to,
     required DateTime recordDate,
-    required double systolic,
-    required double diastolic,
+    required int systolic,
+    required int diastolic,
     String? context,
     String? note,
   }) async {
@@ -78,8 +78,8 @@ class BloodPressureDatasource {
     required DateTime from,
     required DateTime to,
     DateTime? recordDate,
-    double? systolic,
-    double? diastolic,
+    int? systolic,
+    int? diastolic,
     String? context,
     String? note,
     required String metricId,
@@ -98,7 +98,7 @@ class BloodPressureDatasource {
           'context': context, //"Thở đều",
           'note': note,
           'metric_id': metricId,
-          'is_logic_del': isDeleted,
+          'Is_deleted': isDeleted,
         },
       );
       return BaseResponse<List<BloodPressureModel>>.fromJson(

@@ -58,7 +58,7 @@ class PackageStepBodyWidget extends ConsumerWidget {
                   package: pkg,
                   isSelected: _isSelected(pkg),
                   onToggle: () => onToggle(pkg),
-                  onDetail: () => ModalHelper.showDetailPackageModal(
+                  onDetail: () => ModalHelper.detailPackageModal(
                     context: context,
                     package: pkg,
                   ),

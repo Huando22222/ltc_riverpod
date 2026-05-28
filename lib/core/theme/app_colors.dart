@@ -15,6 +15,15 @@ class AppColors {
   static const warning = Color(0xFFF2994A);
   static const warningLight = Color(0xFFFEF3E7);
 
+  // Health metric accents
+  static const healthHeartRate = error;
+  static const healthBloodOxygen = Color(0xFF2F9EB3);
+  static const healthBloodPressure = Color(0xFF6B5DD3);
+  static const healthBmi = success;
+  static const healthSleep = Color(0xFF5968D8);
+  static const healthWater = primary;
+  static const healthBodyFat = Color(0xFF7E57C2);
+
   // Error — Light
   static const error = Color(0xFFEB5757);
   static const errorLight = Color(0xFFFDECEC);

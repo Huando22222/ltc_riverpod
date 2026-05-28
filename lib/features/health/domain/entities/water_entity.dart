@@ -1,7 +1,7 @@
 import 'package:ltc/features/health/domain/entities/base_metric_entity.dart';
 
 class WaterEntity extends BaseMetricEntity {
-  final double ml; //ml
+  final int ml; //ml
 
   WaterEntity({
     required super.metricId,

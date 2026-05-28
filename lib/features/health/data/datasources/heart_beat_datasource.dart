@@ -94,7 +94,7 @@ class HeartBeatDatasource {
           'context': context,
           'note': note,
           'metric_id': metricId,
-          'is_logic_del': isDeleted,
+          'Is_deleted': isDeleted,
         },
       );
       return BaseResponse<List<HeartBeatModel>>.fromJson(

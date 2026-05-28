@@ -8,6 +8,7 @@ class Routes {
   static const String specialtyBooking = '/specialty-booking';
   static const String packageBooking = '/package-booking';
   static const String patientDeclaration = '/patient-declaration';
+  static const String healthMetricDetail = '/health/:metricType';
 }
 
 class RouteName {
@@ -20,4 +21,5 @@ class RouteName {
   static const String specialtyBooking = 'specialty-booking';
   static const String packageBooking = 'package-booking';
   static const String patientDeclaration = 'patient-declaration';
+  static const String healthMetricDetail = 'health-metric-detail';
 }

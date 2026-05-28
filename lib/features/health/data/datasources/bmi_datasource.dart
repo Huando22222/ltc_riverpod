@@ -108,7 +108,7 @@ class BmiDatasource {
           'body_fat_percentage': bodyFatPercentage,
           'note': note,
           'metric_id': metricId,
-          'is_logic_del': isDeleted,
+          'Is_deleted': isDeleted,
         },
       );
       return BaseResponse<List<BmiModel>>.fromJson(

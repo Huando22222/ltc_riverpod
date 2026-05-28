@@ -112,7 +112,7 @@ class SpecialtyStepBodyWidget extends ConsumerWidget {
             SelectButtonWidget(
               hasSelected: selectedServices.isNotEmpty,
               isLoading: isLoadingServices,
-              onTap: () => ModalHelper.showServiceModal(
+              onTap: () => ModalHelper.serviceModal(
                 context: context,
                 services: _servicesOfSelectedSpecialty,
                 selectedServices: selectedServices,

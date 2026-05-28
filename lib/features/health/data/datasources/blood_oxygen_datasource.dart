@@ -94,7 +94,7 @@ class BloodOxygenDatasource {
           'context': context, //"Thở đều",
           'note': note,
           'metric_id': metricId,
-          'is_logic_del': isDeleted,
+          'Is_deleted': isDeleted,
         },
       );
       return BaseResponse<List<BloodOxygenModel>>.fromJson(

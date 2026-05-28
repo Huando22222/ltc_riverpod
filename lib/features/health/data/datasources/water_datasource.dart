@@ -84,7 +84,7 @@ class WaterDatasource {
           'record_date': recordDate?.toIso8601String(),
           'ml': ml,
           'metric_id': metricId,
-          'is_logic_del': isDeleted,
+          'Is_deleted': isDeleted,
         },
       );
       return BaseResponse<List<WaterModel>>.fromJson(

@@ -8,18 +8,27 @@ class StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final normalized = status.toUpperCase();
+    final normalized = status.trim().toUpperCase();
 
     final label = switch (normalized) {
+      'CHUATOI' => 'Chưa tới',
+      'CHUAXULY' => 'Chưa xử lý',
       'DANGXULY' => 'Đang xử lý',
+      'DATOI' => 'Đã tới',
+      'DENMUON' => 'Đến muộn',
+      'HUYLICH' => 'Hủy lịch',
       'DONE' || 'COMPLETED' || 'HOANTHANH' => 'Hoàn thành',
       'CANCEL' || 'CANCELLED' || 'HUY' => 'Đã hủy',
       _ => status,
     };
 
     final color = switch (normalized) {
-      'DONE' || 'COMPLETED' || 'HOANTHANH' => cs.tertiary,
-      'CANCEL' || 'CANCELLED' || 'HUY' => cs.error,
+      'CHUATOI' => cs.primary,
+      'CHUAXULY' => cs.secondary,
+      'DANGXULY' => cs.tertiary,
+      'DATOI' || 'DONE' || 'COMPLETED' || 'HOANTHANH' => cs.primary,
+      'DENMUON' => cs.error,
+      'HUYLICH' || 'CANCEL' || 'CANCELLED' || 'HUY' => cs.error,
       _ => cs.primary,
     };
 

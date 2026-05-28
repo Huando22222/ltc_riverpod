@@ -8,8 +8,8 @@ import 'package:ltc/features/lookup/domain/entities/booking_data_entity.dart';
 import 'package:ltc/features/lookup/domain/entities/package_group_entity.dart';
 import 'package:ltc/features/lookup/presentation/widgets/status_badge_widget.dart';
 
-class BookingDataModalSheetWidget extends StatelessWidget {
-  const BookingDataModalSheetWidget({super.key, required this.data});
+class BookingDataModalWidget extends StatelessWidget {
+  const BookingDataModalWidget({super.key, required this.data});
 
   final BookingDataEntity data;
 
@@ -89,8 +89,8 @@ class BookingDataModalSheetWidget extends StatelessWidget {
                   if (data.regId != null && data.regId!.isNotEmpty)
                     _InfoRowData('Mã đăng ký', data.regId!.substring(4)),
                   _InfoRowData(
-                    'Ngày tạo',
-                    DateTimeUtil.formatDateFull(data.createdAt),
+                    'Ngày hẹn',
+                    DateTimeUtil.formatDateTimeFull(data.appointmentDateTime),
                   ),
                 ],
               ),

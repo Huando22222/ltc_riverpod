@@ -9,6 +9,7 @@ class BookingDataModel extends BookingDataEntity {
     super.ptnId,
     required super.status,
     super.regId,
+    required super.appointmentDateTime,
     required super.createdAt,
     required super.services,
   });
@@ -21,25 +22,13 @@ class BookingDataModel extends BookingDataEntity {
       ptnId: json['ptn_id'],
       status: json['status'] ?? '',
       regId: json['reg_id'],
+      appointmentDateTime: DateTime.parse(json['appointment_date_time']),
       createdAt: DateTime.parse(json['created_at']),
       services:
           (json['services'] as List?)
               ?.map((e) => BookingDataDetailModel.fromJson(e))
               .toList() ??
           [],
-    );
-  }
-
-  factory BookingDataModel.fromEntity(BookingDataEntity entity) {
-    return BookingDataModel(
-      id: entity.id,
-      ptnName: entity.ptnName,
-      ptnPhone: entity.ptnPhone,
-      ptnId: entity.ptnId,
-      status: entity.status,
-      regId: entity.regId,
-      createdAt: entity.createdAt,
-      services: entity.services.map(BookingDataDetailModel.fromEntity).toList(),
     );
   }
 }

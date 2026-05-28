@@ -7,6 +7,7 @@ class BookingDataEntity {
   final String? ptnId;
   final String status;
   final String? regId;
+  final DateTime appointmentDateTime;
   final DateTime createdAt;
   final List<BookingDataDetailEntity> services;
 
@@ -17,6 +18,7 @@ class BookingDataEntity {
     this.ptnId,
     required this.status,
     this.regId,
+    required this.appointmentDateTime,
     required this.createdAt,
     required this.services,
   });

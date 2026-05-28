@@ -14,7 +14,7 @@ class HeartBeatModel extends HeartBeatEntity {
     return HeartBeatModel(
       metricId: json['metric_id'],
       userId: json['user_id'],
-      recordDate: json['record_date'],
+      recordDate: DateTime.parse(json['record_date']),
       bpm: json['heart_beat'],
       context: json['context'],
       note: json['note'],

@@ -18,6 +18,6 @@ class OverviewUsecases {
   }
 }
 
-final overviewUsecaseProvider = Provider<OverviewUsecases>(
+final getOverviewUsecaseProvider = Provider<OverviewUsecases>(
   (ref) => OverviewUsecases(ref.read(overviewRepositoryProvider)),
 );

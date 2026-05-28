@@ -18,12 +18,22 @@ class OverviewModel extends OverviewEntity {
 
   factory OverviewModel.fromJson({required Map<String, dynamic> json}) {
     return OverviewModel(
-      bmi: BmiModel.fromJson(json: json['bmi']),
-      heartBeat: HeartBeatModel.fromJson(json: json['heart_beat']),
-      bloodOxygen: BloodOxygenModel.fromJson(json: json['blood_oxygen']),
-      bloodPressure: BloodPressureModel.fromJson(json: json['blood_pressure']),
-      sleep: SleepModel.fromJson(json: json['sleep']),
-      water: WaterModel.fromJson(json: json['water']),
+      bmi: json['bmi'] != null ? BmiModel.fromJson(json: json['bmi']) : null,
+      heartBeat: json['heart_beat'] != null
+          ? HeartBeatModel.fromJson(json: json['heart_beat'])
+          : null,
+      bloodOxygen: json['blood_oxygen'] != null
+          ? BloodOxygenModel.fromJson(json: json['blood_oxygen'])
+          : null,
+      bloodPressure: json['blood_pressure'] != null
+          ? BloodPressureModel.fromJson(json: json['blood_pressure'])
+          : null,
+      sleep: json['sleep'] != null
+          ? SleepModel.fromJson(json: json['sleep'])
+          : null,
+      water: json['water'] != null
+          ? WaterModel.fromJson(json: json['water'])
+          : null,
     );
   }
 }

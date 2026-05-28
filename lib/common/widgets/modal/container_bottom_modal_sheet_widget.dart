@@ -18,15 +18,14 @@ class ContainerBottomModalSheetWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = context.colorScheme;
+    final md = MediaQuery.of(context);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Container(
-        padding: padding.copyWith(
-          bottom: MediaQuery.of(context).padding.bottom + 5,
-        ),
+        padding: padding.copyWith(bottom: md.padding.bottom + 5),
         height: height,
         width: double.infinity,
         decoration: BoxDecoration(

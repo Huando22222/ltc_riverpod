@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ltc/common/widgets/modal/booking_data_modal_sheet_widget.dart';
+import 'package:ltc/common/helper/dialog_helper.dart';
+import 'package:ltc/common/widgets/modal/booking_data_modal_widget.dart';
 import 'package:ltc/common/widgets/modal/container_bottom_modal_sheet_widget.dart';
+import 'package:ltc/common/widgets/modal/date_modal_widget.dart';
 import 'package:ltc/common/widgets/modal/detail_package_modal_widget.dart';
 import 'package:ltc/common/widgets/modal/login_required_widget.dart';
 import 'package:ltc/common/widgets/modal/service_modal_widget.dart';
+import 'package:ltc/common/widgets/modal/time_modal_widget.dart';
 import 'package:ltc/features/lookup/domain/entities/booking_data_entity.dart';
 import 'package:ltc/features/service/domain/entities/package_entity.dart';
 import 'package:ltc/features/service/domain/entities/service_entity.dart';
@@ -51,7 +54,7 @@ class ModalHelper {
     );
   }
 
-  static void showServiceModal({
+  static void serviceModal({
     required BuildContext context,
     required List<ServiceEntity> services,
     List<ServiceEntity> selectedServices = const [],
@@ -77,7 +80,7 @@ class ModalHelper {
     );
   }
 
-  static void showDetailPackageModal({
+  static void detailPackageModal({
     required BuildContext context,
     required PackageEntity package,
   }) {
@@ -162,7 +165,7 @@ class ModalHelper {
     );
   }
 
-  static void showDetailBookingDataModal({
+  static void detailBookingDataModal({
     required BuildContext context,
     required BookingDataEntity data,
   }) {
@@ -173,8 +176,154 @@ class ModalHelper {
       builder: (context) => ContainerBottomModalSheetWidget(
         height: MediaQuery.of(context).size.height * 0.7,
         padding: EdgeInsets.zero,
-        child: BookingDataModalSheetWidget(data: data),
+        child: BookingDataModalWidget(data: data),
       ),
     );
+  }
+
+  static Future<List<DateTime>> filterPickDateTime({
+    required BuildContext context,
+    required List<DateTime> currentDateRange,
+    required FilterType filterType,
+    required void Function({
+      required List<DateTime> dateRange,
+      required FilterType type,
+    })
+    onChanged,
+    bool onlyPickOne = false,
+    required void Function({
+      required List<DateTime> dateRange,
+      required FilterType type,
+    })
+    onClosed,
+    DateTime? minYear,
+    DateTime? maxDate,
+    bool isDismissible = true,
+    bool useSheet = true,
+  }) async {
+    final normalizedRange = _normalizeDateRange(currentDateRange);
+    final effectiveMaxDate = maxDate ?? DateTime.now();
+    final picker = DateModalWidget(
+      currentDateRange: normalizedRange,
+      filterType: filterType,
+      onlyPickOne: onlyPickOne,
+      minDate: minYear,
+      maxDate: effectiveMaxDate,
+      onChanged: onChanged,
+      onClosed: onClosed,
+    );
+
+    final result = useSheet
+        ? await modal<DateModalResult>(
+            context: context,
+            isDismissible: isDismissible,
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: picker,
+          )
+        : await DialogHelper.dialog<DateModalResult>(
+            context: context,
+            barrierDismissible: isDismissible,
+            insetPadding: const EdgeInsets.all(20),
+            child: picker,
+          );
+
+    return result?.dateRange ?? normalizedRange;
+  }
+
+  static Future<List<DateTime>?> dateModal({
+    required BuildContext context,
+    List<DateTime>? currentDateRange,
+    FilterType filterType = FilterType.day,
+    bool onlyPickOne = false,
+    DateTime? minDate,
+    DateTime? maxDate,
+    bool useSheet = true,
+  }) {
+    final range = _normalizeDateRange(currentDateRange ?? [DateTime.now()]);
+    final effectiveMaxDate = maxDate ?? DateTime.now();
+    final picker = DateModalWidget(
+      currentDateRange: range,
+      filterType: filterType,
+      onlyPickOne: onlyPickOne,
+      minDate: minDate,
+      maxDate: effectiveMaxDate,
+      onChanged: ({required dateRange, required type}) {},
+      onClosed: ({required dateRange, required type}) {},
+    );
+
+    if (!useSheet) {
+      return DialogHelper.dialog<DateModalResult>(
+        context: context,
+        insetPadding: const EdgeInsets.all(20),
+        child: picker,
+      ).then((value) => value?.dateRange);
+    }
+
+    return showModalBottomSheet<DateModalResult>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => ContainerBottomModalSheetWidget(
+        height: MediaQuery.of(context).size.height * 0.4,
+        padding: EdgeInsets.zero,
+        child: picker,
+      ),
+    ).then((value) => value?.dateRange);
+  }
+
+  static Future<TimeOfDay?> timeModal({
+    required BuildContext context,
+    TimeOfDay? initialTime,
+    ValueChanged<TimeOfDay>? onChanged,
+    ValueChanged<TimeOfDay>? onClosed,
+    int minuteStep = 1,
+    bool useSheet = true,
+  }) {
+    final picker = TimeModalWidget(
+      initialTime: initialTime ?? TimeOfDay.now(),
+      minuteStep: minuteStep,
+      onChanged: onChanged ?? (_) {},
+      onClosed: onClosed ?? (_) {},
+    );
+
+    if (!useSheet) {
+      return DialogHelper.dialog<TimeOfDay>(
+        context: context,
+        insetPadding: const EdgeInsets.all(24),
+        contentPadding: EdgeInsets.zero,
+        child: picker,
+      );
+    }
+
+    return modal<TimeOfDay>(context: context, height: 340, child: picker);
+  }
+
+  static Future<TimeOfDay?> pickTime({
+    required BuildContext context,
+    TimeOfDay? initialTime,
+    bool useSheet = true,
+    int minuteStep = 1,
+  }) {
+    if (useSheet) {
+      return timeModal(
+        context: context,
+        initialTime: initialTime,
+        minuteStep: minuteStep,
+      );
+    }
+
+    return showTimePicker(
+      context: context,
+      initialTime: initialTime ?? TimeOfDay.now(),
+    );
+  }
+
+  static List<DateTime> _normalizeDateRange(List<DateTime> value) {
+    if (value.isEmpty) {
+      final now = DateTime.now();
+      return [now, now];
+    }
+    if (value.length == 1) return [value.first, value.first];
+    return [value.first, value[1]];
   }
 }

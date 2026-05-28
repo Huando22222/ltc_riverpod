@@ -14,8 +14,8 @@ class BloodOxygenModel extends BloodOxygenEntity {
     return BloodOxygenModel(
       metricId: json['metric_id'],
       userId: json['user_id'],
-      recordDate: json['record_date'],
-      spo2: json['spo2'],
+      recordDate: DateTime.parse(json['record_date']),
+      spo2: (json['spo2'] as num).toDouble(),
       context: json['context'],
       note: json['note'],
     );

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
+import 'package:ltc/common/helper/dialog_helper.dart';
 import 'package:ltc/common/helper/modal_helper.dart';
+import 'package:ltc/common/util/booking_util.dart';
 import 'package:ltc/common/util/currency_util.dart';
 import 'package:ltc/common/util/date_time_util.dart';
 import 'package:ltc/common/util/filter_util.dart';
 import 'package:ltc/common/util/look_up_util.dart';
 import 'package:ltc/common/widgets/header/header_widget.dart';
+import 'package:ltc/common/widgets/qr/qr_code_widget.dart';
 import 'package:ltc/common/widgets/search_bar/search_bar_widget.dart';
 import 'package:ltc/common/widgets/states/empty_data_widget.dart';
 import 'package:ltc/common/widgets/states/error_data_widget.dart';
@@ -27,6 +29,11 @@ class BookingDataScreen extends ConsumerStatefulWidget {
 
 class _BookingDataScreenState extends ConsumerState<BookingDataScreen> {
   final _searchController = TextEditingController();
+
+  Future<void> _refresh() async {
+    await ref.refresh(bookingDataProvider.future);
+  }
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -78,18 +85,28 @@ class _BookingDataScreenState extends ConsumerState<BookingDataScreen> {
               onRetry: () => ref.invalidate(bookingDataProvider),
             ),
             data: (items) {
-              final filtered = filterData(items);
+              final filtered = filterData(items)
+                ..sort((a, b) {
+                  final aDate = a.appointmentDateTime;
+                  final bDate = b.appointmentDateTime;
+
+                  return bDate.compareTo(aDate);
+                });
 
               if (filtered.isEmpty &&
                   _searchController.text.trim().isNotEmpty) {
-                return EmptyDataWidget();
+                return RefreshWidget(
+                  onRefresh: _refresh,
+                  child: EmptyDataWidget(iconType: SearchData.search),
+                );
               }
               return RefreshWidget(
-                onRefresh: () async {
-                  ref.refresh(bookingDataProvider.future);
-                },
+                onRefresh: _refresh,
                 childIsScrollable: true,
                 child: ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(
+                    parent: BouncingScrollPhysics(),
+                  ),
                   padding: const EdgeInsets.fromLTRB(
                     AppSpacing.horizontalPaddingScreen,
                     0,
@@ -127,7 +144,7 @@ class _BookingCard extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(14),
       onTap: () {
-        ModalHelper.showDetailBookingDataModal(context: context, data: booking);
+        ModalHelper.detailBookingDataModal(context: context, data: booking);
       },
       child: Container(
         padding: const EdgeInsets.all(14),
@@ -192,36 +209,67 @@ class _BookingCard extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            // Ngày + mã + tiền
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: cs.surfaceContainer,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Column(
+              child: Row(
+                spacing: AppSpacing.sm,
                 children: [
-                  _InfoRow(
-                    icon: Icons.calendar_today_outlined,
-                    label: 'Ngày tạo',
-                    value: DateTimeUtil.formatDateFull(booking.createdAt),
-                  ),
-                  if (booking.regId != null && booking.regId!.isNotEmpty) ...[
-                    const SizedBox(height: 8),
-                    _InfoRow(
-                      icon: Icons.receipt_long_outlined,
-                      label: 'Mã đăng ký',
-                      value: booking.regId!,
-                      valueColor: cs.primary,
+                  Expanded(
+                    child: Column(
+                      children: [
+                        _InfoRow(
+                          icon: Icons.calendar_today_outlined,
+                          label: 'Ngày hẹn',
+                          value: DateTimeUtil.formatDateTimeFull(
+                            booking.appointmentDateTime,
+                          ),
+                        ),
+                        if (booking.regId != null &&
+                            booking.regId!.isNotEmpty) ...[
+                          const SizedBox(height: 8),
+                          _InfoRow(
+                            icon: Icons.receipt_long_outlined,
+                            label: 'Mã đăng ký',
+                            value: booking.regId!,
+                            valueColor: cs.primary,
+                          ),
+                        ],
+                        const SizedBox(height: 8),
+                        _InfoRow(
+                          icon: Icons.payments_outlined,
+                          label: 'Tổng tiền',
+                          value: CurrencyUtil.formatPrice(total),
+                          valueColor: cs.primary,
+                          boldValue: true,
+                        ),
+                      ],
                     ),
-                  ],
-                  const SizedBox(height: 8),
-                  _InfoRow(
-                    icon: Icons.payments_outlined,
-                    label: 'Tổng tiền',
-                    value: CurrencyUtil.formatPrice(total),
-                    valueColor: cs.primary,
-                    boldValue: true,
+                  ),
+                  Visibility(
+                    visible: BookingUtil.showQrCodeAppointment(booking),
+                    child: GestureDetector(
+                      onTap: () async {
+                        await DialogHelper.dialog(
+                          context: context,
+                          child: QrCodeWidget(data: booking.id),
+                        );
+                      },
+                      behavior: HitTestBehavior.opaque,
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            AppSpacing.radiusSm,
+                          ),
+                          color: cs.primary.withOpacity(.1),
+                        ),
+                        child: Icon(Icons.qr_code_2_rounded, size: 30),
+                      ),
+                    ),
                   ),
                 ],
               ),
