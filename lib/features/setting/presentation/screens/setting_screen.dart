@@ -6,6 +6,7 @@ import 'package:ltc/common/widgets/avatar/avatar_widget.dart';
 import 'package:ltc/common/widgets/badge/icon_badge_widget.dart';
 import 'package:ltc/common/widgets/dividers/section_divider.dart';
 import 'package:ltc/common/widgets/header/header_widget.dart';
+import 'package:ltc/common/widgets/size/animated_size_widget.dart';
 import 'package:ltc/common/widgets/splash_tap_widget.dart';
 import 'package:ltc/core/config/routes.dart';
 import 'package:ltc/core/extensions/context_ext.dart';
@@ -74,6 +75,7 @@ class SettingScreen extends ConsumerWidget {
                         onTap: () =>
                             ref.read(localeProvider.notifier).toggleLocale(),
                       ),
+                      const _ThemeModeSettingItem(),
                       _SettingItem(
                         icon: FontAwesomeIcons.bell,
                         color: AppColors.warning,
@@ -94,19 +96,13 @@ class SettingScreen extends ConsumerWidget {
                         icon: FontAwesomeIcons.headset,
                         color: context.colorScheme.tertiary,
                         label: tr.contactSupport,
-                        onTap: () {
-                          final theme = ref.read(themeProvider.notifier);
-                          theme.setTheme(ThemeMode.dark);
-                        },
+                        onTap: () {},
                       ),
                       _SettingItem(
                         icon: FontAwesomeIcons.shieldHalved,
                         color: context.colorScheme.primary,
                         label: tr.privacyPolicy,
-                        onTap: () {
-                          final theme = ref.read(themeProvider.notifier);
-                          theme.setTheme(ThemeMode.light);
-                        },
+                        onTap: () {},
                       ),
                       _SettingItem(
                         icon: FontAwesomeIcons.fileLines,
@@ -292,7 +288,7 @@ class _SettingSection extends StatelessWidget {
   final IconData icon;
   final Color color;
   final String title;
-  final List<_SettingItem> items;
+  final List<Widget> items;
 
   @override
   Widget build(BuildContext context) {
@@ -424,6 +420,270 @@ class _SettingItem extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ThemeModeSettingItem extends ConsumerStatefulWidget {
+  const _ThemeModeSettingItem();
+
+  @override
+  ConsumerState<_ThemeModeSettingItem> createState() =>
+      _ThemeModeSettingItemState();
+}
+
+class _ThemeModeSettingItemState extends ConsumerState<_ThemeModeSettingItem> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeMode = ref.watch(themeProvider).value ?? ThemeMode.system;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SplashTapWidget(
+            onTap: () {
+              setState(() => _isExpanded = !_isExpanded);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
+              ),
+              child: Row(
+                children: [
+                  IconBadgeWidget(
+                    icon: FontAwesomeIcons.circleHalfStroke,
+                    color: context.colorScheme.primary,
+                    size: AppSpacing.iconSm,
+                    padding: AppSpacing.xs,
+                  ),
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Text(
+                      'Giao diện',
+                      style: context.textTheme.bodyMedium?.copyWith(
+                        color: context.colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
+                  _ThemeSummaryBadge(themeMode: themeMode),
+                  const SizedBox(width: AppSpacing.sm),
+                  AnimatedRotation(
+                    turns: _isExpanded ? 0.25 : 0,
+                    duration: const Duration(milliseconds: 180),
+                    curve: Curves.easeOut,
+                    child: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 10,
+                      color: context.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          AnimatedSizeWidget(
+            isExpanded: _isExpanded,
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeOutCubic,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                AppSpacing.xs,
+                AppSpacing.md,
+                AppSpacing.sm,
+              ),
+              child: _ThemeModeSelector(
+                selectedMode: themeMode,
+                onChanged: (mode) {
+                  ref.read(themeProvider.notifier).setTheme(mode);
+                  setState(() => _isExpanded = false);
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ThemeModeSelector extends StatelessWidget {
+  const _ThemeModeSelector({
+    required this.selectedMode,
+    required this.onChanged,
+  });
+
+  final ThemeMode selectedMode;
+  final ValueChanged<ThemeMode> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final options = [
+      _ThemeModeOption(
+        mode: ThemeMode.system,
+        icon: FontAwesomeIcons.mobileScreenButton,
+        label: 'Tự động',
+      ),
+      _ThemeModeOption(
+        mode: ThemeMode.light,
+        icon: FontAwesomeIcons.solidSun,
+        label: 'Sáng',
+      ),
+      _ThemeModeOption(
+        mode: ThemeMode.dark,
+        icon: FontAwesomeIcons.solidMoon,
+        label: 'Tối',
+      ),
+    ];
+
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.sm),
+      decoration: BoxDecoration(
+        color: context.colorScheme.surfaceContainerHighest.withOpacity(0.55),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+        border: Border.all(color: context.colorScheme.outlineVariant),
+      ),
+      child: Column(
+        children: [
+          for (final entry in options.asMap().entries) ...[
+            _ThemeModeButton(
+              option: entry.value,
+              selected: selectedMode == entry.value.mode,
+              onTap: () => onChanged(entry.value.mode),
+            ),
+            if (entry.key != options.length - 1)
+              Padding(
+                padding: const EdgeInsets.only(left: AppSpacing.xl),
+                child: SectionDivider(
+                  // color: context.colorScheme.outlineVariant.withOpacity(0.5),
+                  margin: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                ),
+              ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _ThemeModeButton extends StatelessWidget {
+  const _ThemeModeButton({
+    required this.option,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final _ThemeModeOption option;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedColor = context.colorScheme.primary;
+
+    return SplashTapWidget(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.sm,
+        ),
+        decoration: BoxDecoration(
+          color: selected
+              ? context.colorScheme.primaryContainer.withOpacity(0.5)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              option.icon,
+              size: AppSpacing.iconSm,
+              color: selected
+                  ? selectedColor
+                  : context.colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Expanded(
+              child: Text(
+                option.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: context.textTheme.bodySmall?.copyWith(
+                  color: selected
+                      ? selectedColor
+                      : context.colorScheme.onSurfaceVariant,
+                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                ),
+              ),
+            ),
+            AnimatedScale(
+              scale: selected ? 1 : 0.75,
+              duration: const Duration(milliseconds: 160),
+              child: Icon(
+                selected ? Icons.check_circle_rounded : Icons.circle_outlined,
+                size: AppSpacing.iconSm,
+                color: selected
+                    ? selectedColor
+                    : context.colorScheme.outlineVariant,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ThemeSummaryBadge extends StatelessWidget {
+  const _ThemeSummaryBadge({required this.themeMode});
+
+  final ThemeMode themeMode;
+
+  @override
+  Widget build(BuildContext context) {
+    final label = switch (themeMode) {
+      ThemeMode.system => 'Tự động',
+      ThemeMode.light => 'Sáng',
+      ThemeMode.dark => 'Tối',
+    };
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: 2,
+      ),
+      decoration: BoxDecoration(
+        color: context.colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+      ),
+      child: Text(
+        label,
+        style: context.textTheme.labelSmall?.copyWith(
+          color: context.colorScheme.primary,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+}
+
+class _ThemeModeOption {
+  const _ThemeModeOption({
+    required this.mode,
+    required this.icon,
+    required this.label,
+  });
+
+  final ThemeMode mode;
+  final IconData icon;
+  final String label;
 }
 
 // ── Language Badge ────────────────────────────────────────

@@ -20,3 +20,4 @@ class LoginUsecase {
 final loginUsecaseProvider = Provider<LoginUsecase>(
   (ref) => LoginUsecase(ref.read(authRepositoryProvider)),
 );
+  
