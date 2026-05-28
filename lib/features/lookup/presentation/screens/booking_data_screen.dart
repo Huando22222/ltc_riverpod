@@ -233,15 +233,15 @@ class _BookingCard extends StatelessWidget {
                           const SizedBox(height: 8),
                           _InfoRow(
                             icon: Icons.receipt_long_outlined,
-                            label: 'Mã đăng ký',
-                            value: booking.regId!,
+                            label: 'Mã phiếu khám',
+                            value: booking.regId!.substring(4),
                             valueColor: cs.primary,
                           ),
                         ],
                         const SizedBox(height: 8),
                         _InfoRow(
                           icon: Icons.payments_outlined,
-                          label: 'Tổng tiền',
+                          label: 'Tạm tính',
                           value: CurrencyUtil.formatPrice(total),
                           valueColor: cs.primary,
                           boldValue: true,
